@@ -1,12 +1,16 @@
-#define DEBUG  // Debug flag
+#include "Arduino.h"
+
+#include "main.hpp"
+#include "led.h"
 #include "debug.h"
-#include "wifi.hpp"
+#include "wifi-connection.hpp"
 #include "dummy-wifi-dependent.hpp"
 
-#define led_built_in_ESP 2
-#define led_built_in_Node 16
+#define BLINK_INTERVAL 2500
 
-void setup() {
+// cppcheck-suppress unusedFunction
+void setup()
+{
 
   initDebugging();
 
@@ -18,20 +22,23 @@ void setup() {
   DummyWifiDependent dependent1;
   DummyWifiDependent dependent2;
 
-  std::list<WifiDependent*> deps;
+  std::list<WifiDependent *> deps;
   deps.push_back(&dependent1);
   deps.push_back(&dependent2);
 
   WifiConnection::getInstance().init(deps);
 }
 
-void loop() {
+// cppcheck-suppress unusedFunction
+void loop()
+{
   blinkLed();
 }
 
-void blinkLed() {
+void blinkLed()
+{
   digitalWrite(led_built_in_Node, LOW);
-  delay(2500);
+  delay(BLINK_INTERVAL);
   digitalWrite(led_built_in_Node, HIGH);
-  delay(2500);
+  delay(BLINK_INTERVAL);
 }

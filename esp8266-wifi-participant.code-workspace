@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "esp8266-wifi-participant",
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.autoSave": "onFocusChange"
+	}
+}

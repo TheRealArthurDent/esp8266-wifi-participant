@@ -6,6 +6,6 @@ class DummyWifiDependent : public WifiDependent
 {
 
 public:
-  virtual void onWifiConnectionEstablished();
-  virtual void onWifiConnectionLost();
+  void onWifiConnectionEstablished() override;
+  void onWifiConnectionLost() override;
 };

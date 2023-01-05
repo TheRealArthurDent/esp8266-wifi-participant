@@ -15,9 +15,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Copy secrets examples
+      - name: Prepare Arduino IDE compatibility
         run: |
-          cp wifi_secrets.h.example wifi_secrets.h
+          cp include/wifi-secrets.h.example include/wifi-secrets.h
+          cd scripts
+          sh migrate_to_ino.sh
       - uses: arduino/compile-sketches@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -26,6 +28,6 @@ jobs:
             - name: esp8266:esp8266
               source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
           sketch-paths: |
-            - .
+            - ./esp8266-wifi-participant
           cli-compile-flags: |
             - --warnings="none"
