@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.5"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>ESP8266 WiFi Participant: ESP8266 WiFi Participant</title>
+<title>ESP8266 WiFi Participant: WifiDependent Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -46,7 +46,6 @@ $(function() {
 /* @license-end */
 </script>
 <div id="main-nav"></div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -68,12 +67,36 @@ $(function() {
 </div>
 </div>
 
-<div><div class="header">
-  <div class="headertitle"><div class="title">ESP8266 WiFi Participant </div></div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="classWifiDependent-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">WifiDependent Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p >A tiny sample project that makes your ESP8266 a participant in a WiFi network. On startup your board will try to connect to the specified WiFi network and will blink the built in ESP LED (GPIO 2) at 2 revolution per second while doing so. Once successfully connected the node LED (GPIO 16) will blink at 1 revolution per 5 seconds. If started with "#define DEBUG" it will log the progress via the Serial port. </p>
-</div></div><!-- PageDoc -->
+<div class="dynheader">
+Inheritance diagram for WifiDependent:</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classWifiDependent.png" usemap="#WifiDependent_map" alt=""/>
+  <map id="WifiDependent_map" name="WifiDependent_map">
+<area href="classDummyWifiDependent.html" alt="DummyWifiDependent" shape="rect" coords="0,56,135,80"/>
+  </map>
+</div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a36da441f78056898dd93eb23b34fb178"><td class="memItemLeft" align="right" valign="top"><a id="a36da441f78056898dd93eb23b34fb178" name="a36da441f78056898dd93eb23b34fb178"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onWifiConnectionEstablished</b> ()=0</td></tr>
+<tr class="separator:a36da441f78056898dd93eb23b34fb178"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10673c479193e0be330404115e75df4e"><td class="memItemLeft" align="right" valign="top"><a id="a10673c479193e0be330404115e75df4e" name="a10673c479193e0be330404115e75df4e"></a>
+virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onWifiConnectionLost</b> ()</td></tr>
+<tr class="separator:a10673c479193e0be330404115e75df4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>include/<a class="el" href="wifi-dependent_8hpp_source.html">wifi-dependent.hpp</a></li>
+</ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
