@@ -75,6 +75,11 @@ $(function() {
   <div class="headertitle"><div class="title">DummyWifiDependent Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
+
+<p>Dummy implementation.  
+ <a href="classDummyWifiDependent.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="dummy-wifi-dependent_8hpp_source.html">dummy-wifi-dependent.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for DummyWifiDependent:</div>
 <div class="dyncontent">
@@ -91,14 +96,17 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a3f657153d322a120facfb5daa07c8af1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58dd1dc3f65c400bca793ae82c176158"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDummyWifiDependent.html#a58dd1dc3f65c400bca793ae82c176158">onWifiConnectionLost</a> () override</td></tr>
 <tr class="separator:a58dd1dc3f65c400bca793ae82c176158"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a36da441f78056898dd93eb23b34fb178"><td class="memItemLeft" align="right" valign="top"><a id="a36da441f78056898dd93eb23b34fb178" name="a36da441f78056898dd93eb23b34fb178"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onWifiConnectionEstablished</b> ()=0</td></tr>
+<tr class="memitem:a36da441f78056898dd93eb23b34fb178"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWifiDependent.html#a36da441f78056898dd93eb23b34fb178">onWifiConnectionEstablished</a> ()=0</td></tr>
+<tr class="memdesc:a36da441f78056898dd93eb23b34fb178"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback function informing about an established connection.  <a href="classWifiDependent.html#a36da441f78056898dd93eb23b34fb178">More...</a><br /></td></tr>
 <tr class="separator:a36da441f78056898dd93eb23b34fb178"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10673c479193e0be330404115e75df4e"><td class="memItemLeft" align="right" valign="top"><a id="a10673c479193e0be330404115e75df4e" name="a10673c479193e0be330404115e75df4e"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onWifiConnectionLost</b> ()</td></tr>
+<tr class="memitem:a10673c479193e0be330404115e75df4e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWifiDependent.html#a10673c479193e0be330404115e75df4e">onWifiConnectionLost</a> ()</td></tr>
+<tr class="memdesc:a10673c479193e0be330404115e75df4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback function informing about a connection loss.  <a href="classWifiDependent.html#a10673c479193e0be330404115e75df4e">More...</a><br /></td></tr>
 <tr class="separator:a10673c479193e0be330404115e75df4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >Dummy implementation. </p>
+<p >Just a dummy implementation of a <a class="el" href="classWifiDependent.html">WifiDependent</a> that does nothing but logging the respective events. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a3f657153d322a120facfb5daa07c8af1" name="a3f657153d322a120facfb5daa07c8af1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3f657153d322a120facfb5daa07c8af1">&#9670;&#160;</a></span>onWifiConnectionEstablished()</h2>
 
@@ -121,8 +129,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onWifiConnect
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Logs in case of an established WiFi connection. </p>
 
-<p>Implements <a class="el" href="classWifiDependent.html">WifiDependent</a>.</p>
+<p>Implements <a class="el" href="classWifiDependent.html#a36da441f78056898dd93eb23b34fb178">WifiDependent</a>.</p>
 
 </div>
 </div>
@@ -148,8 +157,9 @@ virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onWifiConnect
   </tr>
 </table>
 </div><div class="memdoc">
+<p >Logs in case of an lost WiFi connection. </p>
 
-<p>Reimplemented from <a class="el" href="classWifiDependent.html">WifiDependent</a>.</p>
+<p>Reimplemented from <a class="el" href="classWifiDependent.html#a10673c479193e0be330404115e75df4e">WifiDependent</a>.</p>
 
 </div>
 </div>

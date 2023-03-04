@@ -75,25 +75,90 @@ $(function() {
   <div class="headertitle"><div class="title">WifiDependent Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="wifi-dependent_8hpp_source.html">wifi-dependent.hpp</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for WifiDependent:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="classWifiDependent.png" usemap="#WifiDependent_map" alt=""/>
   <map id="WifiDependent_map" name="WifiDependent_map">
-<area href="classDummyWifiDependent.html" alt="DummyWifiDependent" shape="rect" coords="0,56,135,80"/>
+<area href="classDummyWifiDependent.html" title="Dummy implementation." alt="DummyWifiDependent" shape="rect" coords="0,56,135,80"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a36da441f78056898dd93eb23b34fb178"><td class="memItemLeft" align="right" valign="top"><a id="a36da441f78056898dd93eb23b34fb178" name="a36da441f78056898dd93eb23b34fb178"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onWifiConnectionEstablished</b> ()=0</td></tr>
+<tr class="memitem:a36da441f78056898dd93eb23b34fb178"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWifiDependent.html#a36da441f78056898dd93eb23b34fb178">onWifiConnectionEstablished</a> ()=0</td></tr>
+<tr class="memdesc:a36da441f78056898dd93eb23b34fb178"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback function informing about an established connection.  <a href="classWifiDependent.html#a36da441f78056898dd93eb23b34fb178">More...</a><br /></td></tr>
 <tr class="separator:a36da441f78056898dd93eb23b34fb178"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10673c479193e0be330404115e75df4e"><td class="memItemLeft" align="right" valign="top"><a id="a10673c479193e0be330404115e75df4e" name="a10673c479193e0be330404115e75df4e"></a>
-virtual void&#160;</td><td class="memItemRight" valign="bottom"><b>onWifiConnectionLost</b> ()</td></tr>
+<tr class="memitem:a10673c479193e0be330404115e75df4e"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classWifiDependent.html#a10673c479193e0be330404115e75df4e">onWifiConnectionLost</a> ()</td></tr>
+<tr class="memdesc:a10673c479193e0be330404115e75df4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback function informing about a connection loss.  <a href="classWifiDependent.html#a10673c479193e0be330404115e75df4e">More...</a><br /></td></tr>
 <tr class="separator:a10673c479193e0be330404115e75df4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p >An interface defining a controller that depends on a WiFi connection. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a36da441f78056898dd93eb23b34fb178" name="a36da441f78056898dd93eb23b34fb178"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36da441f78056898dd93eb23b34fb178">&#9670;&#160;</a></span>onWifiConnectionEstablished()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void WifiDependent::onWifiConnectionEstablished </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Callback function informing about an established connection. </p>
+<p >Callback function that will be called by the WiFi connection's controller in case a connection has been established. </p>
+
+<p>Implemented in <a class="el" href="classDummyWifiDependent.html#a3f657153d322a120facfb5daa07c8af1">DummyWifiDependent</a>.</p>
+
+</div>
+</div>
+<a id="a10673c479193e0be330404115e75df4e" name="a10673c479193e0be330404115e75df4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a10673c479193e0be330404115e75df4e">&#9670;&#160;</a></span>onWifiConnectionLost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void WifiDependent::onWifiConnectionLost </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Callback function informing about a connection loss. </p>
+<p >Callback function that will be called by the WiFi connection's controller in case a connection has been lost. </p>
+
+<p>Reimplemented in <a class="el" href="classDummyWifiDependent.html#a58dd1dc3f65c400bca793ae82c176158">DummyWifiDependent</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>include/<a class="el" href="wifi-dependent_8hpp_source.html">wifi-dependent.hpp</a></li>
 </ul>
