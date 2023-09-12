@@ -19,7 +19,9 @@ public:
     auto stateChanged(Alert *alert) -> void override;
     auto hasActiveAlerts() -> bool override;
     auto getActiveAlerts() -> std::vector<Alert *> override;
+    auto getAllAlerts() -> std::vector<Alert *> override;
 
     auto acknowledge() -> void;
+    auto isAcknowledged() -> bool;
     auto isAlarming() -> bool;
 };

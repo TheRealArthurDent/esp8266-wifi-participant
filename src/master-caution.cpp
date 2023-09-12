@@ -74,9 +74,21 @@ std::vector<Alert *> MasterCaution::getActiveAlerts()
     return filteredResult;
 }
 
+std::vector<Alert *> MasterCaution::getAllAlerts()
+{
+    std::vector<Alert *> result;
+    std::copy(alerts.begin(), alerts.end(), std::back_inserter(result));
+    return result;
+}
+
 void MasterCaution::acknowledge()
 {
     acknowledged = true;
+}
+
+bool MasterCaution::isAcknowledged()
+{
+    return acknowledged;
 }
 
 bool MasterCaution::isAlarming()

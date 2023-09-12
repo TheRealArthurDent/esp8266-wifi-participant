@@ -16,4 +16,5 @@ public:
     virtual auto stateChanged(Alert *alert) -> void = 0;
     virtual auto hasActiveAlerts() -> bool = 0;
     virtual auto getActiveAlerts() -> std::vector<Alert *> = 0;
+    virtual auto getAllAlerts() -> std::vector<Alert *> = 0;
 };
