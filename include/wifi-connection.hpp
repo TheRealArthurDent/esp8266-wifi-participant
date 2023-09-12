@@ -35,8 +35,9 @@ public:
     static WifiConnection instance;
     return instance;
   }
-  // hide constructor, copy constructor and = operator
+
 private:
+  // hide constructor, copy constructor and = operator
   WifiConnection() = default;                 // hide default constructor
   WifiConnection(WifiConnection const &);     // Don't implement.
   WifiConnection(WifiConnection &&) noexcept; // Don't implement.

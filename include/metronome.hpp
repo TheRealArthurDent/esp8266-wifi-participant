@@ -41,9 +41,9 @@ public:
     auto waitForNextCycle() -> void;
 
 private:
-    Metronome() = default;                  // hide default constructor
+    Metronome() = default;                   // hide default constructor
     Metronome(Metronome const &);            // hide copy constructor
-    Metronome &operator=(Metronome const &); // hide assignment operator.
+    Metronome &operator=(Metronome const &); // NOLINT(modernize-use-trailing-return-type) hide assignment operator.
 
     int cycleDuration;
     bool skipMissedCycles;

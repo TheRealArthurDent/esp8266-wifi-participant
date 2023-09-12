@@ -1,5 +1,7 @@
 #pragma once
 
+#include "interface.hpp"
+
 /**
  * \brief An interface defining a controller that depends on a WiFi connection.
  *
@@ -8,6 +10,7 @@
  */
 class WifiDependent
 {
+  DECLARE_CLASS_AS_INTERFACE(WifiDependent)
 
 public:
   /**
