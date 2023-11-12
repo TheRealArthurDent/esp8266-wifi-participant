@@ -1,5 +1,7 @@
 #pragma once
 
+#include "interface.hpp"
+
 /**
  * \brief An interface defining a controller that depends on a WiFi connection.
  *
@@ -8,6 +10,7 @@
  */
 class WifiDependent
 {
+  DECLARE_CLASS_AS_INTERFACE(WifiDependent)
 
 public:
   /**
@@ -23,5 +26,5 @@ public:
    * Callback function that will be called by the WiFi connection's controller
    * in case a connection has been lost.
    */
-  virtual void onWifiConnectionLost() {}
+  virtual void onWifiConnectionLost() {};
 };

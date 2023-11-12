@@ -1,6 +1,7 @@
 #pragma once
 
 #include "wifi-dependent.hpp"
+#include "alert.hpp"
 
 /**
  * \brief Dummy implementation of a WifiDependent.
@@ -10,8 +11,13 @@
  */
 class DummyWifiDependent : public WifiDependent
 {
+private:
+  Alert *alert;
 
 public:
+  DummyWifiDependent() : alert(NULL){};
+  DummyWifiDependent(Alert *alert);
+
   void onWifiConnectionEstablished() override;
   void onWifiConnectionLost() override;
 };

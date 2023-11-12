@@ -26,7 +26,40 @@
 			"stdexcept": "cpp",
 			"streambuf": "cpp",
 			"system_error": "cpp",
-			"tuple": "cpp"
-		}
+			"tuple": "cpp",
+			"array": "cpp",
+			"bit": "cpp",
+			"cctype": "cpp",
+			"clocale": "cpp",
+			"cmath": "cpp",
+			"compare": "cpp",
+			"concepts": "cpp",
+			"cstdarg": "cpp",
+			"cstddef": "cpp",
+			"cstdint": "cpp",
+			"cstdio": "cpp",
+			"cstdlib": "cpp",
+			"cstring": "cpp",
+			"cwchar": "cpp",
+			"cwctype": "cpp",
+			"map": "cpp",
+			"set": "cpp",
+			"exception": "cpp",
+			"algorithm": "cpp",
+			"memory": "cpp",
+			"numeric": "cpp",
+			"random": "cpp",
+			"type_traits": "cpp",
+			"utility": "cpp",
+			"initializer_list": "cpp",
+			"iosfwd": "cpp",
+			"limits": "cpp",
+			"cinttypes": "cpp",
+			"typeinfo": "cpp"
+		},
+		"cSpell.words": [
+			"Alertable",
+			"alertables"
+		]
 	}
 }
