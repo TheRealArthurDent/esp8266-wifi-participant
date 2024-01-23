@@ -46,7 +46,7 @@ private:
 
   // normal methods
 public:
-  auto isConnected() -> bool;
+  auto isConnected() -> const bool;
   void init(std::list<WifiDependent *> dependents);
   // void addDependent
   // void removeDependent

@@ -1,5 +1,5 @@
-#include <Arduino.h>
 
+#include <Arduino.h>
 #include "main.hpp"
 #include "led.h"
 #include "debug.h"
@@ -10,6 +10,9 @@
 const int LOOP_DURATION = 5000;
 const int BLINK_INTERVAL = LOOP_DURATION / 2;
 
+// This "class" is our helper to get us from non-OO to an OO context.
+// Since we're not within a class yet, we have to declare it globally.
+// NOLINTNEXTLINE(cppcoreguidelines-avoid-non-const-global-variables)
 Metronome metronome(LOOP_DURATION);
 
 // cppcheck-suppress unusedFunction
@@ -26,9 +29,7 @@ void setup()
   DummyWifiDependent dependent1;
   DummyWifiDependent dependent2;
 
-  std::list<WifiDependent *> deps;
-  deps.push_back(&dependent1);
-  deps.push_back(&dependent2);
+  std::list<WifiDependent *> deps{&dependent1, &dependent2};
 
   WifiConnection::getInstance().init(deps);
 }

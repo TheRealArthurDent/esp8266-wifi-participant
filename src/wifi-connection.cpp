@@ -44,7 +44,7 @@ void WifiConnection::init(std::list<WifiDependent *> dependentsList)
  * or \c false otherwise.
  */
 // cppcheck-suppress unusedFunction
-bool WifiConnection::isConnected()
+auto WifiConnection::isConnected() -> const bool
 {
   return connected;
 }

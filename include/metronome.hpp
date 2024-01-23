@@ -41,8 +41,10 @@ public:
   auto waitForNextCycle() -> void;
 
 private:
-  Metronome() = default;                   // hide default constructor
-  Metronome(Metronome const &);            // hide copy constructor
+  Metronome() = default;        // hide default constructor
+  Metronome(Metronome const &); // hide copy constructor
+  // I just don't want to use a trailing return type here.
+  // NOLINTNEXTLINE(modernize-use-trailing-return-type)
   Metronome &operator=(Metronome const &); // hide assignment operator.
 
   int cycleDuration;
