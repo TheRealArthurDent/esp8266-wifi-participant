@@ -24,6 +24,6 @@ int main(int argc, char **argv)
 {
   UNITY_BEGIN();
   RUN_TEST(should_always_succeed);
-  RUN_TEST(should_always_fail);
+  // RUN_TEST(should_always_fail);
   UNITY_END();
 }

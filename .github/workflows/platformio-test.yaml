@@ -1,4 +1,4 @@
-name: PlatformIO Test Unity
+name: PlatformIO Test
 
 on:
   push:
@@ -39,7 +39,7 @@ jobs:
         #!/bin/bash
         pip install --upgrade platformio
 
-    - name: Check PlatformIO
+    - name: PlatformIO Test
       shell: bash
       run: |
         #!/bin/bash
