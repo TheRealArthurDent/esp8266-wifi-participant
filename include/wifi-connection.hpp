@@ -2,6 +2,7 @@
 
 #include <ESP8266WiFi.h>
 #include <Ticker.h>
+
 #include <list>
 #include <vector>
 #include "wifi-dependent.hpp"
@@ -58,6 +59,8 @@ private:
   void notifyDependentsConnected();
   void notifyDependentsDisconnected();
 
+  // Protected for testing purposes
+protected:
   static void onWifiConnect(const WiFiEventStationModeGotIP &event);
   static void onWifiDisconnect(const WiFiEventStationModeDisconnected &event);
 };
