@@ -17,10 +17,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v4.2.2
 
       - name: Cpp Lint Full
-        uses: cpp-linter/cpp-linter-action@v2.13.1
+        uses: cpp-linter/cpp-linter-action@v2.13.4
         id: linter
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

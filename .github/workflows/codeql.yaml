@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.2.0
+        uses: actions/checkout@v4.2.2
 
       # Initializes the CodeQL tools for scanning.
       - name: Initialize CodeQL
@@ -81,12 +81,12 @@ jobs:
           cp secrets.ini.template secrets.ini
 
       - name: Set up Python
-        uses: actions/setup-python@v5.2.0
+        uses: actions/setup-python@v5.4.0
         with:
           python-version-file: '.python-version'
 
       - name: Cache PlatformIO
-        uses: actions/cache@v4.0.2
+        uses: actions/cache@v4.2.0
         with:
           path: |
             ~/.cache/pip
