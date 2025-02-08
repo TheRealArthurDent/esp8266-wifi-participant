@@ -19,19 +19,19 @@ repos:
 
   - repo: https://github.com/renovatebot/pre-commit-hooks
     # renovate: datasource=github-releases depName=renovate-config-validator packageName=renovatebot/pre-commit-hooks
-    rev: 39.0.1
+    rev: 39.164.0
     hooks:
       - id: renovate-config-validator
         language_version: 20.18.0
 
   - repo: https://github.com/rhysd/actionlint
     # renovate: datasource=github-releases depName=actionlint packageName=rhysd/actionlint
-    rev: v1.7.3
+    rev: v1.7.7
     hooks:
       - id: actionlint-docker
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
     # renovate: datasource=github-releases depName=markdownlint packageName=igorshubovych/markdownlint-cli
-    rev: v0.42.0
+    rev: v0.44.0
     hooks:
       - id: markdownlint-docker
