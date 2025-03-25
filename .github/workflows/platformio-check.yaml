@@ -25,7 +25,7 @@ jobs:
           cp secrets.ini.template secrets.ini
 
       - name: Set up Python
-        uses: actions/setup-python@v5.4.0
+        uses: actions/setup-python@v5.5.0
         with:
           python-version-file: '.python-version'
 
@@ -40,7 +40,7 @@ jobs:
 
       - name: Restore Cache PIP
         id: cache-restore-pip
-        uses: actions/cache/restore@v4.2.2
+        uses: actions/cache/restore@v4.2.3
         with:
           path: |
             ${{ env.PIP_CACHE_FOLDER }}
@@ -48,7 +48,7 @@ jobs:
 
       - name: Restore Cache PlatformIO
         id: cache-restore-platformio
-        uses: actions/cache/restore@v4.2.2
+        uses: actions/cache/restore@v4.2.3
         with:
           path: |
             ${{ env.PLATFORMIO_CACHE_FOLDER }}
@@ -132,7 +132,7 @@ jobs:
 
       - name: Save Cache Pip
         if: ${{ steps.cache-updates.outputs.pip == 'true' }}
-        uses: actions/cache/save@v4.2.2
+        uses: actions/cache/save@v4.2.3
         with:
           path: |
             ${{ env.PIP_CACHE_FOLDER }}
@@ -140,7 +140,7 @@ jobs:
 
       - name: Save Cache Platformio
         if: ${{ steps.cache-updates.outputs.platformio  == 'true' }}
-        uses: actions/cache/save@v4.2.2
+        uses: actions/cache/save@v4.2.3
         with:
           path: |
             ${{ env.PLATFORMIO_CACHE_FOLDER }}
