@@ -1,0 +1,46 @@
+name: PlatformIO Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4.1.1
+
+    - name: Copy secrets template
+      run: |
+        cp secrets.ini.template secrets.ini
+
+    - name: Set up Python
+      uses: actions/setup-python@v5.1.0
+      with:
+        python-version-file: '.python-version'
+
+    - name: Cache PlatformIO
+      uses: actions/cache@v4.0.2
+      with:
+        path: |
+          ~/.cache/pip
+          ~/.platformio/.cache
+        key: ${{ runner.os }}-pio-${{ hashFiles('**/requirements.txt') }}
+
+    - name: Install PlatformIO
+      shell: bash
+      run: |
+        #!/bin/bash
+        pip install --upgrade platformio
+
+    - name: PlatformIO Test
+      shell: bash
+      run: |
+        #!/bin/bash
+        pio test -e unit_test
