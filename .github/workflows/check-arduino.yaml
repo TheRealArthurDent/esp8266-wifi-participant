@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v7.0.1
 
       - name: Prepare Arduino IDE compatibility
         run: |
@@ -26,7 +26,7 @@ jobs:
           sh migrate_to_ino.sh
 
       - name: Arduino Lint
-        uses: arduino/arduino-lint-action@v2.0.0
+        uses: arduino/arduino-lint-action@v3.0.0
         with:
           compliance: specification
           library-manager: update
