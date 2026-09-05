@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
 
       - name: Spellcheck
         uses: reviewdog/action-misspell@v1.27.0
@@ -21,19 +21,19 @@ jobs:
           ignore: mosquitto
 
       - name: Action lint
-        uses: reviewdog/action-actionlint@v1.72.0
+        uses: reviewdog/action-actionlint@v1.73.4
         with:
           reporter: github-pr-review
           fail_on_error: true
 
       - name: YAML lint
-        uses: reviewdog/action-yamllint@v1.21.0
+        uses: reviewdog/action-yamllint@v1.23.1
         with:
           reporter: github-pr-review
           fail_on_error: true
 
       - name: Markdown lint
-        uses: reviewdog/action-markdownlint@v0.26.2
+        uses: reviewdog/action-markdownlint@v0.28.0
         with:
           reporter: github-pr-review
           fail_on_error: true
