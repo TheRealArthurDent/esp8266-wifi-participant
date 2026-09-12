@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
 
       - name: Prepare Arduino IDE compatibility
         run: |
@@ -26,7 +26,7 @@ jobs:
           sh migrate_to_ino.sh
 
       - name: Compile sketch
-        uses: arduino/compile-sketches@v1.1.2
+        uses: arduino/compile-sketches@v1.1.3
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           fqbn: ${{ matrix.fqbn }}
