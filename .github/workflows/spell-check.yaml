@@ -14,9 +14,9 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.1.0
 
       - name: Spell check
-        uses: codespell-project/actions-codespell@v2.2
+        uses: codespell-project/actions-codespell@v2.4.3
         with:
           check_filenames: true
