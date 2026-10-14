@@ -16,10 +16,6 @@ old open PRs, all conflicting with or lagging behind `main`:
 - #29 "Main app" and #31 "Alerting" – an `App` class behind an `ArduinoCallable`
   wrapper, and an `Alert`/`MasterCaution` system.
 
-Known bug: `setup()` in `src/main.cpp` hands pointers to two stack-local
-`DummyWifiDependent`s to `WifiConnection::init`, which keeps them after
-`setup()` returns.
-
 Onboarding Claude to this repo is tracked in #137 and its sub-issues. Check open
 issues before changing an affected area, and reference them in commits.
 
@@ -148,8 +144,8 @@ markdownlint, reviewdog.
   resets; yield or keep loops short.
 - Heap is small and fragments easily; avoid repeated `new`/`String` churn in
   `loop()`.
-- Objects handed to callbacks or singletons must outlive them (see the known bug
-  above).
+- Objects handed to callbacks or singletons must outlive them, like the
+  file-scope `DummyWifiDependent`s in `main.cpp` that `WifiConnection` keeps.
 
 ## Working with the user
 

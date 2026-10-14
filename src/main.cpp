@@ -12,6 +12,11 @@ const int BLINK_INTERVAL = LOOP_DURATION / 2;
 
 Metronome metronome(LOOP_DURATION);
 
+// WifiConnection keeps the pointers it gets in setup(), so the dependents
+// must live as long as the program does.
+DummyWifiDependent dependent1;
+DummyWifiDependent dependent2;
+
 // cppcheck-suppress unusedFunction
 void setup()
 {
@@ -22,9 +27,6 @@ void setup()
   pinMode(led_built_in_Node, OUTPUT);
   digitalWrite(led_built_in_Node, HIGH);
   digitalWrite(led_built_in_ESP, HIGH);
-
-  DummyWifiDependent dependent1;
-  DummyWifiDependent dependent2;
 
   std::list<WifiDependent *> deps;
   deps.push_back(&dependent1);
