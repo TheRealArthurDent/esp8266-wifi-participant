@@ -1,16 +1,14 @@
 #include <Arduino.h>
 
-#include "main.hpp"
 #include "led.h"
 #include "debug.h"
 #include "wifi-connection.hpp"
 #include "dummy-wifi-dependent.hpp"
-#include "metronome.hpp"
+#include "led-blinker.hpp"
 
 const int LOOP_DURATION = 5000;
-const int BLINK_INTERVAL = LOOP_DURATION / 2;
 
-Metronome metronome(LOOP_DURATION);
+LedBlinker ledBlinker(LOOP_DURATION);
 
 // cppcheck-suppress unusedFunction
 void setup()
@@ -36,17 +34,5 @@ void setup()
 // cppcheck-suppress unusedFunction
 void loop()
 {
-  blinkLed();
-}
-
-void blinkLed()
-{
-  digitalWrite(led_built_in_Node, LOW);
-  delay(BLINK_INTERVAL);
-  digitalWrite(led_built_in_Node, HIGH);
-
-  metronome.waitForNextCycle();
-
-  DEBUG_PRINT("Loop ended at: ");
-  DEBUG_PRINTLN(millis());
+  ledBlinker.blink();
 }

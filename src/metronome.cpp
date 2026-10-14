@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "metronome.hpp"
 
+// cppcheck-suppress unusedFunction
 void Metronome::waitForNextCycle()
 {
   const Millis now = millis();
