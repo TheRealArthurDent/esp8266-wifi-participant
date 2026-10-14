@@ -6,12 +6,12 @@
 
 /**
  * \brief Keeps track of the WiFi connection state and informs the
- * registered \c WifiDependent s about its changes.
+ * registered \c wifi_dependent s about its changes.
  *
- * The hardware-free part of \c WifiConnection: it knows nothing about the
+ * The hardware-free part of \c wifi_connection: it knows nothing about the
  * ESP8266 WiFi stack, so it can be unit tested on the host.
  */
-class WifiDependentNotifier
+class wifi_dependent_notifier
 {
 public:
   /**
@@ -21,29 +21,29 @@ public:
    * connection's status, in the order they will be informed. They must
    * outlive this notifier, or be replaced before they are destroyed.
    */
-  void setDependents(const std::list<WifiDependent *> &dependents);
+  void set_dependents(const std::list<wifi_dependent *> &dependents);
 
   /**
    * \brief Marks the connection as established and calls
-   * WifiDependent::onWifiConnectionEstablished() on every dependent.
+   * wifi_dependent::on_wifi_connection_established() on every dependent.
    */
-  void connectionEstablished();
+  void connection_established();
 
   /**
    * \brief Marks the connection as lost and calls
-   * WifiDependent::onWifiConnectionLost() on every dependent.
+   * wifi_dependent::on_wifi_connection_lost() on every dependent.
    */
-  void connectionLost();
+  void connection_lost();
 
   /**
    * \brief Returns the connection status.
    *
-   * \return \c true after connectionEstablished(), \c false initially and
-   * after connectionLost().
+   * \return \c true after connection_established(), \c false initially and
+   * after connection_lost().
    */
-  [[nodiscard]] auto isConnected() const -> bool;
+  [[nodiscard]] auto is_connected() const -> bool;
 
 private:
   bool connected = false;
-  std::vector<WifiDependent *> dependents;
+  std::vector<wifi_dependent *> dependents;
 };

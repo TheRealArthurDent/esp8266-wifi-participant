@@ -2,22 +2,22 @@
 #include "metronome.hpp"
 
 // cppcheck-suppress unusedFunction
-void Metronome::waitForNextCycle()
+void metronome::wait_for_next_cycle()
 {
-  const Millis now = millis();
-  const auto duration = static_cast<Millis>(cycleDuration);
+  const milliseconds now = millis();
+  const auto duration = static_cast<milliseconds>(cycle_duration);
 
-  if (skipMissedCycles || !started)
+  if (skip_missed_cycles || !started)
   {
-    const Millis wait = duration - (now % duration);
-    currentCycleStart = now + wait;
+    const milliseconds wait = duration - (now % duration);
+    current_cycle_start = now + wait;
     started = true;
     delay(wait);
     return;
   }
 
   // Unsigned arithmetic keeps this right when millis() wraps around.
-  const Millis elapsed = now - currentCycleStart;
-  currentCycleStart += duration;
+  const milliseconds elapsed = now - current_cycle_start;
+  current_cycle_start += duration;
   delay(elapsed >= duration ? 0 : duration - elapsed);
 }

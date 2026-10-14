@@ -11,49 +11,49 @@
  *
  * A singleton that will take care of your WiFi connection. It will try to
  * establish a connection, attempt reconnects in case of a connection loss
- * and inform registered \c WifiDependent s about successful connects as well
+ * and inform registered \c wifi_dependent s about successful connects as well
  * as connection losses by calling their
- * WifiDependent::onWifiConnectionEstablished() or
- * WifiDependent::onWifiConnectionLost() callback respectively.
+ * wifi_dependent::on_wifi_connection_established() or
+ * wifi_dependent::on_wifi_connection_lost() callback respectively.
  */
-class WifiConnection
+class wifi_connection
 {
-  WiFiEventHandler wifiConnectHandler;
-  WiFiEventHandler wifiDisconnectHandler;
-  // Ticker wifiReconnectTimer;
+  WiFiEventHandler wifi_connect_handler;
+  WiFiEventHandler wifi_disconnect_handler;
+  // Ticker wifi_reconnect_timer;
 
-  WifiDependentNotifier notifier;
+  wifi_dependent_notifier notifier;
 
   // Singleton "constructor"
 public:
   /**
    * Gets the \c Singleton instance.
    */
-  static auto getInstance() -> WifiConnection &
+  static auto get_instance() -> wifi_connection &
   {
-    static WifiConnection instance;
+    static wifi_connection instance;
     return instance;
   }
   // hide constructor, copy constructor and = operator
 private:
-  WifiConnection() = default;                 // hide default constructor
-  WifiConnection(WifiConnection const &);     // Don't implement.
-  WifiConnection(WifiConnection &&) noexcept; // Don't implement.
-  void operator=(WifiConnection const &);     // Don't implement.
-  void operator=(WifiConnection &&) noexcept; // Don't implement.
-  ~WifiConnection() = default;                // Don't implement.
+  wifi_connection() = default;                  // hide default constructor
+  wifi_connection(wifi_connection const &);     // Don't implement.
+  wifi_connection(wifi_connection &&) noexcept; // Don't implement.
+  void operator=(wifi_connection const &);      // Don't implement.
+  void operator=(wifi_connection &&) noexcept;  // Don't implement.
+  ~wifi_connection() = default;                 // Don't implement.
 
   // normal methods
 public:
-  auto isConnected() -> bool;
-  void init(std::list<WifiDependent *> dependents);
-  // void addDependent
-  // void removeDependent
+  auto is_connected() -> bool;
+  void init(std::list<wifi_dependent *> dependents);
+  // void add_dependent
+  // void remove_dependent
 
 private:
   void init();
   void connect();
 
-  static void onWifiConnect(const WiFiEventStationModeGotIP &event);
-  static void onWifiDisconnect(const WiFiEventStationModeDisconnected &event);
+  static void on_wifi_connect(const WiFiEventStationModeGotIP &event);
+  static void on_wifi_disconnect(const WiFiEventStationModeDisconnected &event);
 };

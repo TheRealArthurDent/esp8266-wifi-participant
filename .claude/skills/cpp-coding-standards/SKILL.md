@@ -238,7 +238,7 @@ runs "concurrently" is interrupt handlers and SDK callbacks (WiFi events).
   handle it in `loop()`.
 - Never block for long. Waiting loops call `delay()` or `yield()` so the
   WiFi stack runs and the watchdog is fed; prefer `millis()`-based state
-  machines (like `Metronome`) over long `delay()`s.
+  machines (like `metronome`) over long `delay()`s.
 - Use `millis()` differences, not absolute values, so the 49-day wraparound
   doesn't matter: `if (millis() - start >= period)`.
 
@@ -420,9 +420,9 @@ Repo conventions:
 - Types, functions, variables, members and enumerators are
   `lower_snake_case` (NL.10), like the standard library. Members have no
   prefix or suffix. Macros, and only macros, are `ALL_CAPS`.
-- The existing code is still `PascalCase`/`camelCase` until it's migrated;
-  new code uses `lower_snake_case`. Names from the Arduino core and SDK
-  (`digitalWrite`, `WiFi.begin`) stay as they are.
+- Names from the Arduino core, the SDK and test libraries (`digitalWrite`,
+  `WiFi.begin`, Unity's `setUp`/`tearDown`) stay as they are.
+- `.clang-tidy` enforces this with `readability-identifier-naming`.
 - Public classes and methods get Doxygen comments (`\brief`, `\param`).
 
 ## Performance & Footprint (Per.\*, ESP)

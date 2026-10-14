@@ -6,7 +6,7 @@
  * Implementing class will receive callbacks in case the WiFi connection is
  * established or lost.
  */
-class WifiDependent
+class wifi_dependent
 {
 
 public:
@@ -16,12 +16,12 @@ public:
    * Callback function that will be called by the WiFi connection's controller
    * in case a connection has been established.
    */
-  virtual void onWifiConnectionEstablished() = 0;
+  virtual void on_wifi_connection_established() = 0;
   /**
    * \brief Callback function informing about a connection loss.
    *
    * Callback function that will be called by the WiFi connection's controller
    * in case a connection has been lost.
    */
-  virtual void onWifiConnectionLost() {}
+  virtual void on_wifi_connection_lost() {}
 };

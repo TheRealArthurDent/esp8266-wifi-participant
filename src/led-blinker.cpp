@@ -5,13 +5,13 @@
 #include "debug.h"
 
 // cppcheck-suppress unusedFunction
-void LedBlinker::blink()
+void led_blinker::blink()
 {
-  digitalWrite(led_built_in_Node, LOW);
-  delay(blinkInterval);
-  digitalWrite(led_built_in_Node, HIGH);
+  digitalWrite(LED_BUILT_IN_NODE, LOW);
+  delay(blink_interval);
+  digitalWrite(LED_BUILT_IN_NODE, HIGH);
 
-  metronome.waitForNextCycle();
+  beat.wait_for_next_cycle();
 
   DEBUG_PRINT("Loop ended at: ");
   DEBUG_PRINTLN(millis());

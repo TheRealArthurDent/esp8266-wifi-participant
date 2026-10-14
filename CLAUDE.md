@@ -2,15 +2,15 @@
 
 A small firmware project that makes an ESP8266 (NodeMCU v2) a participant in a
 WiFi network: it connects, keeps the connection, and informs registered
-`WifiDependent`s when the connection is established or lost. The LEDs show the
+`wifi_dependent`s when the connection is established or lost. The LEDs show the
 state (ESP LED flashes while connecting, node LED blinks once connected). Built
 with PlatformIO and the Arduino framework, and kept buildable in the Arduino
 IDE.
 
 ## State of the repo
 
-`main` is a skeleton: the WiFi controller, the `Metronome` loop helper (with
-unit tests) and two `DummyWifiDependent`s. Work that hasn't landed yet lives in
+`main` is a skeleton: the WiFi controller, the `metronome` loop helper (with
+unit tests) and two `dummy_wifi_dependent`s. Work that hasn't landed yet lives in
 old open PRs, all conflicting with or lagging behind `main`:
 
 - #29 "Main app" and #31 "Alerting" – an `App` class behind an `ArduinoCallable`
@@ -108,7 +108,7 @@ markdownlint, reviewdog.
   and updated by Renovate; keep them pinned. Leave Renovate PRs alone unless
   asked (automerge is being set up in #141).
 - Work test-driven where it's feasible, and say why when it isn't. Logic that
-  doesn't touch hardware (like `Metronome`) belongs under unit tests.
+  doesn't touch hardware (like `metronome`) belongs under unit tests.
 
 ## Unit tests
 
@@ -120,17 +120,17 @@ markdownlint, reviewdog.
   [ArduinoFake](https://github.com/FabioBatSilva/ArduinoFake), which mocks them
   with fakeit: stub with `When(Method(ArduinoFake(), millis)).Return(…)`, check
   with `Verify(Method(ArduinoFake(), delay).Using(…)).Once()`. Call
-  `ArduinoFakeReset()` in `setUp()` and `installFakeitUnityAdapter()` (from
+  `ArduinoFakeReset()` in `setUp()` and `install_fakeit_unity_adapter()` (from
   `test/fakeit-unity.hpp`) before `UNITY_BEGIN()`, so a failed `Verify` fails
   its test instead of aborting the program.
 - Only code listed in `build_src_filter` of `[env:unit_test]` is built for the
   tests (`unit_test_DEBUG` inherits it). Add a source file there when you test
-  it; code that needs the ESP8266 SDK (like `WifiConnection`) can't be built on
+  it; code that needs the ESP8266 SDK (like `wifi_connection`) can't be built on
   the host, so keep its hardware-free logic in separate classes (like
-  `WifiDependentNotifier`) and test those.
+  `wifi_dependent_notifier`) and test those.
 - `main()` returns `UNITY_END()`, so failures fail the process.
 - Coverage counts only the files in `build_src_filter`, so code the tests
-  don't build (like `WifiConnection` or `main.cpp`) is missing from the
+  don't build (like `wifi_connection` or `main.cpp`) is missing from the
   report rather than shown as uncovered. The HTML report lands in
   `.pio/build/coverage/coverage.html`.
 - YAML files use the `.yaml` extension, not `.yml`.
@@ -156,7 +156,7 @@ markdownlint, reviewdog.
 - Heap is small and fragments easily; avoid repeated `new`/`String` churn in
   `loop()`.
 - Objects handed to callbacks or singletons must outlive them, like the
-  static `DummyWifiDependent`s in `main.cpp` that `WifiConnection` keeps.
+  static `dummy_wifi_dependent`s in `main.cpp` that `wifi_connection` keeps.
 
 ## Working with the user
 

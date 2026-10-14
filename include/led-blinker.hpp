@@ -8,16 +8,16 @@
  * Shows that the firmware is alive: every call to blink() switches the node
  * LED on for half a cycle, then waits for the next cycle to start.
  */
-class LedBlinker
+class led_blinker
 {
 public:
   /**
    * \brief Constructor.
    *
-   * \param cycleDuration The duration of one blink cycle in milliseconds.
+   * \param cycle_duration The duration of one blink cycle in milliseconds.
    */
-  explicit LedBlinker(int cycleDuration)
-      : blinkInterval(cycleDuration / 2), metronome(cycleDuration) {}
+  explicit led_blinker(int cycle_duration)
+      : blink_interval(cycle_duration / 2), beat(cycle_duration) {}
 
   /**
    * \brief Blinks the node LED once and blocks until the next cycle starts.
@@ -25,6 +25,6 @@ public:
   void blink();
 
 private:
-  int blinkInterval;
-  Metronome metronome;
+  int blink_interval;
+  metronome beat;
 };

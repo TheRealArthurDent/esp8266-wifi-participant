@@ -6,35 +6,35 @@
 #include "dummy-wifi-dependent.hpp"
 #include "led-blinker.hpp"
 
-const int LOOP_DURATION = 5000;
+const int loop_duration = 5000;
 
-LedBlinker ledBlinker(LOOP_DURATION);
+led_blinker blinker(loop_duration);
 
 // cppcheck-suppress unusedFunction
 void setup()
 {
 
-  initDebugging();
+  init_debugging();
 
-  pinMode(led_built_in_ESP, OUTPUT);
-  pinMode(led_built_in_Node, OUTPUT);
-  digitalWrite(led_built_in_Node, HIGH);
-  digitalWrite(led_built_in_ESP, HIGH);
+  pinMode(LED_BUILT_IN_ESP, OUTPUT);
+  pinMode(LED_BUILT_IN_NODE, OUTPUT);
+  digitalWrite(LED_BUILT_IN_NODE, HIGH);
+  digitalWrite(LED_BUILT_IN_ESP, HIGH);
 
-  // WifiConnection keeps these pointers, so the dependents must outlive
+  // wifi_connection keeps these pointers, so the dependents must outlive
   // setup(): static locals live as long as the program does.
-  static DummyWifiDependent dependent1;
-  static DummyWifiDependent dependent2;
+  static dummy_wifi_dependent dependent1;
+  static dummy_wifi_dependent dependent2;
 
-  std::list<WifiDependent *> deps;
+  std::list<wifi_dependent *> deps;
   deps.push_back(&dependent1);
   deps.push_back(&dependent2);
 
-  WifiConnection::getInstance().init(deps);
+  wifi_connection::get_instance().init(deps);
 }
 
 // cppcheck-suppress unusedFunction
 void loop()
 {
-  ledBlinker.blink();
+  blinker.blink();
 }

@@ -11,7 +11,7 @@ using fakeit::When;
 
 namespace
 {
-const int CYCLE_DURATION = 1000;
+const int cycle_duration = 1000;
 } // namespace
 
 void setUp()
@@ -29,31 +29,31 @@ void tearDown()
 {
 }
 
-void switchesTheNodeLedOnForHalfACycleThenWaitsForTheNextOne()
+void switches_the_node_led_on_for_half_a_cycle_then_waits_for_the_next_one()
 {
-  LedBlinker blinker(CYCLE_DURATION);
+  led_blinker blinker(cycle_duration);
 
   blinker.blink();
 
   // millis() is 1500 after the LED went off, so the next cycle is 500 ms away.
-  Verify(Method(ArduinoFake(), digitalWrite).Using(led_built_in_Node, LOW),
-         Method(ArduinoFake(), delay).Using(CYCLE_DURATION / 2),
-         Method(ArduinoFake(), digitalWrite).Using(led_built_in_Node, HIGH),
+  Verify(Method(ArduinoFake(), digitalWrite).Using(LED_BUILT_IN_NODE, LOW),
+         Method(ArduinoFake(), delay).Using(cycle_duration / 2),
+         Method(ArduinoFake(), digitalWrite).Using(LED_BUILT_IN_NODE, HIGH),
          Method(ArduinoFake(), delay).Using(500));
 }
 
-void leavesTheEspLedAlone()
+void leaves_the_esp_led_alone()
 {
-  LedBlinker blinker(CYCLE_DURATION);
+  led_blinker blinker(cycle_duration);
 
   blinker.blink();
 
-  Verify(Method(ArduinoFake(), digitalWrite).Using(led_built_in_ESP, fakeit::_)).Never();
+  Verify(Method(ArduinoFake(), digitalWrite).Using(LED_BUILT_IN_ESP, fakeit::_)).Never();
 }
 
-void logsTheEndOfTheCycleInDebugBuilds()
+void logs_the_end_of_the_cycle_in_debug_builds()
 {
-  LedBlinker blinker(CYCLE_DURATION);
+  led_blinker blinker(cycle_duration);
 
   blinker.blink();
 
@@ -67,10 +67,10 @@ void logsTheEndOfTheCycleInDebugBuilds()
 
 auto main() -> int
 {
-  installFakeitUnityAdapter();
+  install_fakeit_unity_adapter();
   UNITY_BEGIN();
-  RUN_TEST(switchesTheNodeLedOnForHalfACycleThenWaitsForTheNextOne);
-  RUN_TEST(leavesTheEspLedAlone);
-  RUN_TEST(logsTheEndOfTheCycleInDebugBuilds);
+  RUN_TEST(switches_the_node_led_on_for_half_a_cycle_then_waits_for_the_next_one);
+  RUN_TEST(leaves_the_esp_led_alone);
+  RUN_TEST(logs_the_end_of_the_cycle_in_debug_builds);
   return UNITY_END();
 }

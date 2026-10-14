@@ -10,9 +10,9 @@
  *
  * Without it fakeit throws an exception that nothing catches, which aborts
  * the whole test program instead of failing the one test. Install it once
- * with \c installFakeitUnityAdapter() before \c UNITY_BEGIN().
+ * with \c install_fakeit_unity_adapter() before \c UNITY_BEGIN().
  */
-class FakeitUnityAdapter final : public fakeit::EventHandler
+class fakeit_unity_adapter final : public fakeit::EventHandler
 {
 public:
   void handle(const fakeit::UnexpectedMethodCallEvent &event) override
@@ -43,10 +43,10 @@ private:
 
 /**
  * \brief Makes fakeit report its failures through Unity, see
- * \c FakeitUnityAdapter.
+ * \c fakeit_unity_adapter.
  */
-inline auto installFakeitUnityAdapter() -> void
+inline auto install_fakeit_unity_adapter() -> void
 {
-  static FakeitUnityAdapter adapter;
+  static fakeit_unity_adapter adapter;
   Fakeit.setTestingFrameworkAdapter(adapter);
 }
