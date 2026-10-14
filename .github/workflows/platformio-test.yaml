@@ -42,4 +42,4 @@ jobs:
       - name: Run unit tests
         shell: bash
         run: |
-          pio test -e unit_test
+          pio test -e unit_test -e unit_test_DEBUG
