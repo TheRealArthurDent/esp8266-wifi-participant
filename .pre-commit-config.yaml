@@ -22,16 +22,16 @@ repos:
     rev: 42.95.1
     hooks:
       - id: renovate-config-validator
-        language_version: 20.18.0
+        language_version: 22.22.0
 
   - repo: https://github.com/rhysd/actionlint
     # renovate: datasource=github-releases depName=actionlint packageName=rhysd/actionlint
     rev: v1.7.12
     hooks:
-      - id: actionlint-docker
+      - id: actionlint
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
     # renovate: datasource=github-releases depName=markdownlint packageName=igorshubovych/markdownlint-cli
     rev: v0.49.1
     hooks:
-      - id: markdownlint-docker
+      - id: markdownlint
