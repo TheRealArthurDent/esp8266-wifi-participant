@@ -44,6 +44,10 @@ fetch_core()
 build()
 {
   mkdir -p "$(dirname "${sketch}")"
+  # Objects of the firmware itself are rebuilt every time: their dependency
+  # files would name headers that may no longer exist (CI caches the core with
+  # its bin/ folder). The core's and its libraries' objects are kept.
+  rm -rf "${core}/tests/host/bin${repo}/src" "${core}/tests/host/bin${work}/sketch"
   # The emulation has no Arduino preprocessing; the sketch just includes main.cpp.
   printf '#include "%s"\n#include "%s"\n' "${repo}/src/main.cpp" "${repo}/test-sil/wifi-events.cpp" > "${sketch}.ino"
 
