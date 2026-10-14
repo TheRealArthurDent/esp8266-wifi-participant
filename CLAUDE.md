@@ -145,7 +145,7 @@ markdownlint, reviewdog.
 - Heap is small and fragments easily; avoid repeated `new`/`String` churn in
   `loop()`.
 - Objects handed to callbacks or singletons must outlive them, like the
-  file-scope `DummyWifiDependent`s in `main.cpp` that `WifiConnection` keeps.
+  static `DummyWifiDependent`s in `main.cpp` that `WifiConnection` keeps.
 
 ## Working with the user
 
