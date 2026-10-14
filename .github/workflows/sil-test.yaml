@@ -1,0 +1,35 @@
+name: 🖥️ SIL Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Cache ESP8266 core
+        uses: actions/cache@v5.1.0
+        with:
+          path: .pio/sil/arduino-*
+          key: ${{ runner.os }}-sil-${{ hashFiles('test-sil/run.sh', 'test-sil/core-host-emulation.patch') }}
+
+      - name: Run software-in-the-loop (SIL) tests
+        shell: bash
+        run: |
+          test-sil/run.sh
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: sil-logs
+          path: .pio/sil/logs/

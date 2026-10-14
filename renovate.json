@@ -22,6 +22,17 @@
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*version: (?<currentValue>\\S+)"
       ]
+    },
+    {
+      "customType": "regex",
+      "description": "The ESP8266 Arduino core that the software-in-the-loop (SIL) tests in test-sil/run.sh build against.",
+      "extractVersionTemplate": "^v?(?<version>.+)$",
+      "managerFilePatterns": [
+        "/(^|/)test-sil/run\\.sh$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\nCORE_VERSION=(?<currentValue>\\S+)"
+      ]
     }
   ],
   "packageRules": [

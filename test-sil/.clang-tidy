@@ -1,0 +1,8 @@
+---
+# Software-in-the-loop (SIL) test code: the parent config, minus checks that only make
+# noise here.
+# - Magic numbers are the test data (event times, addresses).
+InheritParentConfig: true
+Checks: >-
+  -cppcoreguidelines-avoid-magic-numbers,
+  -readability-magic-numbers
