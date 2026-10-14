@@ -3,8 +3,8 @@
 #include <ESP8266WiFi.h>
 #include <Ticker.h>
 #include <list>
-#include <vector>
 #include "wifi-dependent.hpp"
+#include "wifi-dependent-notifier.hpp"
 
 /**
  * \brief A controller for a WiFi connection.
@@ -22,8 +22,7 @@ class WifiConnection
   WiFiEventHandler wifiDisconnectHandler;
   // Ticker wifiReconnectTimer;
 
-  bool connected = false;
-  std::vector<WifiDependent *> dependents;
+  WifiDependentNotifier notifier;
 
   // Singleton "constructor"
 public:
@@ -54,9 +53,6 @@ public:
 private:
   void init();
   void connect();
-  void setConnected(bool connected);
-  void notifyDependentsConnected();
-  void notifyDependentsDisconnected();
 
   static void onWifiConnect(const WiFiEventStationModeGotIP &event);
   static void onWifiDisconnect(const WiFiEventStationModeDisconnected &event);

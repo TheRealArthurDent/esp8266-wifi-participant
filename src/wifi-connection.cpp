@@ -30,9 +30,7 @@ void WifiConnection::init()
  */
 void WifiConnection::init(std::list<WifiDependent *> dependentsList)
 {
-  dependents.clear();
-  std::for_each(dependentsList.begin(), dependentsList.end(), [this](WifiDependent *d)
-                { dependents.push_back(d); });
+  notifier.setDependents(dependentsList);
 
   init();
 }
@@ -46,24 +44,7 @@ void WifiConnection::init(std::list<WifiDependent *> dependentsList)
 // cppcheck-suppress unusedFunction
 bool WifiConnection::isConnected()
 {
-  return connected;
-}
-
-void WifiConnection::setConnected(bool conn)
-{
-  connected = conn;
-}
-
-void WifiConnection::notifyDependentsConnected()
-{
-  std::for_each(dependents.begin(), dependents.end(), [](WifiDependent *d)
-                { d->onWifiConnectionEstablished(); });
-}
-
-void WifiConnection::notifyDependentsDisconnected()
-{
-  std::for_each(dependents.begin(), dependents.end(), [](WifiDependent *d)
-                { d->onWifiConnectionLost(); });
+  return notifier.isConnected();
 }
 
 void WifiConnection::connect()
@@ -88,8 +69,7 @@ void WifiConnection::onWifiConnect(const WiFiEventStationModeGotIP &event)
   DEBUG_PRINT("IP address: ");
   DEBUG_PRINTLN(WiFi.localIP());
 
-  getInstance().setConnected(true);
-  getInstance().notifyDependentsConnected();
+  getInstance().notifier.connectionEstablished();
 }
 
 void WifiConnection::onWifiDisconnect(const WiFiEventStationModeDisconnected &event)
@@ -97,8 +77,7 @@ void WifiConnection::onWifiDisconnect(const WiFiEventStationModeDisconnected &ev
   DEBUG_PRINTLN("Disconnected from WiFi ");
   DEBUG_PRINTLN(SECRET_WIFI_SSID);
 
-  getInstance().setConnected(false);
-  getInstance().notifyDependentsDisconnected();
+  getInstance().notifier.connectionLost();
 
   // Apparently this is not even required, since ESP8266WiFiClass tries to reconnect like a mad man anyway.
   // wifiReconnectTimer.once(2, connectToWifi);

@@ -1,0 +1,33 @@
+#include "wifi-dependent-notifier.hpp"
+
+// cppcheck-suppress unusedFunction
+void WifiDependentNotifier::setDependents(const std::list<WifiDependent *> &dependentsList)
+{
+  dependents.assign(dependentsList.begin(), dependentsList.end());
+}
+
+// cppcheck-suppress unusedFunction
+void WifiDependentNotifier::connectionEstablished()
+{
+  connected = true;
+  for (WifiDependent *dependent : dependents)
+  {
+    dependent->onWifiConnectionEstablished();
+  }
+}
+
+// cppcheck-suppress unusedFunction
+void WifiDependentNotifier::connectionLost()
+{
+  connected = false;
+  for (WifiDependent *dependent : dependents)
+  {
+    dependent->onWifiConnectionLost();
+  }
+}
+
+// cppcheck-suppress unusedFunction
+auto WifiDependentNotifier::isConnected() const -> bool
+{
+  return connected;
+}

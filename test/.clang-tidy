@@ -2,8 +2,12 @@
 # Test code: the parent config, minus checks that only make noise here.
 # - Magic numbers are the test data, named by the test that uses them.
 # - The analyzer reports leaks inside fakeit's mock setup at every call site.
+# - Unity's TEST_ASSERT_* macros expand to do-while loops.
+# - fakeit's OverloadedMethod() expands to pre-C++14 type traits.
 InheritParentConfig: true
 Checks: >-
   -cppcoreguidelines-avoid-magic-numbers,
   -readability-magic-numbers,
-  -clang-analyzer-cplusplus.NewDeleteLeaks
+  -clang-analyzer-cplusplus.NewDeleteLeaks,
+  -cppcoreguidelines-avoid-do-while,
+  -modernize-type-traits
