@@ -17,6 +17,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Dispatch to workflows
+        shell: bash
         run: |
             curl \
             --header "Accept: application/vnd.github.everest-preview+json" \

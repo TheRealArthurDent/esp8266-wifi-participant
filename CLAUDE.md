@@ -9,14 +9,12 @@ IDE.
 
 ## State of the repo
 
-`main` is a skeleton: the WiFi controller, the `Metronome` loop helper and two
-`DummyWifiDependent`s. Work that hasn't landed yet lives in old open PRs, all
-conflicting with or lagging behind `main`:
+`main` is a skeleton: the WiFi controller, the `Metronome` loop helper (with
+unit tests) and two `DummyWifiDependent`s. Work that hasn't landed yet lives in
+old open PRs, all conflicting with or lagging behind `main`:
 
 - #29 "Main app" and #31 "Alerting" – an `App` class behind an `ArduinoCallable`
   wrapper, and an `Alert`/`MasterCaution` system.
-- #80 "Introduce testing with Unity" – unit tests with Unity and a
-  `platformio-test` workflow.
 
 Known bug: `setup()` in `src/main.cpp` hands pointers to two stack-local
 `DummyWifiDependent`s to `WifiConnection::init`, which keeps them after
@@ -30,7 +28,9 @@ issues before changing an affected area, and reference them in commits.
 - `src/` – implementation (`main.cpp` holds `setup()`/`loop()`)
 - `include/` – headers (`.hpp` for classes, `.h` for plain C-style helpers like
   `debug.h`, `led.h`)
-- `lib/`, `test/` – PlatformIO's library and test folders (empty on `main`)
+- `lib/` – PlatformIO's library folder (empty on `main`)
+- `test/` – unit tests, one `test_<name>/` folder per suite, plus shared test
+  helpers such as `fakeit-unity.hpp` and a `.clang-tidy` for test code
 - `scripts/migrate_to_ino.sh` – copies `src/` and `include/` into a flat Arduino
   IDE sketch folder
 - `docs/` – Doxygen config; the docs are published to GitHub Pages
@@ -43,6 +43,9 @@ Board: NodeMCU v2 (ESP8266), with two PlatformIO envs:
 - `nodemcuv2_DEBUG` – **default**; debug build with `-D DEBUG`, serial logging
   at 115200 baud
 - `nodemcuv2` – release build
+
+A third env, `unit_test`, builds the unit tests for the host (`platform =
+native`), not for the board.
 
 Platform: `espressif8266`, framework: `arduino`. Never flash a board unless the
 user explicitly asks.
@@ -64,7 +67,7 @@ pip install -r requirements.txt       # PlatformIO and pre-commit, pinned
 pio run                               # build the default env (nodemcuv2_DEBUG)
 pio run -e nodemcuv2                  # build the release env
 pio check -e nodemcuv2_DEBUG          # static analysis: cppcheck + clang-tidy
-pio test                              # unit tests (once #80 lands)
+pio test -e unit_test                 # unit tests on the host
 pre-commit run --all-files            # hygiene, JSON/YAML, Renovate, linters
 clang-format --dry-run --Werror src/*.cpp include/*.h*   # see .clang-format
 ```
@@ -75,10 +78,10 @@ In Claude cloud sessions, `.claude/hooks/session-start.sh` does the setup above
 command here runs there without manual steps. The pre-commit hooks don't use
 Docker, because cloud sessions can't run containers.
 
-CI on every PR: PlatformIO build and `pio check`, cpp-linter (clang-format +
-clang-tidy, reports only, doesn't fail the build), Arduino IDE compile
-(`compile-sketch`) and `arduino-lint` (`check-arduino`), CodeQL, codespell,
-markdownlint, reviewdog.
+CI on every PR: PlatformIO build, `pio check` and `pio test -e unit_test`,
+cpp-linter (clang-format + clang-tidy, reports only, doesn't fail the build),
+Arduino IDE compile (`compile-sketch`) and `arduino-lint` (`check-arduino`),
+CodeQL, codespell, markdownlint, reviewdog.
 
 ## Conventions
 
@@ -101,8 +104,24 @@ markdownlint, reviewdog.
   and updated by Renovate; keep them pinned. Leave Renovate PRs alone unless
   asked (automerge is being set up in #141).
 - Work test-driven where it's feasible, and say why when it isn't. Logic that
-  doesn't touch hardware (like `Metronome`) belongs under unit tests once Unity
-  is in (#80).
+  doesn't touch hardware (like `Metronome`) belongs under unit tests.
+
+## Unit tests
+
+- Tests use Unity and run on the host in the `unit_test` env. Plain `pio test`
+  runs nothing, because the board envs ignore all tests; always pass
+  `-e unit_test`.
+- Arduino functions (`millis()`, `delay()`, `digitalWrite()`, …) come from
+  [ArduinoFake](https://github.com/FabioBatSilva/ArduinoFake), which mocks them
+  with fakeit: stub with `When(Method(ArduinoFake(), millis)).Return(…)`, check
+  with `Verify(Method(ArduinoFake(), delay).Using(…)).Once()`. Call
+  `ArduinoFakeReset()` in `setUp()` and `installFakeitUnityAdapter()` (from
+  `test/fakeit-unity.hpp`) before `UNITY_BEGIN()`, so a failed `Verify` fails
+  its test instead of aborting the program.
+- Only code listed in `build_src_filter` of `[env:unit_test]` is built for the
+  tests. Add a source file there when you test it; code that needs the
+  ESP8266 SDK (like `WifiConnection`) can't be built on the host.
+- `main()` returns `UNITY_END()`, so failures fail the process.
 - YAML files use the `.yaml` extension, not `.yml`.
 - Everything in the repo is written in English (code, comments, docs, commit
   messages), even when the user chats in German.
