@@ -50,4 +50,4 @@ removes it from the list.
 
 - `boots`: `setup()` runs and the loop keeps going. Passes.
 - `wifi_events`: connect, disconnect and reconnect reach both dependents.
-  Known failure, #149.
+  Passes.

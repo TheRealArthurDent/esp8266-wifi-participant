@@ -149,9 +149,7 @@ all_scenarios=(boots wifi_events)
 
 # Scenarios that fail on main because of a known bug. They must keep failing
 # until it's fixed; then remove them here.
-#  wifi_events (#149): setup() hands WifiConnection pointers to stack-local
-#    DummyWifiDependents, which are gone when the events fire.
-known_failures=(wifi_events)
+known_failures=()
 
 fetch_core
 build

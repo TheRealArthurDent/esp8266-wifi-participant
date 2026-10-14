@@ -23,8 +23,10 @@ void setup()
   digitalWrite(led_built_in_Node, HIGH);
   digitalWrite(led_built_in_ESP, HIGH);
 
-  DummyWifiDependent dependent1;
-  DummyWifiDependent dependent2;
+  // WifiConnection keeps these pointers, so the dependents must outlive
+  // setup(): static locals live as long as the program does.
+  static DummyWifiDependent dependent1;
+  static DummyWifiDependent dependent2;
 
   std::list<WifiDependent *> deps;
   deps.push_back(&dependent1);
