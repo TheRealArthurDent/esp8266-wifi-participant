@@ -37,7 +37,7 @@ jobs:
       - name: Install PlatformIO
         shell: bash
         run: |
-          pip install --upgrade platformio
+          pip install -r requirements.txt
 
       - name: Check PlatformIO
         shell: bash

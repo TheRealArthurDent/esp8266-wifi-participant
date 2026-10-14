@@ -34,6 +34,9 @@ jobs:
           platforms: |
             - name: esp8266:esp8266
               source-url: https://arduino.esp8266.com/stable/package_esp8266com_index.json
+              # The core PlatformIO builds with (framework-arduinoespressif8266 3.30102.0).
+              # renovate: datasource=github-tags depName=esp8266/Arduino
+              version: 3.1.2
           sketch-paths: |
             - ./esp8266-wifi-participant
           cli-compile-flags: |

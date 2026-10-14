@@ -1,5 +1,29 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "PlatformIO platforms and libraries in platformio.ini, each annotated with a `; renovate:` comment. Renovate has no PlatformIO manager.",
+      "extractVersionTemplate": "^v?(?<version>.+)$",
+      "managerFilePatterns": [
+        "/(^|/)platformio\\.ini$/"
+      ],
+      "matchStrings": [
+        "; renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n[^\\n@]+@(?<currentValue>\\S+)"
+      ]
+    },
+    {
+      "customType": "regex",
+      "description": "The ESP8266 Arduino core that the compile-sketch workflow installs.",
+      "extractVersionTemplate": "^v?(?<version>.+)$",
+      "managerFilePatterns": [
+        "/(^|/)\\.github/workflows/compile-sketch\\.yaml$/"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n\\s*version: (?<currentValue>\\S+)"
+      ]
+    }
+  ],
   "packageRules": [
     {
       "addLabels": [
