@@ -60,17 +60,20 @@ the repo.
 
 ```sh
 cp secrets.ini.template secrets.ini   # once; dummy values build fine
-pip install -r requirements.txt       # PlatformIO, pinned
+pip install -r requirements.txt       # PlatformIO and pre-commit, pinned
 pio run                               # build the default env (nodemcuv2_DEBUG)
 pio run -e nodemcuv2                  # build the release env
 pio check -e nodemcuv2_DEBUG          # static analysis: cppcheck + clang-tidy
 pio test                              # unit tests (once #80 lands)
 pre-commit run --all-files            # hygiene, JSON/YAML, Renovate, linters
-clang-format --dry-run --Werror src/*.cpp include/*   # see .clang-format
+clang-format --dry-run --Werror src/*.cpp include/*.h*   # see .clang-format
 ```
 
-In Claude cloud sessions PlatformIO can't download the `espressif8266` toolchain
-yet (#140), so builds only run in CI there.
+In Claude cloud sessions, `.claude/hooks/session-start.sh` does the setup above
+(PlatformIO and pre-commit in a venv that is put on `PATH`, a dummy
+`secrets.ini`, the pre-commit hooks and the PlatformIO packages), so every
+command here runs there without manual steps. The pre-commit hooks don't use
+Docker, because cloud sessions can't run containers.
 
 CI on every PR: PlatformIO build and `pio check`, cpp-linter (clang-format +
 clang-tidy, reports only, doesn't fail the build), Arduino IDE compile
