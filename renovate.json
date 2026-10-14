@@ -47,9 +47,7 @@
     },
     {
       "automerge": false,
-      "commitMessagePrefix": "[MAJOR] ",
       "description": "Create PRs for major changes to github-actions, pip_requirements and pyenv.",
-      "groupName": "MAJOR",
       "matchManagers": [
         "github-actions",
         "pip_requirements",
@@ -85,7 +83,6 @@
     },
     {
       "automerge": false,
-      "commitMessagePrefix": "[MAJOR] ",
       "description": "Create PRs for major changes to pre-commit actions.",
       "groupName": "pre-commit MAJOR",
       "matchDatasources": [
