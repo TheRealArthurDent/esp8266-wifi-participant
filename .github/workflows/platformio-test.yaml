@@ -43,3 +43,15 @@ jobs:
         shell: bash
         run: |
           pio test -e unit_test -e unit_test_DEBUG
+
+      - name: Measure unit test coverage
+        shell: bash
+        run: |
+          pio test -e coverage
+          gcovr --markdown "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: coverage-report
+          path: .pio/build/coverage/coverage*.html
