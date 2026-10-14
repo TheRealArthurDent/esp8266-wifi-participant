@@ -25,10 +25,10 @@
     },
     {
       "customType": "regex",
-      "description": "The ESP8266 Arduino core that the host emulation tests in test-host/run.sh build against.",
+      "description": "The ESP8266 Arduino core that the software-in-the-loop (SIL) tests in test-sil/run.sh build against.",
       "extractVersionTemplate": "^v?(?<version>.+)$",
       "managerFilePatterns": [
-        "/(^|/)test-host/run\\.sh$/"
+        "/(^|/)test-sil/run\\.sh$/"
       ],
       "matchStrings": [
         "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\nCORE_VERSION=(?<currentValue>\\S+)"

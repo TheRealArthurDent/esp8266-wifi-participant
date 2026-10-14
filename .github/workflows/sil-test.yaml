@@ -1,4 +1,4 @@
-name: 🖥️ Host Emulation Test
+name: 🖥️ SIL Test
 
 on:
   push:
@@ -19,17 +19,17 @@ jobs:
       - name: Cache ESP8266 core
         uses: actions/cache@v5.1.0
         with:
-          path: .pio/host-emulation/arduino-*
-          key: ${{ runner.os }}-host-emulation-${{ hashFiles('test-host/run.sh', 'test-host/core-host-emulation.patch') }}
+          path: .pio/sil/arduino-*
+          key: ${{ runner.os }}-sil-${{ hashFiles('test-sil/run.sh', 'test-sil/core-host-emulation.patch') }}
 
-      - name: Run host emulation tests
+      - name: Run software-in-the-loop (SIL) tests
         shell: bash
         run: |
-          test-host/run.sh
+          test-sil/run.sh
 
       - name: Upload logs
         if: always()
         uses: actions/upload-artifact@v7.0.2
         with:
-          name: host-emulation-logs
-          path: .pio/host-emulation/logs/
+          name: sil-logs
+          path: .pio/sil/logs/

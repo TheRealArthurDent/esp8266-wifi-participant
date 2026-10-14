@@ -31,8 +31,8 @@ issues before changing an affected area, and reference them in commits.
 - `lib/` – PlatformIO's library folder (empty on `main`)
 - `test/` – unit tests, one `test_<name>/` folder per suite, plus shared test
   helpers such as `fakeit-unity.hpp` and a `.clang-tidy` for test code
-- `test-host/` – host emulation tests: the real firmware and ESP8266 core
-  libraries built as a Linux program, see `test-host/README.md`
+- `test-sil/` – software-in-the-loop (SIL) tests: the real firmware and ESP8266
+  core libraries built as a Linux program, see `test-sil/README.md`
 - `scripts/migrate_to_ino.sh` – copies `src/` and `include/` into a flat Arduino
   IDE sketch folder
 - `docs/` – Doxygen config; the docs are published to GitHub Pages
@@ -70,7 +70,7 @@ pio run                               # build the default env (nodemcuv2_DEBUG)
 pio run -e nodemcuv2                  # build the release env
 pio check -e nodemcuv2_DEBUG          # static analysis: cppcheck + clang-tidy
 pio test -e unit_test                 # unit tests on the host
-test-host/run.sh                      # firmware in the core's host emulation
+test-sil/run.sh                      # SIL tests (firmware in host emulation)
 pre-commit run --all-files            # hygiene, JSON/YAML, Renovate, linters
 clang-format --dry-run --Werror src/*.cpp include/*.h*   # see .clang-format
 ```
@@ -82,7 +82,7 @@ command here runs there without manual steps. The pre-commit hooks don't use
 Docker, because cloud sessions can't run containers.
 
 CI on every PR: PlatformIO build, `pio check` and `pio test -e unit_test`,
-host emulation tests (`test-host/run.sh`), cpp-linter (clang-format +
+software-in-the-loop tests (`test-sil/run.sh`), cpp-linter (clang-format +
 clang-tidy, reports only, doesn't fail the build), Arduino IDE compile
 (`compile-sketch`) and `arduino-lint` (`check-arduino`), CodeQL, codespell,
 markdownlint, reviewdog.
@@ -130,9 +130,9 @@ markdownlint, reviewdog.
 - Everything in the repo is written in English (code, comments, docs, commit
   messages), even when the user chats in German.
 
-## Host emulation tests
+## Software-in-the-loop (SIL) tests
 
-- `test-host/run.sh` builds `src/` with the ESP8266 core's host emulation and
+- `test-sil/run.sh` builds `src/` with the ESP8266 core's host emulation and
   runs scenarios (shell functions `scenario_<name>`) that check the serial
   output. Use it for what unit tests can't reach: `setup()`/`loop()` wiring,
   object lifetimes (AddressSanitizer is on) and WiFi event callbacks

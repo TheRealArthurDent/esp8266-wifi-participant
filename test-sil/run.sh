@@ -2,13 +2,14 @@
 # Scenarios are called by name, which shellcheck can't follow.
 # shellcheck disable=SC2329
 
-# Builds the firmware against the ESP8266 Arduino core's host emulation and
-# runs it as a native Linux program, checking its serial output.
+# Software-in-the-loop (SIL) tests: builds the firmware against the ESP8266
+# Arduino core's host emulation, runs it as a native Linux program and checks
+# its serial output.
 #
-# Usage: test-host/run.sh [scenario...]   (default: all scenarios)
+# Usage: test-sil/run.sh [scenario...]   (default: all scenarios)
 #
-# The core is fetched from GitHub into .pio/host-emulation on the first run.
-# See test-host/README.md.
+# The core is fetched from GitHub into .pio/sil on the first run.
+# See test-sil/README.md.
 # Refs #143
 set -euo pipefail
 
@@ -18,7 +19,7 @@ set -euo pipefail
 CORE_VERSION=3.1.2
 
 repo="$(cd "$(dirname "$0")/.." && pwd)"
-work="${repo}/.pio/host-emulation"
+work="${repo}/.pio/sil"
 core="${work}/arduino-${CORE_VERSION}"
 sketch="${work}/sketch/firmware/firmware"
 log="${work}/logs"
@@ -36,7 +37,7 @@ fetch_core()
   git -C "${core}" submodule --quiet update --init --depth 1 \
     libraries/LittleFS/lib/littlefs libraries/ESP8266SdFat libraries/SoftwareSerial \
     tools/sdk/ssl/bearssl tools/sdk/uzlib
-  git -C "${core}" apply "${repo}/test-host/core-host-emulation.patch"
+  git -C "${core}" apply "${repo}/test-sil/core-host-emulation.patch"
   touch "${core}/.patched"
 }
 
@@ -44,7 +45,7 @@ build()
 {
   mkdir -p "$(dirname "${sketch}")"
   # The emulation has no Arduino preprocessing; the sketch just includes main.cpp.
-  printf '#include "%s"\n#include "%s"\n' "${repo}/src/main.cpp" "${repo}/test-host/wifi-events.cpp" > "${sketch}.ino"
+  printf '#include "%s"\n#include "%s"\n' "${repo}/src/main.cpp" "${repo}/test-sil/wifi-events.cpp" > "${sketch}.ino"
 
   local sources=()
   for f in "${repo}"/src/*.cpp; do

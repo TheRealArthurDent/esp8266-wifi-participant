@@ -1,20 +1,20 @@
-# Host emulation tests
+# Software-in-the-loop (SIL) tests
 
-The middle level of tests (#143), between the Unity unit tests in `test/` and
-hardware in the loop (#139). The real firmware (`src/`) is compiled together
-with the real ESP8266 Arduino core libraries, including `ESP8266WiFi`, into a
-native Linux program by the core's own
-[host emulation](https://github.com/esp8266/Arduino/tree/master/tests/host).
+The second of three test levels (#143): Unity unit tests in `test/`, these
+software-in-the-loop tests, and hardware in the loop (HIL, #139). The real
+firmware (`src/`) is compiled together with the real ESP8266 Arduino core
+libraries, including `ESP8266WiFi`, into a native Linux program by the core's
+own [host emulation](https://github.com/esp8266/Arduino/tree/master/tests/host).
 The scenarios run it for a few seconds and check its serial output.
 
 ```sh
-test-host/run.sh               # all scenarios
-test-host/run.sh wifi_events   # one scenario
+test-sil/run.sh               # all scenarios
+test-sil/run.sh wifi_events   # one scenario
 ```
 
 The first run clones the core (pinned to the version PlatformIO builds with)
-into `.pio/host-emulation/` and builds it, which takes about a minute. Logs of
-the build and of every scenario end up in `.pio/host-emulation/logs/`.
+into `.pio/sil/` and builds it, which takes about a minute. Logs of
+the build and of every scenario end up in `.pio/sil/logs/`.
 
 Needs Linux, `git`, `make` and `g++`. No PlatformIO, no board, no Docker.
 
