@@ -46,8 +46,8 @@ Board: NodeMCU v2 (ESP8266), with two PlatformIO envs:
   at 115200 baud
 - `nodemcuv2` – release build
 
-A third env, `unit_test`, builds the unit tests for the host (`platform =
-native`), not for the board.
+Two more envs, `unit_test` and `unit_test_DEBUG` (the same with `-D DEBUG`),
+build the unit tests for the host (`platform = native`), not for the board.
 
 Platform: `espressif8266`, framework: `arduino`. Never flash a board unless the
 user explicitly asks.
@@ -69,7 +69,7 @@ pip install -r requirements.txt       # PlatformIO and pre-commit, pinned
 pio run                               # build the default env (nodemcuv2_DEBUG)
 pio run -e nodemcuv2                  # build the release env
 pio check -e nodemcuv2_DEBUG          # static analysis: cppcheck + clang-tidy
-pio test -e unit_test                 # unit tests on the host
+pio test -e unit_test -e unit_test_DEBUG   # unit tests on the host
 test-sil/run.sh                      # SIL tests (firmware in host emulation)
 pre-commit run --all-files            # hygiene, JSON/YAML, Renovate, linters
 clang-format --dry-run --Werror src/*.cpp include/*.h*   # see .clang-format
@@ -81,7 +81,7 @@ In Claude cloud sessions, `.claude/hooks/session-start.sh` does the setup above
 command here runs there without manual steps. The pre-commit hooks don't use
 Docker, because cloud sessions can't run containers.
 
-CI on every PR: PlatformIO build, `pio check` and `pio test -e unit_test`,
+CI on every PR: PlatformIO build, `pio check` and the unit tests in both envs,
 software-in-the-loop tests (`test-sil/run.sh`), cpp-linter (clang-format +
 clang-tidy, reports only, doesn't fail the build), Arduino IDE compile
 (`compile-sketch`) and `arduino-lint` (`check-arduino`), CodeQL, codespell,
@@ -112,9 +112,10 @@ markdownlint, reviewdog.
 
 ## Unit tests
 
-- Tests use Unity and run on the host in the `unit_test` env. Plain `pio test`
-  runs nothing, because the board envs ignore all tests; always pass
-  `-e unit_test`.
+- Tests use Unity and run on the host in the `unit_test` env, and again with
+  `-D DEBUG` in `unit_test_DEBUG`; guard checks that differ between the two
+  with `#ifdef DEBUG`. Plain `pio test` runs nothing, because the board envs
+  ignore all tests; always pass `-e unit_test -e unit_test_DEBUG`.
 - Arduino functions (`millis()`, `delay()`, `digitalWrite()`, …) come from
   [ArduinoFake](https://github.com/FabioBatSilva/ArduinoFake), which mocks them
   with fakeit: stub with `When(Method(ArduinoFake(), millis)).Return(…)`, check
@@ -123,8 +124,10 @@ markdownlint, reviewdog.
   `test/fakeit-unity.hpp`) before `UNITY_BEGIN()`, so a failed `Verify` fails
   its test instead of aborting the program.
 - Only code listed in `build_src_filter` of `[env:unit_test]` is built for the
-  tests. Add a source file there when you test it; code that needs the
-  ESP8266 SDK (like `WifiConnection`) can't be built on the host.
+  tests (`unit_test_DEBUG` inherits it). Add a source file there when you test
+  it; code that needs the ESP8266 SDK (like `WifiConnection`) can't be built on
+  the host, so keep its hardware-free logic in separate classes (like
+  `WifiDependentNotifier`) and test those.
 - `main()` returns `UNITY_END()`, so failures fail the process.
 - YAML files use the `.yaml` extension, not `.yml`.
 - Everything in the repo is written in English (code, comments, docs, commit
