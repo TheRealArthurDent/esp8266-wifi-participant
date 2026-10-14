@@ -29,8 +29,9 @@ fi
 pre-commit install
 pre-commit install-hooks
 
-# Platform, framework and toolchain for both envs, plus the pio check tools.
-pio pkg install -e nodemcuv2 -e nodemcuv2_DEBUG
+# Platform, framework and toolchain for all envs (unit tests included), plus
+# the pio check tools.
+pio pkg install -e nodemcuv2 -e nodemcuv2_DEBUG -e unit_test
 if [ ! -d "${HOME}/.platformio/packages/tool-cppcheck" ] || [ ! -d "${HOME}/.platformio/packages/tool-clangtidy" ]; then
   pio check -e nodemcuv2_DEBUG --silent
 fi

@@ -16,6 +16,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6.1.0
 
+      - name: Set up Python
+        uses: actions/setup-python@v6.3.0
+        with:
+          python-version-file: '.python-version'
+
+      # Unity and ArduinoFake, so clang-tidy finds the headers the tests use.
+      - name: Install test libraries
+        shell: bash
+        run: |
+          cp secrets.ini.template secrets.ini
+          pip install -r requirements.txt
+          pio pkg install -e unit_test
+
       - name: CPP Lint
         uses: cpp-linter/cpp-linter-action@v2.23.1
         id: linter
@@ -25,13 +38,13 @@ jobs:
           style: file
           tidy-checks: ''
           thread-comments: true
-          extra-args: -Iinclude/
+          ignore: .github|.pio
+          extra-args: -Iinclude/ -Itest/ -I.pio/libdeps/unit_test/Unity/src -I.pio/libdeps/unit_test/ArduinoFake/src
 
       - name: Fail fast?!
         if: steps.linter.outputs.checks-failed > 0
         shell: bash
         run: |
-          #!/bin/bash
           echo "Some files failed the linting checks!"
           # for actual deployment
           # exit 1

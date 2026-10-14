@@ -30,7 +30,8 @@ public:
    * growing delay that can never be made up.
    * \endparblock
    */
-  Metronome(int cycleDuration, bool skipMissedCycles = true) : cycleDuration(cycleDuration), skipMissedCycles(skipMissedCycles){};
+  Metronome(int cycleDuration, bool skipMissedCycles = true)
+      : cycleDuration(cycleDuration), skipMissedCycles(skipMissedCycles) {}
 
   /**
    * Blocks until the next cycle starts.
@@ -40,11 +41,19 @@ public:
    */
   auto waitForNextCycle() -> void;
 
+  Metronome() = delete;
+  Metronome(Metronome const &) = delete;
+  Metronome(Metronome &&) = delete;
+  auto operator=(Metronome const &) -> Metronome & = delete;
+  auto operator=(Metronome &&) -> Metronome & = delete;
+  ~Metronome() = default;
+
 private:
-  Metronome() = default;                   // hide default constructor
-  Metronome(Metronome const &);            // hide copy constructor
-  Metronome &operator=(Metronome const &); // hide assignment operator.
+  /// The type \c millis() returns.
+  using Millis = unsigned long; // NOLINT(google-runtime-int)
 
   int cycleDuration;
   bool skipMissedCycles;
+  bool started = false;
+  Millis currentCycleStart = 0;
 };
