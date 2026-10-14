@@ -21,6 +21,7 @@ jobs:
         uses: actions/checkout@v6.1.0
 
       - name: Copy secrets template
+        shell: bash
         run: |
           cp secrets.ini.template secrets.ini
 
@@ -33,7 +34,6 @@ jobs:
         id: cache-keys
         shell: bash
         run: |
-          #!/bin/bash
           hash=${{ hashFiles('**/requirements.txt') }}
           echo "pip=${{ runner.os }}-pip-$hash" >> "$GITHUB_OUTPUT"
           echo "platformio=${{ runner.os }}-platformio-$hash" >> "$GITHUB_OUTPUT"
@@ -58,7 +58,6 @@ jobs:
         id: cache-sizes
         shell: bash
         run: |
-          #!/bin/bash
           cacheSizePip=0
           if [ -d ${{ env.PIP_CACHE_FOLDER }} ]; then
             cacheSizePip=$(du -s ${{ env.PIP_CACHE_FOLDER }} | awk '{print $1}')
@@ -74,20 +73,17 @@ jobs:
       - name: Install PlatformIO
         shell: bash
         run: |
-          #!/bin/bash
           pip install -r requirements.txt
 
       - name: Check PlatformIO
         shell: bash
         run: |
-          #!/bin/bash
           pio check -e nodemcuv2_DEBUG
 
       - name: Determine Cache Update
         id: cache-updates
         shell: bash
         run: |
-          #!/bin/bash
           cacheSizePip=0
           if [ -d ${{ env.PIP_CACHE_FOLDER }} ]; then
             cacheSizePip=$(du -s ${{ env.PIP_CACHE_FOLDER }} | awk '{print $1}')
@@ -115,6 +111,7 @@ jobs:
       - name: Delete Previous Cache Pip
         if: ${{ (steps.cache-restore-pip.outputs.cache-hit == 'true') && (steps.cache-updates.outputs.pip == 'true') }}
         continue-on-error: true
+        shell: bash
         run: |
           gh extension install actions/gh-actions-cache
           gh actions-cache delete "${{ steps.cache-keys.outputs.pip }}" --confirm
@@ -124,6 +121,7 @@ jobs:
       - name: Delete Previous Cache Platformio
         if: ${{ (steps.cache-restore-platformio.outputs.cache-hit == 'true') && (steps.cache-updates.outputs.platformio == 'true') }}
         continue-on-error: true
+        shell: bash
         run: |
           gh extension install actions/gh-actions-cache
           gh actions-cache delete "${{ steps.cache-keys.outputs.platformio }}" --confirm

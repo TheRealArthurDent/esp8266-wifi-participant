@@ -25,7 +25,6 @@ jobs:
       - name: Install test libraries
         shell: bash
         run: |
-          #!/bin/bash
           cp secrets.ini.template secrets.ini
           pip install -r requirements.txt
           pio pkg install -e unit_test
@@ -46,7 +45,6 @@ jobs:
         if: steps.linter.outputs.checks-failed > 0
         shell: bash
         run: |
-          #!/bin/bash
           echo "Some files failed the linting checks!"
           # for actual deployment
           # exit 1
