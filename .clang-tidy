@@ -1,0 +1,13 @@
+---
+# The checks cpp-linter used to pass on the command line (its default
+# tidy-checks), now kept here so local runs, pio check and CI agree.
+Checks: >-
+  boost-*,
+  bugprone-*,
+  performance-*,
+  readability-*,
+  portability-*,
+  modernize-*,
+  clang-analyzer-*,
+  cppcoreguidelines-*
+FormatStyle: file
