@@ -15,3 +15,6 @@ secrets.ini
 
 # Arduino IDE compatibility
 esp8266-wifi-participant/
+
+# Claude Code personal settings
+.claude/settings.local.json
