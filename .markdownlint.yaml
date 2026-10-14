@@ -1,0 +1,13 @@
+---
+# markdownlint configuration, see
+# https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md
+default: true
+
+# Table rows can't be wrapped; keep the 80 character limit for everything else.
+MD013:
+  tables: false
+
+# Allow repeated headings in different sections (e.g. "Key Rules" under each
+# chapter of a skill), but not twice under the same parent.
+MD024:
+  siblings_only: true

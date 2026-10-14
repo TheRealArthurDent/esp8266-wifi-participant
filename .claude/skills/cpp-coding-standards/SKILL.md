@@ -7,7 +7,9 @@ metadata:
 
 # C++ Coding Standards (C++ Core Guidelines)
 
-Comprehensive coding standards for modern C++ (C++17/20/23) derived from the [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines). Enforces type safety, resource safety, immutability, and clarity.
+Comprehensive coding standards for modern C++ (C++17/20/23) derived from the
+[C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
+Enforces type safety, resource safety, immutability, and clarity.
 
 ## When to Use
 
@@ -15,31 +17,38 @@ Comprehensive coding standards for modern C++ (C++17/20/23) derived from the [C+
 - Reviewing or refactoring existing C++ code
 - Making architectural decisions in C++ projects
 - Enforcing consistent style across a C++ codebase
-- Choosing between language features (e.g., `enum` vs `enum class`, raw pointer vs smart pointer)
+- Choosing between language features (e.g., `enum` vs `enum class`, raw
+  pointer vs smart pointer)
 
 ### When NOT to Use
 
 - Non-C++ projects
 - Legacy C codebases that cannot adopt modern C++ features
-- Embedded/bare-metal contexts where specific guidelines conflict with hardware constraints (adapt selectively)
+- Embedded/bare-metal contexts where specific guidelines conflict with
+  hardware constraints (adapt selectively)
 
 ## Cross-Cutting Principles
 
 These themes recur across the entire guidelines and form the foundation:
 
-1. **RAII everywhere** (P.8, R.1, E.6, CP.20): Bind resource lifetime to object lifetime
-2. **Immutability by default** (P.10, Con.1-5, ES.25): Start with `const`/`constexpr`; mutability is the exception
-3. **Type safety** (P.4, I.4, ES.46-49, Enum.3): Use the type system to prevent errors at compile time
-4. **Express intent** (P.3, F.1, NL.1-2, T.10): Names, types, and concepts should communicate purpose
+1. **RAII everywhere** (P.8, R.1, E.6, CP.20): Bind resource lifetime to
+   object lifetime
+2. **Immutability by default** (P.10, Con.1-5, ES.25): Start with
+   `const`/`constexpr`; mutability is the exception
+3. **Type safety** (P.4, I.4, ES.46-49, Enum.3): Use the type system to
+   prevent errors at compile time
+4. **Express intent** (P.3, F.1, NL.1-2, T.10): Names, types, and concepts
+   should communicate purpose
 5. **Minimize complexity** (F.2-3, ES.5, Per.4-5): Simple code is correct code
-6. **Value semantics over pointer semantics** (C.10, R.3-5, F.20, CP.31): Prefer returning by value and scoped objects
+6. **Value semantics over pointer semantics** (C.10, R.3-5, F.20, CP.31):
+   Prefer returning by value and scoped objects
 
 ## Philosophy & Interfaces (P.*, I.*)
 
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **P.1** | Express ideas directly in code |
 | **P.3** | Express intent |
 | **P.4** | Ideally, a program should be statically type safe |
@@ -78,7 +87,7 @@ int g_counter = 0;  // I.2 violation
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **F.1** | Package meaningful operations as carefully named functions |
 | **F.2** | A function should perform a single logical operation |
 | **F.3** | Keep functions short and simple |
@@ -134,7 +143,7 @@ static_assert(factorial(5) == 120);
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **C.2** | Use `class` if invariant exists; `struct` if data members vary independently |
 | **C.9** | Minimize exposure of members |
 | **C.20** | If you can avoid defining default operations, do (Rule of Zero) |
@@ -224,7 +233,7 @@ private:
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **R.1** | Manage resources automatically using RAII |
 | **R.3** | A raw pointer (`T*`) is non-owning |
 | **R.5** | Prefer scoped objects; don't heap-allocate unnecessarily |
@@ -285,7 +294,8 @@ private:
 
 - Naked `new`/`delete` (R.11)
 - `malloc()`/`free()` in C++ code (R.10)
-- Multiple resource allocations in a single expression (R.13 -- exception safety hazard)
+- Multiple resource allocations in a single expression (R.13 -- exception
+  safety hazard)
 - `shared_ptr` where `unique_ptr` suffices (R.21)
 
 ## Expressions & Statements (ES.*)
@@ -293,7 +303,7 @@ private:
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **ES.5** | Keep scopes small |
 | **ES.20** | Always initialize an object |
 | **ES.23** | Prefer `{}` initializer syntax |
@@ -338,7 +348,7 @@ const auto config = [&] {
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **E.1** | Develop an error-handling strategy early in a design |
 | **E.2** | Throw an exception to signal that a function can't perform its assigned task |
 | **E.6** | Use RAII to prevent leaks |
@@ -394,7 +404,7 @@ void run() {
 ### All Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **Con.1** | By default, make objects immutable |
 | **Con.2** | By default, make member functions `const` |
 | **Con.3** | By default, pass pointers and references to `const` |
@@ -434,7 +444,7 @@ constexpr int MAX_SENSORS = 256;
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **CP.2** | Avoid data races |
 | **CP.3** | Minimize explicit sharing of writable data |
 | **CP.4** | Think in terms of tasks, rather than threads |
@@ -498,7 +508,7 @@ void transfer(Account& from, Account& to, double amount) {
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **T.1** | Use templates to raise the level of abstraction |
 | **T.2** | Use templates to express algorithms for many argument types |
 | **T.10** | Specify concepts for all template arguments |
@@ -549,7 +559,7 @@ void save(const T& obj, const std::string& path);
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **SL.1** | Use libraries wherever possible |
 | **SL.2** | Prefer the standard library to other libraries |
 | **SL.con.1** | Prefer `std::array` or `std::vector` over C arrays |
@@ -577,7 +587,7 @@ std::cout << "result: " << value << '\n';
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **Enum.1** | Prefer enumerations over macros |
 | **Enum.3** | Prefer `enum class` over plain `enum` |
 | **Enum.5** | Don't use ALL_CAPS for enumerators |
@@ -598,7 +608,7 @@ enum { RED, GREEN, BLUE };           // Enum.3 + Enum.5 + Enum.6 violation
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **SF.1** | Use `.cpp` for code files and `.h` for interface files |
 | **SF.7** | Don't write `using namespace` at global scope in a header |
 | **SF.8** | Use `#include` guards for all `.h` files |
@@ -668,7 +678,7 @@ private:
 ### Key Rules
 
 | Rule | Summary |
-|------|---------|
+| --- | --- |
 | **Per.1** | Don't optimize without reason |
 | **Per.2** | Don't optimize prematurely |
 | **Per.6** | Don't make claims about performance without measurements |
