@@ -44,6 +44,8 @@ Board: NodeMCU v2 (ESP8266), with two PlatformIO envs:
 
 Two more envs, `unit_test` and `unit_test_DEBUG` (the same with `-D DEBUG`),
 build the unit tests for the host (`platform = native`), not for the board.
+A fifth, `coverage`, is `unit_test_DEBUG` with gcov instrumentation for the
+coverage report.
 
 Platform: `espressif8266`, framework: `arduino`. Never flash a board unless the
 user explicitly asks.
@@ -66,6 +68,7 @@ pio run                               # build the default env (nodemcuv2_DEBUG)
 pio run -e nodemcuv2                  # build the release env
 pio check -e nodemcuv2_DEBUG          # static analysis: cppcheck + clang-tidy
 pio test -e unit_test -e unit_test_DEBUG   # unit tests on the host
+pio test -e coverage && gcovr         # unit test coverage, see gcovr.cfg
 test-sil/run.sh                      # SIL tests (firmware in host emulation)
 pre-commit run --all-files            # hygiene, JSON/YAML, Renovate, linters
 clang-format --dry-run --Werror src/*.cpp include/*.h*   # see .clang-format
@@ -77,7 +80,8 @@ In Claude cloud sessions, `.claude/hooks/session-start.sh` does the setup above
 command here runs there without manual steps. The pre-commit hooks don't use
 Docker, because cloud sessions can't run containers.
 
-CI on every PR: PlatformIO build, `pio check` and the unit tests in both envs,
+CI on every PR: PlatformIO build, `pio check` and the unit tests in both envs
+(plus a coverage report in the job summary, without a minimum),
 software-in-the-loop tests (`test-sil/run.sh`), cpp-linter (clang-format +
 clang-tidy, reports only, doesn't fail the build), Arduino IDE compile
 (`compile-sketch`) and `arduino-lint` (`check-arduino`), CodeQL, codespell,
@@ -125,6 +129,10 @@ markdownlint, reviewdog.
   the host, so keep its hardware-free logic in separate classes (like
   `WifiDependentNotifier`) and test those.
 - `main()` returns `UNITY_END()`, so failures fail the process.
+- Coverage counts only the files in `build_src_filter`, so code the tests
+  don't build (like `WifiConnection` or `main.cpp`) is missing from the
+  report rather than shown as uncovered. The HTML report lands in
+  `.pio/build/coverage/coverage.html`.
 - YAML files use the `.yaml` extension, not `.yml`.
 - Everything in the repo is written in English (code, comments, docs, commit
   messages), even when the user chats in German.
