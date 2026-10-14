@@ -117,9 +117,9 @@ The signature already says the types. The comment says what it doesn't:
   must live, like the `WifiDependent`s that `WifiConnection` keeps.
 - **When callbacks run**: from which context (`loop()`, a WiFi event
   handler, a `Ticker`) and in which order.
-- **`DEBUG`-only behaviour**: what changes with `-D DEBUG`.
+- **`DEBUG`-only behavior**: what changes with `-D DEBUG`.
 
-Describe what the code does, not what it should do. Don't invent behaviour
+Describe what the code does, not what it should do. Don't invent behavior
 the code doesn't have; if the comment and the code disagree, say so to the
 user instead of picking one.
 
