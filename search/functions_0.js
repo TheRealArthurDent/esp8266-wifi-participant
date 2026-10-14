@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['getinstance_0',['getInstance',['../classWifiConnection.html#a181f5c865433645790085eff6c3e2cd9',1,'WifiConnection']]]
+  ['blink_0',['blink',['../classLedBlinker.html#a08a02da261116b7b97b73af6d990c927',1,'LedBlinker']]]
 ];

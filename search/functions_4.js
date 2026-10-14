@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['waitfornextcycle_0',['waitForNextCycle',['../classMetronome.html#a8f18ddf160a79ce2bb9f7fb5f134ce17',1,'Metronome']]]
+  ['ledblinker_0',['LedBlinker',['../classLedBlinker.html#a92372542c961acb28ab14acc6fd7d5f1',1,'LedBlinker']]]
 ];
