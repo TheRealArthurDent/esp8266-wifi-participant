@@ -61,8 +61,7 @@ it) with stricter settings appended on stdin; later lines win:
   echo "QUIET = YES" ) | ~/doxygen/doxygen-1.12.0/bin/doxygen -
 ```
 
-- Only warnings are printed then. Compare them before and after your change;
-  `main` isn't warning-free.
+- Only warnings are printed then, and on `main` there are none.
 - Open `~/doxygen/out/html/` (or grep it) to check that what you documented
   is really there: `ls ~/doxygen/out/html | grep -E '8h\.html|^class'`.
 - A plain `doxygen docs/Doxygen` writes to `docs/generated/` (gitignored),
@@ -79,7 +78,7 @@ Match the existing headers:
  * Shows that the firmware is alive: every call to blink() switches the node
  * LED on for half a cycle, then waits for the next cycle to start.
  */
-class led_blinker
+class LedBlinker
 {
 public:
   /**
@@ -87,10 +86,10 @@ public:
    *
    * \param cycle_duration The duration of one blink cycle in milliseconds.
    */
-  explicit led_blinker(int cycle_duration);
+  explicit LedBlinker(int cycle_duration);
 
   /// The type \c millis() returns.
-  using millis_t = unsigned long;
+  using Millis = unsigned long;
 };
 ```
 
@@ -101,9 +100,11 @@ public:
   definition in the `.cpp` is merged in after the header's (both are shown),
   so keep implementation notes there and the contract in the header.
 - `\c name` for code in prose, `\p name` for a parameter of the function
-  being documented. `name()` and `class_name::method()` auto-link when the
-  target exists.
-- New code uses `lower_snake_case` (issue #157), in the comments too.
+  being documented. `name()`, `ClassName::method()` and class names auto-link
+  when the target exists. Doxygen only auto-links words with an uppercase
+  letter or `_`; an all-lowercase name needs `\ref`.
+- Use the names the C++ skill prescribes (`PascalCase` classes, `camelCase`
+  methods, `lower_snake_case` parameters), in the comments too.
 
 ## What to write
 
@@ -128,9 +129,9 @@ user instead of picking one.
 Each of these was checked with Doxygen 1.12.0:
 
 - **A header without a `\file` comment hides its free functions, macros and
-  constants**, documented or not, and without a warning (`debug.h` and
-  `led.h` on `main`). A class in such a header still shows up. Give such
-  headers a file comment:
+  constants**, documented or not, and without a warning. A class in such a
+  header still shows up. Give such headers a file comment, like `debug.h`
+  and `led.h` have:
 
   ```cpp
   /**
@@ -139,8 +140,14 @@ Each of these was checked with Doxygen 1.12.0:
    */
   ```
 
+- **Doxygen runs the preprocessor without `DEBUG`**, so of macros defined in
+  `#ifdef DEBUG … #else …` it only sees the `#else` branch; a comment on the
+  `#ifdef` branch is lost (`Member DEBUG_PRINT(x) … is not documented`).
+  Document such macros once with a `\def DEBUG_PRINT(x)` block after the
+  `#endif`, as `debug.h` does. The same goes for any code inside
+  `#ifdef DEBUG`: it's missing from the docs.
 - **A link to a member that doesn't exist is plain text, no warning.**
-  After a rename, `wifi_dependent::on_lost()` in a comment silently stops
+  After a rename, `WifiDependent::onLost()` in a comment silently stops
   linking. Grep the comments for the old names, and check the links in the
   output.
 - **`\param` names must match the definition's names.** A comment on the
@@ -159,8 +166,9 @@ Each of these was checked with Doxygen 1.12.0:
   no inputs for options. Look options up in the
   [configuration reference](https://www.doxygen.nl/manual/config.html) for
   the version CI uses.
-- Making warnings fail CI (`WARN_AS_ERROR = FAIL_ON_WARNINGS`) only works
-  once `main` has none.
+- `main` has no warnings, even with `WARN_NO_PARAMDOC`. Keep it that way;
+  making them fail CI (`WARN_AS_ERROR = FAIL_ON_WARNINGS`) would be the next
+  step.
 - The site is deployed from `main` only. A PR shows nothing on Pages; its
   workflow run only proves that Doxygen ran.
 

@@ -6,7 +6,7 @@
 
 /**
  * \brief Keeps track of the WiFi connection state and informs the
- * registered \c WifiDependent s about its changes.
+ * registered \ref WifiDependent "WifiDependents" about its changes.
  *
  * The hardware-free part of \c WifiConnection: it knows nothing about the
  * ESP8266 WiFi stack, so it can be unit tested on the host.

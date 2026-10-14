@@ -22,11 +22,14 @@ void WifiConnection::init()
 
 /**
  * Initializes the controller while registering a collection of
- * \c WifiDependent s.
+ * \ref WifiDependent "WifiDependents", then connects to the WiFi.
+ *
+ * Blocks until the WiFi is connected, flashing the ESP LED meanwhile.
  *
  * \param dependents A collection of instances that depend on a WiFi
  * connection. The dependents will be informed about changes in the
- * connection's status.
+ * connection's status. They must outlive the controller, which lives
+ * until the program ends.
  */
 void WifiConnection::init(std::list<WifiDependent *> dependents)
 {

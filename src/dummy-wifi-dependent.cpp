@@ -11,7 +11,7 @@ void DummyWifiDependent::onWifiConnectionEstablished()
 }
 
 /**
- * Logs in case of an lost WiFi connection.
+ * Logs in case of a lost WiFi connection.
  */
 // cppcheck-suppress unusedFunction
 void DummyWifiDependent::onWifiConnectionLost()
