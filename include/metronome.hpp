@@ -31,7 +31,7 @@ public:
    * \endparblock
    */
   Metronome(int cycleDuration, bool skipMissedCycles = true)
-      : cycleDuration(cycleDuration), skipMissedCycles(skipMissedCycles){};
+      : cycleDuration(cycleDuration), skipMissedCycles(skipMissedCycles) {}
 
   /**
    * Blocks until the next cycle starts.
@@ -43,7 +43,10 @@ public:
 
   Metronome() = delete;
   Metronome(Metronome const &) = delete;
+  Metronome(Metronome &&) = delete;
   auto operator=(Metronome const &) -> Metronome & = delete;
+  auto operator=(Metronome &&) -> Metronome & = delete;
+  ~Metronome() = default;
 
 private:
   /// The type \c millis() returns.
