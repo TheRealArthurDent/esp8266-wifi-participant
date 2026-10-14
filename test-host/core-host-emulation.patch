@@ -1,0 +1,41 @@
+diff --git a/tests/host/common/Arduino.cpp b/tests/host/common/Arduino.cpp
+index 4b1d707..39ae1de 100644
+--- a/tests/host/common/Arduino.cpp
++++ b/tests/host/common/Arduino.cpp
+@@ -68,9 +68,18 @@ extern "C" void esp_schedule() { }
+ 
+ extern "C" void esp_yield() { }
+ 
++// Called about once per millisecond while the sketch waits in delay(), like
++// the SDK's own tasks on the chip. A host test can override it.
++extern "C" void __attribute__((weak)) mock_sdk_task() { }
++
+ extern "C" void esp_delay(unsigned long ms)
+ {
+-    usleep(ms * 1000);
++    const unsigned long start = millis();
++    while (millis() - start < ms)
++    {
++        mock_sdk_task();
++        usleep(1000);
++    }
+ }
+ 
+ bool esp_try_delay(const uint32_t start_ms, const uint32_t timeout_ms, const uint32_t intvl_ms)
+diff --git a/tests/host/common/mock.h b/tests/host/common/mock.h
+index b330828..27f8aa8 100644
+--- a/tests/host/common/mock.h
++++ b/tests/host/common/mock.h
+@@ -65,8 +65,12 @@ extern "C"
+     char* itoa(int val, char* s, int radix);
+     char* ltoa(long val, char* s, int radix);
+ 
++#ifndef HAVE_STRLCAT
+     size_t strlcat(char* dst, const char* src, size_t size);
++#endif
++#ifndef HAVE_STRLCPY
+     size_t strlcpy(char* dst, const char* src, size_t size);
++#endif
+ 
+ #ifdef __cplusplus
+ }

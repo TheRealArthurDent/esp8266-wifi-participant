@@ -31,6 +31,8 @@ issues before changing an affected area, and reference them in commits.
 - `lib/` – PlatformIO's library folder (empty on `main`)
 - `test/` – unit tests, one `test_<name>/` folder per suite, plus shared test
   helpers such as `fakeit-unity.hpp` and a `.clang-tidy` for test code
+- `test-host/` – host emulation tests: the real firmware and ESP8266 core
+  libraries built as a Linux program, see `test-host/README.md`
 - `scripts/migrate_to_ino.sh` – copies `src/` and `include/` into a flat Arduino
   IDE sketch folder
 - `docs/` – Doxygen config; the docs are published to GitHub Pages
@@ -68,6 +70,7 @@ pio run                               # build the default env (nodemcuv2_DEBUG)
 pio run -e nodemcuv2                  # build the release env
 pio check -e nodemcuv2_DEBUG          # static analysis: cppcheck + clang-tidy
 pio test -e unit_test                 # unit tests on the host
+test-host/run.sh                      # firmware in the core's host emulation
 pre-commit run --all-files            # hygiene, JSON/YAML, Renovate, linters
 clang-format --dry-run --Werror src/*.cpp include/*.h*   # see .clang-format
 ```
@@ -79,9 +82,10 @@ command here runs there without manual steps. The pre-commit hooks don't use
 Docker, because cloud sessions can't run containers.
 
 CI on every PR: PlatformIO build, `pio check` and `pio test -e unit_test`,
-cpp-linter (clang-format + clang-tidy, reports only, doesn't fail the build),
-Arduino IDE compile (`compile-sketch`) and `arduino-lint` (`check-arduino`),
-CodeQL, codespell, markdownlint, reviewdog.
+host emulation tests (`test-host/run.sh`), cpp-linter (clang-format +
+clang-tidy, reports only, doesn't fail the build), Arduino IDE compile
+(`compile-sketch`) and `arduino-lint` (`check-arduino`), CodeQL, codespell,
+markdownlint, reviewdog.
 
 ## Conventions
 
@@ -125,6 +129,18 @@ CodeQL, codespell, markdownlint, reviewdog.
 - YAML files use the `.yaml` extension, not `.yml`.
 - Everything in the repo is written in English (code, comments, docs, commit
   messages), even when the user chats in German.
+
+## Host emulation tests
+
+- `test-host/run.sh` builds `src/` with the ESP8266 core's host emulation and
+  runs scenarios (shell functions `scenario_<name>`) that check the serial
+  output. Use it for what unit tests can't reach: `setup()`/`loop()` wiring,
+  object lifetimes (AddressSanitizer is on) and WiFi event callbacks
+  (`WIFI_EVENTS="got_ip@1000,disconnected@2000"`).
+- A scenario that fails because of a known bug goes in `known_failures` with
+  its issue; the fix removes it from there.
+- The core version is pinned in `run.sh` and must match the one PlatformIO
+  uses.
 
 ## ESP8266 pitfalls
 
