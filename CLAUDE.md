@@ -143,7 +143,8 @@ markdownlint, reviewdog.
   runs scenarios (shell functions `scenario_<name>`) that check the serial
   output. Use it for what unit tests can't reach: `setup()`/`loop()` wiring,
   object lifetimes (AddressSanitizer is on) and WiFi event callbacks
-  (`WIFI_EVENTS="got_ip@1000,disconnected@2000"`).
+  (`WIFI_EVENTS="got_ip@1000,disconnected@2000"`). `WiFi.status()` follows
+  those events, so `setup()` only returns once `got_ip` is fired.
 - A scenario that fails because of a known bug goes in `known_failures` with
   its issue; the fix removes it from there.
 - The core version is pinned in `run.sh` and must match the one PlatformIO

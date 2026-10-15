@@ -1,8 +1,8 @@
 diff --git a/tests/host/common/Arduino.cpp b/tests/host/common/Arduino.cpp
-index 4b1d707..39ae1de 100644
+index 4b1d707..f375426 100644
 --- a/tests/host/common/Arduino.cpp
 +++ b/tests/host/common/Arduino.cpp
-@@ -68,9 +68,18 @@ extern "C" void esp_schedule() { }
+@@ -68,9 +68,29 @@ extern "C" void esp_schedule() { }
  
  extern "C" void esp_yield() { }
  
@@ -10,12 +10,23 @@ index 4b1d707..39ae1de 100644
 +// the SDK's own tasks on the chip. A host test can override it.
 +extern "C" void __attribute__((weak)) mock_sdk_task() { }
 +
++// ArduinoMain.cpp; main() checks user_exit only between calls to loop().
++extern bool user_exit;
++void        cleanup();
++
  extern "C" void esp_delay(unsigned long ms)
  {
 -    usleep(ms * 1000);
 +    const unsigned long start = millis();
 +    while (millis() - start < ms)
 +    {
++        // Ctrl-C (or timeout's SIGINT) also ends a sketch that never leaves
++        // setup(), e.g. while it waits for WiFi.
++        if (user_exit)
++        {
++            cleanup();
++            exit(0);
++        }
 +        mock_sdk_task();
 +        usleep(1000);
 +    }
@@ -39,3 +50,21 @@ index b330828..27f8aa8 100644
  
  #ifdef __cplusplus
  }
+diff --git a/tests/host/common/user_interface.cpp b/tests/host/common/user_interface.cpp
+index 26144ae..9c0730d 100644
+--- a/tests/host/common/user_interface.cpp
++++ b/tests/host/common/user_interface.cpp
+@@ -66,9 +66,12 @@ extern "C"
+         return 0;
+     }
+ 
++    // Idle until a host test sets it, e.g. from the WiFi events it fires.
++    station_status_t mock_station_connect_status = STATION_IDLE;
++
+     station_status_t wifi_station_get_connect_status(void)
+     {
+-        return STATION_GOT_IP;
++        return mock_station_connect_status;
+     }
+ 
+     uint8 wifi_station_get_auto_connect(void)
