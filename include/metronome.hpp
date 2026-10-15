@@ -4,7 +4,7 @@
  * \brief The metronome.
  *
  * A helper class that let's you manage (somewhat) constant durations
- * of your loop() function. Define a cycleDuration and call waitForNextCycle()
+ * of your loop() function. Define a cycle_duration and call waitForNextCycle()
  * at the end of your loop.
  * Easy, isn't it? :)
  */
@@ -14,8 +14,8 @@ public:
   /**
    * \brief Constructor.
    *     *
-   * \param cycleDuration The duration of one cycle of the loop.
-   * \param skipMissedCycles
+   * \param cycle_duration The duration of one cycle of the loop.
+   * \param skip_missed_cycles
    * \parblock
    * In case a cycle has been missed - due to stuff happening within the loop
    * taking more time than the defined cycle duration - this bool defines
@@ -25,18 +25,18 @@ public:
    * whereas \c false will make metronome's \c waitForNextCycle return
    * immediately and thereby trigger the next iteration of the loop in order
    * to make up the delay.
-   * \warning Using \c skipMissedCycles = \c false in conjunction with a loop
-   * that usually takes more time than \c cycleDuration will lead to a
+   * \warning Using \c skip_missed_cycles = \c false in conjunction with a loop
+   * that usually takes more time than \c cycle_duration will lead to a
    * growing delay that can never be made up.
    * \endparblock
    */
-  Metronome(int cycleDuration, bool skipMissedCycles = true)
-      : cycleDuration(cycleDuration), skipMissedCycles(skipMissedCycles) {}
+  Metronome(int cycle_duration, bool skip_missed_cycles = true)
+      : cycle_duration(cycle_duration), skip_missed_cycles(skip_missed_cycles) {}
 
   /**
    * Blocks until the next cycle starts.
    * Might return immediately if the Metronome has been configured NOT to skip
-   * missed cycles ( \c skipMissedCycles = \c false ).
+   * missed cycles ( \c skip_missed_cycles = \c false ).
    * See Metronome(int, bool).
    */
   auto waitForNextCycle() -> void;
@@ -52,8 +52,8 @@ private:
   /// The type \c millis() returns.
   using Millis = unsigned long; // NOLINT(google-runtime-int)
 
-  int cycleDuration;
-  bool skipMissedCycles;
+  int cycle_duration;
+  bool skip_missed_cycles;
   bool started = false;
-  Millis currentCycleStart = 0;
+  Millis current_cycle_start = 0;
 };

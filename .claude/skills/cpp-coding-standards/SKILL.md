@@ -59,12 +59,12 @@ API.
 
 ```cpp
 // I.4: the unit is part of the type, not a comment
-struct milliseconds
+struct Milliseconds
 {
   unsigned long value;
 };
 
-auto blink(uint8_t pin, milliseconds period) -> void;
+auto blink(uint8_t pin, Milliseconds period) -> void;
 
 // DON'T: which unit? which argument is which?
 void blink(int a, int b);
@@ -91,23 +91,23 @@ them (I.2, I.3).
 
 ```cpp
 // F.16: cheap types by value, others by const&
-auto set_level(uint8_t level) -> void;
-auto log_line(std::string_view text) -> void;   // non-owning view, no copy
+auto setLevel(uint8_t level) -> void;
+auto logLine(std::string_view text) -> void;   // non-owning view, no copy
 
 // F.20 + F.21: return a struct, not output parameters
-struct reading
+struct Reading
 {
   float value;
   bool valid;
 };
-auto read_sensor() -> reading;
+auto readSensor() -> Reading;
 
 // F.4 + F.8: pure and constexpr, checked at compile time
-constexpr auto blink_count(unsigned long period_ms) noexcept -> unsigned
+constexpr auto blinkCount(unsigned long period_ms) noexcept -> unsigned
 {
   return period_ms == 0 ? 0 : 1000 / period_ms;
 }
-static_assert(blink_count(250) == 4, "4 blinks per second");
+static_assert(blinkCount(250) == 4, "4 blinks per second");
 ```
 
 The repo uses trailing return types (`auto f() -> void`), as
@@ -134,16 +134,16 @@ Most classes here own hardware or are registered somewhere, so they must
 not be copied. Delete all five, as `metronome.hpp` does:
 
 ```cpp
-class led_blinker
+class LedBlinker
 {
 public:
-  explicit led_blinker(uint8_t pin) : pin(pin) {}
+  explicit LedBlinker(uint8_t pin) : pin(pin) {}
 
-  led_blinker(const led_blinker &) = delete;
-  led_blinker(led_blinker &&) = delete;
-  auto operator=(const led_blinker &) -> led_blinker & = delete;
-  auto operator=(led_blinker &&) -> led_blinker & = delete;
-  ~led_blinker() = default;
+  LedBlinker(const LedBlinker &) = delete;
+  LedBlinker(LedBlinker &&) = delete;
+  auto operator=(const LedBlinker &) -> LedBlinker & = delete;
+  auto operator=(LedBlinker &&) -> LedBlinker & = delete;
+  ~LedBlinker() = default;
 
 private:
   uint8_t pin;
@@ -154,19 +154,19 @@ private:
 Interfaces get a virtual destructor and no copies (C.35, C.67, C.121):
 
 ```cpp
-class wifi_dependent
+class WifiDependent
 {
 public:
-  virtual ~wifi_dependent() = default;
-  virtual auto on_connected() -> void = 0;
-  virtual auto on_disconnected() -> void = 0;
+  virtual ~WifiDependent() = default;
+  virtual auto onConnected() -> void = 0;
+  virtual auto onDisconnected() -> void = 0;
 
 protected:
-  wifi_dependent() = default;
-  wifi_dependent(const wifi_dependent &) = default;
-  wifi_dependent(wifi_dependent &&) = default;
-  auto operator=(const wifi_dependent &) -> wifi_dependent & = default;
-  auto operator=(wifi_dependent &&) -> wifi_dependent & = default;
+  WifiDependent() = default;
+  WifiDependent(const WifiDependent &) = default;
+  WifiDependent(WifiDependent &&) = default;
+  auto operator=(const WifiDependent &) -> WifiDependent & = default;
+  auto operator=(WifiDependent &&) -> WifiDependent & = default;
 };
 ```
 
@@ -190,20 +190,20 @@ in a virtual function and its override (C.140).
 
 ```cpp
 // GOOD: static storage, lives as long as the program
-dummy_wifi_dependent dependent_a{"A"};
-dummy_wifi_dependent dependent_b{"B"};
+DummyWifiDependent dependent_a{"A"};
+DummyWifiDependent dependent_b{"B"};
 
 auto setup() -> void
 {
-  wifi_connection::init(&dependent_a, &dependent_b);
+  WifiConnection::init(&dependent_a, &dependent_b);
 }
 
-// BAD: the objects die when setup() returns, but wifi_connection keeps the
+// BAD: the objects die when setup() returns, but WifiConnection keeps the
 // pointers (the known bug in main.cpp, see CLAUDE.md)
 auto setup() -> void
 {
-  dummy_wifi_dependent dependent_a{"A"};
-  wifi_connection::init(&dependent_a);
+  DummyWifiDependent dependent_a{"A"};
+  WifiConnection::init(&dependent_a);
 }
 ```
 
@@ -216,7 +216,7 @@ RAII for the platform's own resources, e.g. the core's interrupt lock:
 ```cpp
 #include <interrupts.h>
 
-auto read_counter() -> uint32_t
+auto readCounter() -> uint32_t
 {
   esp8266::InterruptLock lock;   // disables interrupts, restores on exit
   return isr_counter;            // a multi-byte read the ISR can't tear
@@ -238,14 +238,14 @@ runs "concurrently" is interrupt handlers and SDK callbacks (WiFi events).
   handle it in `loop()`.
 - Never block for long. Waiting loops call `delay()` or `yield()` so the
   WiFi stack runs and the watchdog is fed; prefer `millis()`-based state
-  machines (like `Metronome`) over long `delay()`s.
+  machines (like `metronome`) over long `delay()`s.
 - Use `millis()` differences, not absolute values, so the 49-day wraparound
   doesn't matter: `if (millis() - start >= period)`.
 
 ```cpp
 volatile bool button_pressed = false;
 
-IRAM_ATTR auto on_button() -> void
+IRAM_ATTR auto onButton() -> void
 {
   button_pressed = true;
 }
@@ -255,7 +255,7 @@ auto loop() -> void
   if (button_pressed)
   {
     button_pressed = false;
-    handle_button();
+    handleButton();
   }
 }
 ```
@@ -277,7 +277,7 @@ auto loop() -> void
 
 ```cpp
 constexpr unsigned long blink_period_ms{500};   // ES.45 instead of 500
-constexpr uint8_t status_led{LED_BUILTIN};
+constexpr uint8_t STATUS_LED{LED_BUILTIN};
 const auto start = millis();                    // ES.25
 ```
 
@@ -302,14 +302,14 @@ Exceptions are disabled, so E.2/E.14/E.15 don't apply. Instead:
   documents that a function cannot fail (E.12).
 
 ```cpp
-enum class connect_result
+enum class ConnectResult
 {
-  connected,
-  timed_out,
-  wrong_password
+  CONNECTED,
+  TIMED_OUT,
+  WRONG_PASSWORD
 };
 
-[[nodiscard]] auto connect(std::string_view ssid) -> connect_result;
+[[nodiscard]] auto connect(std::string_view ssid) -> ConnectResult;
 ```
 
 ## Constants & Immutability (Con.\*)
@@ -323,12 +323,12 @@ enum class connect_result
 | **Con.5** | Use `constexpr` for values computable at compile time |
 
 ```cpp
-class sensor
+class Sensor
 {
 public:
-  explicit sensor(uint8_t pin) : pin(pin) {}
+  explicit Sensor(uint8_t pin) : pin(pin) {}
 
-  [[nodiscard]] auto last_reading() const -> float { return reading; }  // Con.2
+  [[nodiscard]] auto lastReading() const -> float { return reading; }  // Con.2
   auto record(float value) -> void { reading = value; }
 
 private:
@@ -336,7 +336,7 @@ private:
   float reading{0.0F};
 };
 
-constexpr float volts_per_step = 3.3F / 1024;   // Con.5, lower_snake_case
+constexpr float VOLTS_PER_STEP = 3.3F / 1024;   // Con.5
 ```
 
 ## Templates (T.\*)
@@ -355,7 +355,7 @@ traits instead, and keep templates rare: every instantiation costs flash.
 #include <type_traits>
 
 template <typename T>
-constexpr auto clamp_to_byte(T value) -> uint8_t
+constexpr auto clampToByte(T value) -> uint8_t
 {
   static_assert(std::is_integral_v<T>, "integers only");
   return value < 0 ? 0 : (value > 255 ? 255 : static_cast<uint8_t>(value));
@@ -373,7 +373,7 @@ constexpr auto clamp_to_byte(T value) -> uint8_t
 | **ESP** | Use `Serial`/`DEBUG_PRINT`, never `<iostream>` (pulls in a lot of flash) |
 
 ```cpp
-std::array<wifi_dependent *, 2> dependents{&dependent_a, &dependent_b};
+std::array<WifiDependent *, 2> dependents{&dependent_a, &dependent_b};
 
 Serial.println(F("WiFi connected"));   // literal stays in flash
 
@@ -387,13 +387,13 @@ String message = "RSSI: " + String(WiFi.RSSI());
 | --- | --- |
 | **Enum.1** | Prefer enumerations over macros |
 | **Enum.3** | Prefer `enum class` over plain `enum` |
-| **Enum.5** | Don't use ALL_CAPS for enumerators |
+| **Enum.5** | Don't use ALL_CAPS for enumerators (not followed here, see naming) |
 | **Enum.6** | Avoid unnamed enumerations |
 
 ```cpp
-enum class led_state : uint8_t { off, on, blinking };   // fixed size: 1 byte
+enum class LedState : uint8_t { OFF, ON, BLINKING };   // fixed size: 1 byte
 
-// BAD: leaks names, ALL_CAPS clashes with macros (the core defines many)
+// BAD: unscoped and unnamed, OFF and ON leak into the enclosing scope
 enum { OFF, ON };
 #define BLINK_MS 500   // Enum.1 / ES.31: use constexpr
 ```
@@ -407,8 +407,8 @@ enum { OFF, ON };
 | **SF.11** | Header files should be self-contained |
 | **NL.5** | No Hungarian notation |
 | **NL.8** | Use a consistent naming style |
-| **NL.9** | ALL_CAPS for macro names only |
-| **NL.10** | Prefer `lower_snake_case` names |
+| **NL.9** | ALL_CAPS for macro names only (here also enumerators and global constants) |
+| **NL.10** | Prefer `lower_snake_case` names (here: variables, parameters and members) |
 
 Repo conventions:
 
@@ -417,12 +417,26 @@ Repo conventions:
   (`wifi-connection.hpp`).
 - No subfolders in `src/`/`include/` and no duplicate file names:
   `scripts/migrate_to_ino.sh` flattens them into one Arduino IDE sketch.
-- Types, functions, variables, members and enumerators are
-  `lower_snake_case` (NL.10), like the standard library. Members have no
-  prefix or suffix. Macros, and only macros, are `ALL_CAPS`.
-- The existing code is still `PascalCase`/`camelCase` until it's migrated;
-  new code uses `lower_snake_case`. Names from the Arduino core and SDK
-  (`digitalWrite`, `WiFi.begin`) stay as they are.
+- Naming deviates from NL.10, by the maintainer's decision:
+
+  | What | Style | Example |
+  | --- | --- | --- |
+  | Classes, structs, unions | `PascalCase` | `WifiConnection` |
+  | Enums (the type) | `PascalCase` | `LedState` |
+  | Enumerators (always in an `enum class`) | `ALL_CAPS` | `LedState::BLINKING` |
+  | Type aliases, template parameters | `PascalCase` | `Millis`, `T` |
+  | Methods and free functions, test functions too | `camelCase` | `waitForNextCycle()` |
+  | Data members (no prefix or suffix) | `lower_snake_case` | `blink_interval` |
+  | Parameters | `lower_snake_case` | `cycle_duration` |
+  | Local, static and global variables, local `const` too | `lower_snake_case` | `led_blinker` |
+  | Constants at file or namespace scope | `ALL_CAPS` | `LOOP_DURATION` |
+  | Macros | `ALL_CAPS` | `LED_BUILT_IN_ESP` |
+  | Namespaces | `lower_snake_case` | `wifi` |
+  | File names | `kebab-case` | `wifi-connection.hpp` |
+
+- Names from the Arduino core, the SDK and test libraries (`digitalWrite`,
+  `WiFi.begin`, Unity's `setUp`/`tearDown`) stay as they are.
+- `.clang-tidy` enforces this with `readability-identifier-naming`.
 - Public classes and methods get Doxygen comments (`\brief`, `\param`).
 
 ## Performance & Footprint (Per.\*, ESP)
@@ -442,11 +456,11 @@ in flash, read with `pgm_read_*`:
 ```cpp
 #include <pgmspace.h>
 
-const uint8_t gamma_table[256] PROGMEM = {/* ... */};
+const uint8_t GAMMA_TABLE[256] PROGMEM = {/* ... */};
 
-auto apply_gamma(uint8_t level) -> uint8_t
+auto applyGamma(uint8_t level) -> uint8_t
 {
-  return pgm_read_byte(&gamma_table[level]);
+  return pgm_read_byte(&GAMMA_TABLE[level]);
 }
 ```
 
@@ -467,5 +481,6 @@ Before marking C++ work complete:
 - [ ] Rule of Zero, or all five special members handled (C.20, C.21)
 - [ ] Base class destructors public virtual or protected non-virtual (C.35)
 - [ ] `enum class`, `nullptr`, no C-style casts, no magic numbers
-- [ ] `lower_snake_case` names, `ALL_CAPS` only for macros
+- [ ] Names follow the naming table (`PascalCase` types, `camelCase`
+  functions, `lower_snake_case` variables, `ALL_CAPS` enumerators)
 - [ ] Headers have `#pragma once`, are self-contained and Doxygen-documented

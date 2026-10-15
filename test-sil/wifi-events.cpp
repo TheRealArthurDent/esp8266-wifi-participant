@@ -29,7 +29,7 @@ namespace
 {
 struct ScheduledEvent
 {
-  unsigned long atMs;
+  unsigned long at_ms;
   std::string name;
 };
 
@@ -100,7 +100,7 @@ void fire(const ScheduledEvent &scheduled)
 extern "C" void mock_sdk_task()
 {
   Schedule &pending = schedule();
-  while (pending.next < pending.events.size() && millis() >= pending.events[pending.next].atMs)
+  while (pending.next < pending.events.size() && millis() >= pending.events[pending.next].at_ms)
   {
     fire(pending.events[pending.next++]);
   }

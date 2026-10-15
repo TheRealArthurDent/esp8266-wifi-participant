@@ -14,10 +14,10 @@ public:
   /**
    * \brief Constructor.
    *
-   * \param cycleDuration The duration of one blink cycle in milliseconds.
+   * \param cycle_duration The duration of one blink cycle in milliseconds.
    */
-  explicit LedBlinker(int cycleDuration)
-      : blinkInterval(cycleDuration / 2), metronome(cycleDuration) {}
+  explicit LedBlinker(int cycle_duration)
+      : blink_interval(cycle_duration / 2), metronome(cycle_duration) {}
 
   /**
    * \brief Blinks the node LED once and blocks until the next cycle starts.
@@ -25,6 +25,6 @@ public:
   void blink();
 
 private:
-  int blinkInterval;
+  int blink_interval;
   Metronome metronome;
 };

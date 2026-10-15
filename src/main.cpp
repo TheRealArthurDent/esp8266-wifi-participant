@@ -8,7 +8,7 @@
 
 const int LOOP_DURATION = 5000;
 
-LedBlinker ledBlinker(LOOP_DURATION);
+LedBlinker led_blinker(LOOP_DURATION);
 
 // cppcheck-suppress unusedFunction
 void setup()
@@ -16,10 +16,10 @@ void setup()
 
   initDebugging();
 
-  pinMode(led_built_in_ESP, OUTPUT);
-  pinMode(led_built_in_Node, OUTPUT);
-  digitalWrite(led_built_in_Node, HIGH);
-  digitalWrite(led_built_in_ESP, HIGH);
+  pinMode(LED_BUILT_IN_ESP, OUTPUT);
+  pinMode(LED_BUILT_IN_NODE, OUTPUT);
+  digitalWrite(LED_BUILT_IN_NODE, HIGH);
+  digitalWrite(LED_BUILT_IN_ESP, HIGH);
 
   // WifiConnection keeps these pointers, so the dependents must outlive
   // setup(): static locals live as long as the program does.
@@ -36,5 +36,5 @@ void setup()
 // cppcheck-suppress unusedFunction
 void loop()
 {
-  ledBlinker.blink();
+  led_blinker.blink();
 }

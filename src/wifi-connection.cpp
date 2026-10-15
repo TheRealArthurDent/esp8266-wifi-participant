@@ -15,8 +15,8 @@ void WifiConnection::init()
 
   WiFi.mode(WIFI_STA);
   WiFi.hostname(SECRET_HOSTNAME);
-  wifiConnectHandler = WiFi.onStationModeGotIP(onWifiConnect);
-  wifiDisconnectHandler = WiFi.onStationModeDisconnected(onWifiDisconnect);
+  wifi_connect_handler = WiFi.onStationModeGotIP(onWifiConnect);
+  wifi_disconnect_handler = WiFi.onStationModeDisconnected(onWifiDisconnect);
   connect();
 }
 
@@ -28,9 +28,9 @@ void WifiConnection::init()
  * connection. The dependents will be informed about changes in the
  * connection's status.
  */
-void WifiConnection::init(std::list<WifiDependent *> dependentsList)
+void WifiConnection::init(std::list<WifiDependent *> dependents)
 {
-  notifier.setDependents(dependentsList);
+  notifier.setDependents(dependents);
 
   init();
 }
@@ -54,9 +54,9 @@ void WifiConnection::connect()
 
   while (WiFi.status() != WL_CONNECTED)
   {
-    digitalWrite(led_built_in_ESP, LOW);
+    digitalWrite(LED_BUILT_IN_ESP, LOW);
     delay(FLASH_INTERVAL);
-    digitalWrite(led_built_in_ESP, HIGH);
+    digitalWrite(LED_BUILT_IN_ESP, HIGH);
     delay(FLASH_INTERVAL);
     DEBUG_PRINT(".");
   }
@@ -80,5 +80,5 @@ void WifiConnection::onWifiDisconnect(const WiFiEventStationModeDisconnected &ev
   getInstance().notifier.connectionLost();
 
   // Apparently this is not even required, since ESP8266WiFiClass tries to reconnect like a mad man anyway.
-  // wifiReconnectTimer.once(2, connectToWifi);
+  // wifi_reconnect_timer.once(2, connectToWifi);
 }

@@ -36,9 +36,9 @@ void switchesTheNodeLedOnForHalfACycleThenWaitsForTheNextOne()
   blinker.blink();
 
   // millis() is 1500 after the LED went off, so the next cycle is 500 ms away.
-  Verify(Method(ArduinoFake(), digitalWrite).Using(led_built_in_Node, LOW),
+  Verify(Method(ArduinoFake(), digitalWrite).Using(LED_BUILT_IN_NODE, LOW),
          Method(ArduinoFake(), delay).Using(CYCLE_DURATION / 2),
-         Method(ArduinoFake(), digitalWrite).Using(led_built_in_Node, HIGH),
+         Method(ArduinoFake(), digitalWrite).Using(LED_BUILT_IN_NODE, HIGH),
          Method(ArduinoFake(), delay).Using(500));
 }
 
@@ -48,7 +48,7 @@ void leavesTheEspLedAlone()
 
   blinker.blink();
 
-  Verify(Method(ArduinoFake(), digitalWrite).Using(led_built_in_ESP, fakeit::_)).Never();
+  Verify(Method(ArduinoFake(), digitalWrite).Using(LED_BUILT_IN_ESP, fakeit::_)).Never();
 }
 
 void logsTheEndOfTheCycleInDebugBuilds()
