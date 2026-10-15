@@ -107,11 +107,12 @@ Public Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a181f5c865433645790085eff6c3e2cd9" id="r_a181f5c865433645790085eff6c3e2cd9"><td class="memItemLeft" align="right" valign="top">static auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a181f5c865433645790085eff6c3e2cd9">getInstance</a> () -&gt; <a class="el" href="classWifiConnection.html">WifiConnection</a> &amp;</td></tr>
+<tr class="memdesc:a181f5c865433645790085eff6c3e2cd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the singleton instance.  <br /></td></tr>
 <tr class="separator:a181f5c865433645790085eff6c3e2cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A controller for a WiFi connection. </p>
-<p>A singleton that will take care of your WiFi connection. It will try to establish a connection, attempt reconnects in case of a connection loss and inform registered <code><a class="el" href="classWifiDependent.html" title="An interface defining a controller that depends on a WiFi connection.">WifiDependent</a></code> s about successful connects as well as connection losses by calling their <a class="el" href="classWifiDependent.html#a36da441f78056898dd93eb23b34fb178" title="Callback function informing about an established connection.">WifiDependent::onWifiConnectionEstablished()</a> or <a class="el" href="classWifiDependent.html#a10673c479193e0be330404115e75df4e" title="Callback function informing about a connection loss.">WifiDependent::onWifiConnectionLost()</a> callback respectively. </p>
+<p>A singleton that will take care of your WiFi connection. It will try to establish a connection, attempt reconnects in case of a connection loss and inform the registered <a class="el" href="classWifiDependent.html">WifiDependents</a> about successful connects as well as connection losses by calling their <a class="el" href="classWifiDependent.html#a36da441f78056898dd93eb23b34fb178" title="Callback function informing about an established connection.">WifiDependent::onWifiConnectionEstablished()</a> or <a class="el" href="classWifiDependent.html#a10673c479193e0be330404115e75df4e" title="Callback function informing about a connection loss.">WifiDependent::onWifiConnectionLost()</a> callback respectively. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a181f5c865433645790085eff6c3e2cd9" name="a181f5c865433645790085eff6c3e2cd9"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a181f5c865433645790085eff6c3e2cd9">&#9670;&#160;</a></span>getInstance()</h2>
@@ -136,7 +137,9 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Gets the <code>Singleton</code> instance. </p>
+
+<p>Returns the singleton instance. </p>
+<dl class="section return"><dt>Returns</dt><dd>The one <code><a class="el" href="classWifiConnection.html" title="A controller for a WiFi connection.">WifiConnection</a></code>, created on the first call. </dd></dl>
 
 </div>
 </div>
@@ -154,10 +157,11 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Initializes the controller while registering a collection of <code><a class="el" href="classWifiDependent.html" title="An interface defining a controller that depends on a WiFi connection.">WifiDependent</a></code> s.</p>
+<p>Initializes the controller while registering a collection of <a class="el" href="classWifiDependent.html">WifiDependents</a>, then connects to the WiFi.</p>
+<p>Blocks until the WiFi is connected, flashing the ESP LED meanwhile.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">dependents</td><td>A collection of instances that depend on a WiFi connection. The dependents will be informed about changes in the connection's status. </td></tr>
+    <tr><td class="paramname">dependents</td><td>A collection of instances that depend on a WiFi connection. The dependents will be informed about changes in the connection's status. They must outlive the controller, which lives until the program ends. </td></tr>
   </table>
   </dd>
 </dl>
