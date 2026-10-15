@@ -115,6 +115,21 @@ expect_line()
   fi
 }
 
+# expect_pattern <regex> [count]: like expect_line, for an extended regex.
+expect_pattern()
+{
+  local regex="$1" count="${2:-}"
+  local found
+  found="$(grep -cE -- "${regex}" "${log}/${current}.log" || true)"
+  if [ -z "${count}" ] && [ "${found}" -gt 0 ]; then
+    pass "/${regex}/"
+  elif [ -n "${count}" ] && [ "${found}" -eq "${count}" ]; then
+    pass "/${regex}/ x${count}"
+  else
+    fail "/${regex}/ x${count:-1+}, found ${found}"
+  fi
+}
+
 # expect_running: the firmware ran until the timeout, without crashing.
 expect_running()
 {
@@ -130,17 +145,33 @@ expect_running()
 
 scenario_boots()
 {
-  run_firmware boots 6
+  # As on the board, setup() returns only once the WiFi is connected.
+  run_firmware boots 6 "got_ip@500"
   expect_running
   expect_line "Debugging initialized."
   expect_line "Connecting to emulated-ssid"
   expect_line "Loop ended at:"
 }
 
+scenario_waits_for_wifi()
+{
+  # Without got_ip, connect() keeps flashing the LED and printing dots.
+  run_firmware waits_for_wifi 3
+  expect_running
+  expect_line "Connecting to emulated-ssid"
+  # One dot per 500 ms flash, all on one line.
+  expect_pattern '^\.{4,}' 1
+  expect_line "Connected to WiFi" 0
+  expect_line "Loop ended at:" 0
+}
+
 scenario_wifi_events()
 {
   run_firmware wifi_events 4 "got_ip@1000,disconnected@2000,got_ip@3000"
   expect_running
+  # connect() waits for the first got_ip and prints dots meanwhile (mixed
+  # with the event log on stderr).
+  expect_pattern '^\.'
   expect_line "Connected to WiFi emulated-ssid" 2
   # localIP() is the host's own address in the emulation.
   expect_line "IP address: " 2
@@ -149,7 +180,7 @@ scenario_wifi_events()
   expect_line "DummyWifiDependent disconnected!" 2
 }
 
-all_scenarios=(boots wifi_events)
+all_scenarios=(boots waits_for_wifi wifi_events)
 
 # Scenarios that fail on main because of a known bug. They must keep failing
 # until it's fixed; then remove them here.
