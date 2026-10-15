@@ -11,7 +11,7 @@
  *
  * A singleton that will take care of your WiFi connection. It will try to
  * establish a connection, attempt reconnects in case of a connection loss
- * and inform registered \c WifiDependent s about successful connects as well
+ * and inform the registered \ref WifiDependent "WifiDependents" about successful connects as well
  * as connection losses by calling their
  * WifiDependent::onWifiConnectionEstablished() or
  * WifiDependent::onWifiConnectionLost() callback respectively.
@@ -27,7 +27,9 @@ class WifiConnection
   // Singleton "constructor"
 public:
   /**
-   * Gets the \c Singleton instance.
+   * \brief Returns the singleton instance.
+   *
+   * \return The one \c WifiConnection, created on the first call.
    */
   static auto getInstance() -> WifiConnection &
   {

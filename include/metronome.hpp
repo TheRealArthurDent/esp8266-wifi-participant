@@ -3,7 +3,7 @@
 /**
  * \brief The metronome.
  *
- * A helper class that let's you manage (somewhat) constant durations
+ * A helper class that lets you manage (somewhat) constant durations
  * of your loop() function. Define a cycle_duration and call waitForNextCycle()
  * at the end of your loop.
  * Easy, isn't it? :)
@@ -13,7 +13,7 @@ class Metronome
 public:
   /**
    * \brief Constructor.
-   *     *
+   *
    * \param cycle_duration The duration of one cycle of the loop.
    * \param skip_missed_cycles
    * \parblock
@@ -34,7 +34,8 @@ public:
       : cycle_duration(cycle_duration), skip_missed_cycles(skip_missed_cycles) {}
 
   /**
-   * Blocks until the next cycle starts.
+   * \brief Blocks until the next cycle starts.
+   *
    * Might return immediately if the Metronome has been configured NOT to skip
    * missed cycles ( \c skip_missed_cycles = \c false ).
    * See Metronome(int, bool).
