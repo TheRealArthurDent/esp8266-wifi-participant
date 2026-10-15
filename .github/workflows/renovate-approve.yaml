@@ -1,0 +1,56 @@
+name: ✅ Approve Renovate
+
+# main requires an approving review. Renovate's automerge PRs (minor, patch,
+# pin and digest updates, labelled `auto-merge` by renovate.json) get it from
+# this workflow, so Renovate can merge them once all checks are green. Every
+# other PR, including Renovate's majors and toolchain updates, still needs a
+# human review. See #141.
+#
+# pull_request_target runs this file as it is on main, so a PR can't change
+# what gets approved. The job never checks out or runs code from the PR.
+# Needs "Allow GitHub Actions to create and approve pull requests" in the
+# repository's Actions settings.
+on:
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - labeled
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+
+jobs:
+  approve:
+    name: Approve Renovate automerge PR
+    # Renovate runs as the P4ranoidAndroid account. The event's sender must be
+    # Renovate too: a push or label by anyone else gets no approval.
+    if: >-
+      github.event.sender.login == 'P4ranoidAndroid' &&
+      github.event.pull_request.user.login == 'P4ranoidAndroid' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      startsWith(github.event.pull_request.head.ref, 'renovate/') &&
+      contains(github.event.pull_request.labels.*.name, 'auto-merge')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Approve the PR's head commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          approvals=$(gh api "repos/$REPO/pulls/$PR_NUMBER/reviews" --paginate \
+            --jq ".[] | select(.user.login == \"github-actions[bot]\" and .state == \"APPROVED\" and .commit_id == \"$HEAD_SHA\") | .id")
+          if [ -n "$approvals" ]; then
+            echo "Commit $HEAD_SHA is already approved."
+            exit 0
+          fi
+          gh pr review "$PR_NUMBER" --repo "$REPO" --approve \
+            --body "Approved automatically: Renovate automerge update (see renovate-approve.yaml, #141). Renovate merges it once all checks are green."
