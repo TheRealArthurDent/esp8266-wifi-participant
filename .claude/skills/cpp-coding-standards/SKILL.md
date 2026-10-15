@@ -103,9 +103,9 @@ struct Reading
 auto readSensor() -> Reading;
 
 // F.4 + F.8: pure and constexpr, checked at compile time
-constexpr auto blinkCount(unsigned long periodMs) noexcept -> unsigned
+constexpr auto blinkCount(unsigned long period_ms) noexcept -> unsigned
 {
-  return periodMs == 0 ? 0 : 1000 / periodMs;
+  return period_ms == 0 ? 0 : 1000 / period_ms;
 }
 static_assert(blinkCount(250) == 4, "4 blinks per second");
 ```
@@ -190,20 +190,20 @@ in a virtual function and its override (C.140).
 
 ```cpp
 // GOOD: static storage, lives as long as the program
-DummyWifiDependent dependentA{"A"};
-DummyWifiDependent dependentB{"B"};
+DummyWifiDependent dependent_a{"A"};
+DummyWifiDependent dependent_b{"B"};
 
 auto setup() -> void
 {
-  WifiConnection::init(&dependentA, &dependentB);
+  WifiConnection::init(&dependent_a, &dependent_b);
 }
 
 // BAD: the objects die when setup() returns, but WifiConnection keeps the
 // pointers (the known bug in main.cpp, see CLAUDE.md)
 auto setup() -> void
 {
-  DummyWifiDependent dependentA{"A"};
-  WifiConnection::init(&dependentA);
+  DummyWifiDependent dependent_a{"A"};
+  WifiConnection::init(&dependent_a);
 }
 ```
 
@@ -219,7 +219,7 @@ RAII for the platform's own resources, e.g. the core's interrupt lock:
 auto readCounter() -> uint32_t
 {
   esp8266::InterruptLock lock;   // disables interrupts, restores on exit
-  return isrCounter;            // a multi-byte read the ISR can't tear
+  return isr_counter;            // a multi-byte read the ISR can't tear
 }
 ```
 
@@ -243,18 +243,18 @@ runs "concurrently" is interrupt handlers and SDK callbacks (WiFi events).
   doesn't matter: `if (millis() - start >= period)`.
 
 ```cpp
-volatile bool buttonPressed = false;
+volatile bool button_pressed = false;
 
 IRAM_ATTR auto onButton() -> void
 {
-  buttonPressed = true;
+  button_pressed = true;
 }
 
 auto loop() -> void
 {
-  if (buttonPressed)
+  if (button_pressed)
   {
-    buttonPressed = false;
+    button_pressed = false;
     handleButton();
   }
 }
@@ -276,7 +276,7 @@ auto loop() -> void
 | **ES.50** | Don't cast away `const` |
 
 ```cpp
-constexpr unsigned long blink_periodMs{500};   // ES.45 instead of 500
+constexpr unsigned long blink_period_ms{500};   // ES.45 instead of 500
 constexpr uint8_t STATUS_LED{LED_BUILTIN};
 const auto start = millis();                    // ES.25
 ```
@@ -304,9 +304,9 @@ Exceptions are disabled, so E.2/E.14/E.15 don't apply. Instead:
 ```cpp
 enum class ConnectResult
 {
-  connected,
-  timedOut,
-  wrongPassword
+  CONNECTED,
+  TIMED_OUT,
+  WRONG_PASSWORD
 };
 
 [[nodiscard]] auto connect(std::string_view ssid) -> ConnectResult;
@@ -373,7 +373,7 @@ constexpr auto clampToByte(T value) -> uint8_t
 | **ESP** | Use `Serial`/`DEBUG_PRINT`, never `<iostream>` (pulls in a lot of flash) |
 
 ```cpp
-std::array<WifiDependent *, 2> dependents{&dependentA, &dependentB};
+std::array<WifiDependent *, 2> dependents{&dependent_a, &dependent_b};
 
 Serial.println(F("WiFi connected"));   // literal stays in flash
 
@@ -387,13 +387,13 @@ String message = "RSSI: " + String(WiFi.RSSI());
 | --- | --- |
 | **Enum.1** | Prefer enumerations over macros |
 | **Enum.3** | Prefer `enum class` over plain `enum` |
-| **Enum.5** | Don't use ALL_CAPS for enumerators |
+| **Enum.5** | Don't use ALL_CAPS for enumerators (not followed here, see naming) |
 | **Enum.6** | Avoid unnamed enumerations |
 
 ```cpp
-enum class LedState : uint8_t { off, on, blinking };   // fixed size: 1 byte
+enum class LedState : uint8_t { OFF, ON, BLINKING };   // fixed size: 1 byte
 
-// BAD: leaks names, ALL_CAPS clashes with macros (the core defines many)
+// BAD: unscoped and unnamed, OFF and ON leak into the enclosing scope
 enum { OFF, ON };
 #define BLINK_MS 500   // Enum.1 / ES.31: use constexpr
 ```
@@ -407,8 +407,8 @@ enum { OFF, ON };
 | **SF.11** | Header files should be self-contained |
 | **NL.5** | No Hungarian notation |
 | **NL.8** | Use a consistent naming style |
-| **NL.9** | ALL_CAPS for macro names only (here also global constants) |
-| **NL.10** | Prefer `lower_snake_case` names (here: data members only, see below) |
+| **NL.9** | ALL_CAPS for macro names only (here also enumerators and global constants) |
+| **NL.10** | Prefer `lower_snake_case` names (here: variables, parameters and members) |
 
 Repo conventions:
 
@@ -421,12 +421,18 @@ Repo conventions:
 
   | What | Style | Example |
   | --- | --- | --- |
-  | Classes, structs, enums, type aliases | `PascalCase` | `WifiDependent`, `Millis` |
-  | Functions and methods | `camelCase` | `onWifiConnectionEstablished()` |
+  | Classes, structs, unions | `PascalCase` | `WifiConnection` |
+  | Enums (the type) | `PascalCase` | `LedState` |
+  | Enumerators (always in an `enum class`) | `ALL_CAPS` | `LedState::BLINKING` |
+  | Type aliases, template parameters | `PascalCase` | `Millis`, `T` |
+  | Methods and free functions, test functions too | `camelCase` | `waitForNextCycle()` |
   | Data members (no prefix or suffix) | `lower_snake_case` | `blink_interval` |
-  | Parameters, local and global variables | `camelCase` | `cycleDuration`, `ledBlinker` |
-  | Enumerators | `camelCase` | `ConnectResult::timedOut` |
-  | Global constants and macros | `ALL_CAPS` | `LOOP_DURATION`, `LED_BUILT_IN_ESP` |
+  | Parameters | `lower_snake_case` | `cycle_duration` |
+  | Local, static and global variables, local `const` too | `lower_snake_case` | `led_blinker` |
+  | Constants at file or namespace scope | `ALL_CAPS` | `LOOP_DURATION` |
+  | Macros | `ALL_CAPS` | `LED_BUILT_IN_ESP` |
+  | Namespaces | `lower_snake_case` | `wifi` |
+  | File names | `kebab-case` | `wifi-connection.hpp` |
 
 - Names from the Arduino core, the SDK and test libraries (`digitalWrite`,
   `WiFi.begin`, Unity's `setUp`/`tearDown`) stay as they are.
@@ -475,5 +481,6 @@ Before marking C++ work complete:
 - [ ] Rule of Zero, or all five special members handled (C.20, C.21)
 - [ ] Base class destructors public virtual or protected non-virtual (C.35)
 - [ ] `enum class`, `nullptr`, no C-style casts, no magic numbers
-- [ ] `PascalCase` types, `camelCase` functions, `lower_snake_case` members
+- [ ] Names follow the naming table (`PascalCase` types, `camelCase`
+  functions, `lower_snake_case` variables, `ALL_CAPS` enumerators)
 - [ ] Headers have `#pragma once`, are self-contained and Doxygen-documented

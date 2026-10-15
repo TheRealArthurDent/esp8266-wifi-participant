@@ -8,7 +8,7 @@
 
 const int LOOP_DURATION = 5000;
 
-LedBlinker ledBlinker(LOOP_DURATION);
+LedBlinker led_blinker(LOOP_DURATION);
 
 // cppcheck-suppress unusedFunction
 void setup()
@@ -36,5 +36,5 @@ void setup()
 // cppcheck-suppress unusedFunction
 void loop()
 {
-  ledBlinker.blink();
+  led_blinker.blink();
 }

@@ -1,9 +1,9 @@
 #include "wifi-dependent-notifier.hpp"
 
 // cppcheck-suppress unusedFunction
-void WifiDependentNotifier::setDependents(const std::list<WifiDependent *> &dependentsList)
+void WifiDependentNotifier::setDependents(const std::list<WifiDependent *> &dependents_list)
 {
-  dependents.assign(dependentsList.begin(), dependentsList.end());
+  dependents.assign(dependents_list.begin(), dependents_list.end());
 }
 
 // cppcheck-suppress unusedFunction
