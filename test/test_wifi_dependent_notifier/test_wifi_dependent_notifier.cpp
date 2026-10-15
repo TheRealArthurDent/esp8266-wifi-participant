@@ -12,28 +12,28 @@ using fakeit::When;
 
 namespace
 {
-/// A \c wifi_dependent mock that accepts both callbacks.
-class dependent_mock
+/// A \c WifiDependent mock that accepts both callbacks.
+class DependentMock
 {
 public:
-  dependent_mock()
+  DependentMock()
   {
-    When(Method(mock, on_wifi_connection_established)).AlwaysReturn();
-    When(Method(mock, on_wifi_connection_lost)).AlwaysReturn();
+    When(Method(mock, onWifiConnectionEstablished)).AlwaysReturn();
+    When(Method(mock, onWifiConnectionLost)).AlwaysReturn();
   }
 
-  auto get() -> wifi_dependent *
+  auto get() -> WifiDependent *
   {
     return &mock.get();
   }
 
-  auto operator()() -> Mock<wifi_dependent> &
+  auto operator()() -> Mock<WifiDependent> &
   {
     return mock;
   }
 
 private:
-  Mock<wifi_dependent> mock;
+  Mock<WifiDependent> mock;
 };
 } // namespace
 
@@ -46,111 +46,111 @@ void tearDown()
 {
 }
 
-void is_not_connected_initially()
+void isNotConnectedInitially()
 {
-  const wifi_dependent_notifier notifier;
+  const WifiDependentNotifier notifier;
 
-  TEST_ASSERT_FALSE(notifier.is_connected());
+  TEST_ASSERT_FALSE(notifier.isConnected());
 }
 
-void is_connected_once_the_connection_is_established()
+void isConnectedOnceTheConnectionIsEstablished()
 {
-  wifi_dependent_notifier notifier;
+  WifiDependentNotifier notifier;
 
-  notifier.connection_established();
+  notifier.connectionEstablished();
 
-  TEST_ASSERT_TRUE(notifier.is_connected());
+  TEST_ASSERT_TRUE(notifier.isConnected());
 }
 
-void is_not_connected_once_the_connection_is_lost()
+void isNotConnectedOnceTheConnectionIsLost()
 {
-  wifi_dependent_notifier notifier;
+  WifiDependentNotifier notifier;
 
-  notifier.connection_established();
-  notifier.connection_lost();
+  notifier.connectionEstablished();
+  notifier.connectionLost();
 
-  TEST_ASSERT_FALSE(notifier.is_connected());
+  TEST_ASSERT_FALSE(notifier.isConnected());
 }
 
-void notifies_each_dependent_once_when_the_connection_is_established()
+void notifiesEachDependentOnceWhenTheConnectionIsEstablished()
 {
-  dependent_mock first;
-  dependent_mock second;
-  wifi_dependent_notifier notifier;
-  notifier.set_dependents({first.get(), second.get()});
+  DependentMock first;
+  DependentMock second;
+  WifiDependentNotifier notifier;
+  notifier.setDependents({first.get(), second.get()});
 
-  notifier.connection_established();
+  notifier.connectionEstablished();
 
-  Verify(Method(first(), on_wifi_connection_established)).Once();
-  Verify(Method(second(), on_wifi_connection_established)).Once();
+  Verify(Method(first(), onWifiConnectionEstablished)).Once();
+  Verify(Method(second(), onWifiConnectionEstablished)).Once();
   VerifyNoOtherInvocations(first(), second());
 }
 
-void notifies_each_dependent_once_when_the_connection_is_lost()
+void notifiesEachDependentOnceWhenTheConnectionIsLost()
 {
-  dependent_mock first;
-  dependent_mock second;
-  wifi_dependent_notifier notifier;
-  notifier.set_dependents({first.get(), second.get()});
+  DependentMock first;
+  DependentMock second;
+  WifiDependentNotifier notifier;
+  notifier.setDependents({first.get(), second.get()});
 
-  notifier.connection_lost();
+  notifier.connectionLost();
 
-  Verify(Method(first(), on_wifi_connection_lost)).Once();
-  Verify(Method(second(), on_wifi_connection_lost)).Once();
+  Verify(Method(first(), onWifiConnectionLost)).Once();
+  Verify(Method(second(), onWifiConnectionLost)).Once();
   VerifyNoOtherInvocations(first(), second());
 }
 
-void notifies_dependents_in_the_order_they_were_given()
+void notifiesDependentsInTheOrderTheyWereGiven()
 {
-  dependent_mock first;
-  dependent_mock second;
-  wifi_dependent_notifier notifier;
-  notifier.set_dependents({first.get(), second.get()});
+  DependentMock first;
+  DependentMock second;
+  WifiDependentNotifier notifier;
+  notifier.setDependents({first.get(), second.get()});
 
-  notifier.connection_established();
+  notifier.connectionEstablished();
 
-  Verify(Method(first(), on_wifi_connection_established), Method(second(), on_wifi_connection_established));
+  Verify(Method(first(), onWifiConnectionEstablished), Method(second(), onWifiConnectionEstablished));
 }
 
-void setting_dependents_replaces_the_earlier_ones()
+void settingDependentsReplacesTheEarlierOnes()
 {
-  dependent_mock replaced;
-  dependent_mock current;
-  wifi_dependent_notifier notifier;
-  notifier.set_dependents({replaced.get()});
+  DependentMock replaced;
+  DependentMock current;
+  WifiDependentNotifier notifier;
+  notifier.setDependents({replaced.get()});
 
-  notifier.set_dependents({current.get()});
-  notifier.connection_established();
-  notifier.connection_lost();
+  notifier.setDependents({current.get()});
+  notifier.connectionEstablished();
+  notifier.connectionLost();
 
   VerifyNoOtherInvocations(replaced());
-  Verify(Method(current(), on_wifi_connection_established)).Once();
-  Verify(Method(current(), on_wifi_connection_lost)).Once();
+  Verify(Method(current(), onWifiConnectionEstablished)).Once();
+  Verify(Method(current(), onWifiConnectionLost)).Once();
 }
 
-void notifies_nobody_without_dependents()
+void notifiesNobodyWithoutDependents()
 {
-  wifi_dependent_notifier notifier;
+  WifiDependentNotifier notifier;
 
-  notifier.connection_established();
-  notifier.connection_lost();
+  notifier.connectionEstablished();
+  notifier.connectionLost();
 
-  TEST_ASSERT_FALSE(notifier.is_connected());
+  TEST_ASSERT_FALSE(notifier.isConnected());
 }
 
 auto main() -> int
 {
-  install_fakeit_unity_adapter();
+  installFakeitUnityAdapter();
   UNITY_BEGIN();
 
-  RUN_TEST(is_not_connected_initially);
-  RUN_TEST(is_connected_once_the_connection_is_established);
-  RUN_TEST(is_not_connected_once_the_connection_is_lost);
-  RUN_TEST(notifies_each_dependent_once_when_the_connection_is_established);
-  RUN_TEST(notifies_each_dependent_once_when_the_connection_is_lost);
-  RUN_TEST(notifies_dependents_in_the_order_they_were_given);
-  RUN_TEST(setting_dependents_replaces_the_earlier_ones);
-  RUN_TEST(notifies_nobody_without_dependents);
+  RUN_TEST(isNotConnectedInitially);
+  RUN_TEST(isConnectedOnceTheConnectionIsEstablished);
+  RUN_TEST(isNotConnectedOnceTheConnectionIsLost);
+  RUN_TEST(notifiesEachDependentOnceWhenTheConnectionIsEstablished);
+  RUN_TEST(notifiesEachDependentOnceWhenTheConnectionIsLost);
+  RUN_TEST(notifiesDependentsInTheOrderTheyWereGiven);
+  RUN_TEST(settingDependentsReplacesTheEarlierOnes);
+  RUN_TEST(notifiesNobodyWithoutDependents);
 
   return UNITY_END();
 }

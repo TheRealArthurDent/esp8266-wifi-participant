@@ -1,7 +1,7 @@
 #include "debug.h"
 
 // cppcheck-suppress unusedFunction
-void init_debugging()
+void initDebugging()
 {
 #ifdef DEBUG
   Serial.begin(MONITOR_SPEED);

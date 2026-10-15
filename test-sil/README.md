@@ -37,7 +37,7 @@ Needs Linux, `git`, `make` and `g++`. No PlatformIO, no board, no Docker.
 ## Limits
 
 - `WiFi.status()` is always `WL_CONNECTED`, whatever events were fired, so
-  `wifi_connection::connect()` never waits.
+  `WifiConnection::connect()` never waits.
 - `WiFi.localIP()` returns the host's own address, not the one in the event.
 - Time is real time: a scenario that needs 5 s of firmware time takes 5 s.
 

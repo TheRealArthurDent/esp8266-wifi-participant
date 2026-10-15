@@ -5,16 +5,16 @@
  * Logs in case of an established WiFi connection.
  */
 // cppcheck-suppress unusedFunction
-void dummy_wifi_dependent::on_wifi_connection_established()
+void DummyWifiDependent::onWifiConnectionEstablished()
 {
-  DEBUG_PRINTLN("dummy_wifi_dependent connected!");
+  DEBUG_PRINTLN("DummyWifiDependent connected!");
 }
 
 /**
  * Logs in case of an lost WiFi connection.
  */
 // cppcheck-suppress unusedFunction
-void dummy_wifi_dependent::on_wifi_connection_lost()
+void DummyWifiDependent::onWifiConnectionLost()
 {
-  DEBUG_PRINTLN("dummy_wifi_dependent disconnected!");
+  DEBUG_PRINTLN("DummyWifiDependent disconnected!");
 }

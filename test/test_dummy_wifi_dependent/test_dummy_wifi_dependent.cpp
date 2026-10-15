@@ -20,38 +20,38 @@ void tearDown()
 }
 
 #ifdef DEBUG
-void logs_an_established_connection()
+void logsAnEstablishedConnection()
 {
-  dummy_wifi_dependent dependent;
+  DummyWifiDependent dependent;
 
-  dependent.on_wifi_connection_established();
+  dependent.onWifiConnectionEstablished();
 
   Verify(OverloadedMethod(ArduinoFake(Serial), println, size_t(const char *))
              .Matching([](const char *line)
-                       { return std::string(line) == "dummy_wifi_dependent connected!"; }))
+                       { return std::string(line) == "DummyWifiDependent connected!"; }))
       .Once();
   VerifyNoOtherInvocations(ArduinoFake(Serial));
 }
 
-void logs_a_lost_connection()
+void logsALostConnection()
 {
-  dummy_wifi_dependent dependent;
+  DummyWifiDependent dependent;
 
-  dependent.on_wifi_connection_lost();
+  dependent.onWifiConnectionLost();
 
   Verify(OverloadedMethod(ArduinoFake(Serial), println, size_t(const char *))
              .Matching([](const char *line)
-                       { return std::string(line) == "dummy_wifi_dependent disconnected!"; }))
+                       { return std::string(line) == "DummyWifiDependent disconnected!"; }))
       .Once();
   VerifyNoOtherInvocations(ArduinoFake(Serial));
 }
 #else
-void stays_silent_in_release_builds()
+void staysSilentInReleaseBuilds()
 {
-  dummy_wifi_dependent dependent;
+  DummyWifiDependent dependent;
 
-  dependent.on_wifi_connection_established();
-  dependent.on_wifi_connection_lost();
+  dependent.onWifiConnectionEstablished();
+  dependent.onWifiConnectionLost();
 
   VerifyNoOtherInvocations(ArduinoFake(Serial));
 }
@@ -59,13 +59,13 @@ void stays_silent_in_release_builds()
 
 auto main() -> int
 {
-  install_fakeit_unity_adapter();
+  installFakeitUnityAdapter();
   UNITY_BEGIN();
 #ifdef DEBUG
-  RUN_TEST(logs_an_established_connection);
-  RUN_TEST(logs_a_lost_connection);
+  RUN_TEST(logsAnEstablishedConnection);
+  RUN_TEST(logsALostConnection);
 #else
-  RUN_TEST(stays_silent_in_release_builds);
+  RUN_TEST(staysSilentInReleaseBuilds);
 #endif
   return UNITY_END();
 }

@@ -145,8 +145,8 @@ scenario_wifi_events()
   # localIP() is the host's own address in the emulation.
   expect_line "IP address: " 2
   expect_line "Disconnected from WiFi" 1
-  expect_line "dummy_wifi_dependent connected!" 4
-  expect_line "dummy_wifi_dependent disconnected!" 2
+  expect_line "DummyWifiDependent connected!" 4
+  expect_line "DummyWifiDependent disconnected!" 2
 }
 
 all_scenarios=(boots wifi_events)

@@ -3,15 +3,15 @@
 #include "wifi-dependent.hpp"
 
 /**
- * \brief Dummy implementation of a wifi_dependent.
+ * \brief Dummy implementation of a WifiDependent.
  *
- * Just a dummy implementation of a wifi_dependent that does nothing but
+ * Just a dummy implementation of a WifiDependent that does nothing but
  * logging the respective events.
  */
-class dummy_wifi_dependent : public wifi_dependent
+class DummyWifiDependent : public WifiDependent
 {
 
 public:
-  void on_wifi_connection_established() override;
-  void on_wifi_connection_lost() override;
+  void onWifiConnectionEstablished() override;
+  void onWifiConnectionLost() override;
 };

@@ -10,4 +10,4 @@
 #define DEBUG_PRINTLN(x)
 #endif
 
-void init_debugging();
+void initDebugging();

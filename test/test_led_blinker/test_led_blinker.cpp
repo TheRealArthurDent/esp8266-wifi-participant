@@ -11,7 +11,7 @@ using fakeit::When;
 
 namespace
 {
-const int cycle_duration = 1000;
+const int CYCLE_DURATION = 1000;
 } // namespace
 
 void setUp()
@@ -29,31 +29,31 @@ void tearDown()
 {
 }
 
-void switches_the_node_led_on_for_half_a_cycle_then_waits_for_the_next_one()
+void switchesTheNodeLedOnForHalfACycleThenWaitsForTheNextOne()
 {
-  led_blinker blinker(cycle_duration);
+  LedBlinker blinker(CYCLE_DURATION);
 
   blinker.blink();
 
   // millis() is 1500 after the LED went off, so the next cycle is 500 ms away.
   Verify(Method(ArduinoFake(), digitalWrite).Using(LED_BUILT_IN_NODE, LOW),
-         Method(ArduinoFake(), delay).Using(cycle_duration / 2),
+         Method(ArduinoFake(), delay).Using(CYCLE_DURATION / 2),
          Method(ArduinoFake(), digitalWrite).Using(LED_BUILT_IN_NODE, HIGH),
          Method(ArduinoFake(), delay).Using(500));
 }
 
-void leaves_the_esp_led_alone()
+void leavesTheEspLedAlone()
 {
-  led_blinker blinker(cycle_duration);
+  LedBlinker blinker(CYCLE_DURATION);
 
   blinker.blink();
 
   Verify(Method(ArduinoFake(), digitalWrite).Using(LED_BUILT_IN_ESP, fakeit::_)).Never();
 }
 
-void logs_the_end_of_the_cycle_in_debug_builds()
+void logsTheEndOfTheCycleInDebugBuilds()
 {
-  led_blinker blinker(cycle_duration);
+  LedBlinker blinker(CYCLE_DURATION);
 
   blinker.blink();
 
@@ -67,10 +67,10 @@ void logs_the_end_of_the_cycle_in_debug_builds()
 
 auto main() -> int
 {
-  install_fakeit_unity_adapter();
+  installFakeitUnityAdapter();
   UNITY_BEGIN();
-  RUN_TEST(switches_the_node_led_on_for_half_a_cycle_then_waits_for_the_next_one);
-  RUN_TEST(leaves_the_esp_led_alone);
-  RUN_TEST(logs_the_end_of_the_cycle_in_debug_builds);
+  RUN_TEST(switchesTheNodeLedOnForHalfACycleThenWaitsForTheNextOne);
+  RUN_TEST(leavesTheEspLedAlone);
+  RUN_TEST(logsTheEndOfTheCycleInDebugBuilds);
   return UNITY_END();
 }

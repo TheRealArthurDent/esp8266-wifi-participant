@@ -27,24 +27,24 @@ extern "C" wifi_event_handler_cb_t wifi_event_handler_cb_emu;
 
 namespace
 {
-struct scheduled_event
+struct ScheduledEvent
 {
   unsigned long at_ms;
   std::string name;
 };
 
-struct event_schedule
+struct Schedule
 {
-  std::vector<scheduled_event> events;
+  std::vector<ScheduledEvent> events;
   size_t next = 0;
 };
 
 // Parses WIFI_EVENTS on first use.
-auto schedule() -> event_schedule &
+auto schedule() -> Schedule &
 {
-  static event_schedule instance = []() -> event_schedule
+  static Schedule instance = []() -> Schedule
   {
-    event_schedule parsed;
+    Schedule parsed;
     const char *spec = getenv("WIFI_EVENTS");
     std::string rest = (spec == nullptr) ? "" : spec;
     while (!rest.empty())
@@ -68,7 +68,7 @@ auto schedule() -> event_schedule &
   return instance;
 }
 
-void fire(const scheduled_event &scheduled)
+void fire(const ScheduledEvent &scheduled)
 {
   // The addresses stay 0.0.0.0; the firmware reads WiFi.localIP() instead.
   System_Event_t event{};
@@ -99,7 +99,7 @@ void fire(const scheduled_event &scheduled)
 // Overrides the emulation's empty default, see core-host-emulation.patch.
 extern "C" void mock_sdk_task()
 {
-  event_schedule &pending = schedule();
+  Schedule &pending = schedule();
   while (pending.next < pending.events.size() && millis() >= pending.events[pending.next].at_ms)
   {
     fire(pending.events[pending.next++]);

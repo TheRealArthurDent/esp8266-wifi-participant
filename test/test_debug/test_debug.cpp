@@ -22,25 +22,25 @@ void tearDown()
 }
 
 #ifdef DEBUG
-void opens_the_serial_port_at_the_monitor_speed()
+void opensTheSerialPortAtTheMonitorSpeed()
 {
-  init_debugging();
+  initDebugging();
 
   Verify(OverloadedMethod(ArduinoFake(Serial), begin, void(unsigned long)).Using(MONITOR_SPEED)).Once();
 }
 
-void logs_that_debugging_is_initialized()
+void logsThatDebuggingIsInitialized()
 {
-  init_debugging();
+  initDebugging();
 
   Verify(OverloadedMethod(ArduinoFake(Serial), begin, void(unsigned long)),
          OverloadedMethod(ArduinoFake(Serial), println, size_t(const char *)).Using(fakeit::_),
          OverloadedMethod(ArduinoFake(Serial), println, size_t()));
 }
 #else
-void leaves_the_serial_port_alone_in_release_builds()
+void leavesTheSerialPortAloneInReleaseBuilds()
 {
-  init_debugging();
+  initDebugging();
 
   VerifyNoOtherInvocations(ArduinoFake(Serial));
 }
@@ -48,13 +48,13 @@ void leaves_the_serial_port_alone_in_release_builds()
 
 auto main() -> int
 {
-  install_fakeit_unity_adapter();
+  installFakeitUnityAdapter();
   UNITY_BEGIN();
 #ifdef DEBUG
-  RUN_TEST(opens_the_serial_port_at_the_monitor_speed);
-  RUN_TEST(logs_that_debugging_is_initialized);
+  RUN_TEST(opensTheSerialPortAtTheMonitorSpeed);
+  RUN_TEST(logsThatDebuggingIsInitialized);
 #else
-  RUN_TEST(leaves_the_serial_port_alone_in_release_builds);
+  RUN_TEST(leavesTheSerialPortAloneInReleaseBuilds);
 #endif
   return UNITY_END();
 }
