@@ -100,20 +100,20 @@ $(function(){ initResizable(false); });
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span>{</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keyword">public</span>:</div>
 <div class="foldopen" id="foldopen00019" data-start="{" data-end="}">
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="classLedBlinker.html#a92372542c961acb28ab14acc6fd7d5f1">   19</a></span>  <span class="keyword">explicit</span> <a class="code hl_function" href="classLedBlinker.html#a92372542c961acb28ab14acc6fd7d5f1">LedBlinker</a>(<span class="keywordtype">int</span> cycleDuration)</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>      : blinkInterval(cycleDuration / 2), metronome(cycleDuration) {}</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno"><a class="line" href="classLedBlinker.html#a4a188cde54204e5447f5fcce9e099228">   19</a></span>  <span class="keyword">explicit</span> <a class="code hl_function" href="classLedBlinker.html#a4a188cde54204e5447f5fcce9e099228">LedBlinker</a>(<span class="keywordtype">int</span> cycle_duration)</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>      : blink_interval(cycle_duration / 2), metronome(cycle_duration) {}</div>
 </div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  <span class="keywordtype">void</span> <a class="code hl_function" href="classLedBlinker.html#a08a02da261116b7b97b73af6d990c927">blink</a>();</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  <span class="keywordtype">int</span> blinkInterval;</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  <span class="keywordtype">int</span> blink_interval;</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>  <a class="code hl_class" href="classMetronome.html">Metronome</a> metronome;</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>};</div>
 </div>
 <div class="ttc" id="aclassLedBlinker_html"><div class="ttname"><a href="classLedBlinker.html">LedBlinker</a></div><div class="ttdoc">Blinks the node LED once per cycle.</div><div class="ttdef"><b>Definition</b> led-blinker.hpp:12</div></div>
 <div class="ttc" id="aclassLedBlinker_html_a08a02da261116b7b97b73af6d990c927"><div class="ttname"><a href="classLedBlinker.html#a08a02da261116b7b97b73af6d990c927">LedBlinker::blink</a></div><div class="ttdeci">void blink()</div><div class="ttdoc">Blinks the node LED once and blocks until the next cycle starts.</div><div class="ttdef"><b>Definition</b> led-blinker.cpp:8</div></div>
-<div class="ttc" id="aclassLedBlinker_html_a92372542c961acb28ab14acc6fd7d5f1"><div class="ttname"><a href="classLedBlinker.html#a92372542c961acb28ab14acc6fd7d5f1">LedBlinker::LedBlinker</a></div><div class="ttdeci">LedBlinker(int cycleDuration)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition</b> led-blinker.hpp:19</div></div>
+<div class="ttc" id="aclassLedBlinker_html_a4a188cde54204e5447f5fcce9e099228"><div class="ttname"><a href="classLedBlinker.html#a4a188cde54204e5447f5fcce9e099228">LedBlinker::LedBlinker</a></div><div class="ttdeci">LedBlinker(int cycle_duration)</div><div class="ttdoc">Constructor.</div><div class="ttdef"><b>Definition</b> led-blinker.hpp:19</div></div>
 <div class="ttc" id="aclassMetronome_html"><div class="ttname"><a href="classMetronome.html">Metronome</a></div><div class="ttdoc">The metronome.</div><div class="ttdef"><b>Definition</b> metronome.hpp:12</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

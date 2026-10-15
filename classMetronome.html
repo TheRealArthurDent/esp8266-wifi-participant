@@ -98,9 +98,9 @@ $(function(){ initResizable(false); });
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac24addec5b00c207d3d8e3281dd3ec24" id="r_ac24addec5b00c207d3d8e3281dd3ec24"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac24addec5b00c207d3d8e3281dd3ec24">Metronome</a> (int cycleDuration, bool skipMissedCycles=true)</td></tr>
-<tr class="memdesc:ac24addec5b00c207d3d8e3281dd3ec24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. *.  <br /></td></tr>
-<tr class="separator:ac24addec5b00c207d3d8e3281dd3ec24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3208d402115d36a29c5b06439fc060a5" id="r_a3208d402115d36a29c5b06439fc060a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3208d402115d36a29c5b06439fc060a5">Metronome</a> (int cycle_duration, bool skip_missed_cycles=true)</td></tr>
+<tr class="memdesc:a3208d402115d36a29c5b06439fc060a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor. *.  <br /></td></tr>
+<tr class="separator:a3208d402115d36a29c5b06439fc060a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f18ddf160a79ce2bb9f7fb5f134ce17" id="r_a8f18ddf160a79ce2bb9f7fb5f134ce17"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8f18ddf160a79ce2bb9f7fb5f134ce17">waitForNextCycle</a> () -&gt; void</td></tr>
 <tr class="separator:a8f18ddf160a79ce2bb9f7fb5f134ce17"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a457504db53d62f0e1c1a34c5dbabc624" id="r_a457504db53d62f0e1c1a34c5dbabc624"><td class="memItemLeft" align="right" valign="top"><a id="a457504db53d62f0e1c1a34c5dbabc624" name="a457504db53d62f0e1c1a34c5dbabc624"></a>
@@ -118,10 +118,10 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a cla
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The metronome. </p>
-<p>A helper class that let's you manage (somewhat) constant durations of your loop() function. Define a cycleDuration and call <a class="el" href="#a8f18ddf160a79ce2bb9f7fb5f134ce17">waitForNextCycle()</a> at the end of your loop. Easy, isn't it? :) </p>
+<p>A helper class that let's you manage (somewhat) constant durations of your loop() function. Define a cycle_duration and call <a class="el" href="#a8f18ddf160a79ce2bb9f7fb5f134ce17">waitForNextCycle()</a> at the end of your loop. Easy, isn't it? :) </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac24addec5b00c207d3d8e3281dd3ec24" name="ac24addec5b00c207d3d8e3281dd3ec24"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac24addec5b00c207d3d8e3281dd3ec24">&#9670;&#160;</a></span>Metronome()</h2>
+<a id="a3208d402115d36a29c5b06439fc060a5" name="a3208d402115d36a29c5b06439fc060a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3208d402115d36a29c5b06439fc060a5">&#9670;&#160;</a></span>Metronome()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -132,12 +132,12 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a cla
         <tr>
           <td class="memname">Metronome::Metronome </td>
           <td>(</td>
-          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>cycleDuration</em></span>, </td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>cycle_duration</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>skipMissedCycles</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>&#160;)</td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>skip_missed_cycles</em></span><span class="paramdefsep"> = </span><span class="paramdefval">true</span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -150,12 +150,12 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a cla
 <p>Constructor. *. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">cycleDuration</td><td>The duration of one cycle of the loop. </td></tr>
-    <tr><td class="paramname">skipMissedCycles</td><td>In case a cycle has been missed - due to stuff happening within the loop taking more time than the defined cycle duration - this bool defines whether the missed cycle should be skipped or not. In this case <code>true</code> will make metronome's <code>waitForNextCycle</code> just wait until the next regular cycle, thereby skipping at least one cycle, whereas <code>false</code> will make metronome's <code>waitForNextCycle</code> return immediately and thereby trigger the next iteration of the loop in order to make up the delay. </td></tr>
+    <tr><td class="paramname">cycle_duration</td><td>The duration of one cycle of the loop. </td></tr>
+    <tr><td class="paramname">skip_missed_cycles</td><td>In case a cycle has been missed - due to stuff happening within the loop taking more time than the defined cycle duration - this bool defines whether the missed cycle should be skipped or not. In this case <code>true</code> will make metronome's <code>waitForNextCycle</code> just wait until the next regular cycle, thereby skipping at least one cycle, whereas <code>false</code> will make metronome's <code>waitForNextCycle</code> return immediately and thereby trigger the next iteration of the loop in order to make up the delay. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section warning"><dt>Warning</dt><dd>Using <code>skipMissedCycles</code> = <code>false</code> in conjunction with a loop that usually takes more time than <code>cycleDuration</code> will lead to a growing delay that can never be made up. </dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>Using <code>skip_missed_cycles</code> = <code>false</code> in conjunction with a loop that usually takes more time than <code>cycle_duration</code> will lead to a growing delay that can never be made up. </dd></dl>
 
 </div>
 </div>
@@ -174,7 +174,7 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a cla
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Blocks until the next cycle starts. Might return immediately if the <a class="el" href="classMetronome.html" title="The metronome.">Metronome</a> has been configured NOT to skip missed cycles ( <code>skipMissedCycles</code> = <code>false</code> ). See <a class="el" href="#ac24addec5b00c207d3d8e3281dd3ec24" title="Constructor. *.">Metronome(int, bool)</a>. </p>
+<p>Blocks until the next cycle starts. Might return immediately if the <a class="el" href="classMetronome.html" title="The metronome.">Metronome</a> has been configured NOT to skip missed cycles ( <code>skip_missed_cycles</code> = <code>false</code> ). See <a class="el" href="#a3208d402115d36a29c5b06439fc060a5" title="Constructor. *.">Metronome(int, bool)</a>. </p>
 
 </div>
 </div>
