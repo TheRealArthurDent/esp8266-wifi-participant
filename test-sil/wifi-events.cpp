@@ -105,8 +105,9 @@ void fire(const ScheduledEvent &scheduled)
 }
 } // namespace
 
-// Overrides the emulation's empty default, see core-host-emulation.patch.
-extern "C" void mock_sdk_task()
+// Overrides the emulation's empty default, see core-host-emulation.patch,
+// which also fixes its name.
+extern "C" void mock_sdk_task() // NOLINT(readability-identifier-naming)
 {
   Schedule &pending = schedule();
   while (pending.next < pending.events.size() && millis() >= pending.events[pending.next].at_ms)
