@@ -1,7 +1,7 @@
 name: ✅ Approve Renovate
 
 # main requires an approving review. Renovate's automerge PRs (minor, patch,
-# pin and digest updates, labelled `auto-merge` by renovate.json) get it from
+# pin and digest updates, labeled `auto-merge` by renovate.json) get it from
 # this workflow, so Renovate can merge them once all checks are green. Every
 # other PR, including Renovate's majors and toolchain updates, still needs a
 # human review. See #141.
