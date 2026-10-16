@@ -31,6 +31,8 @@ issues before changing an affected area, and reference them in commits.
   core libraries built as a Linux program, see `test-sil/README.md`
 - `scripts/migrate_to_ino.sh` – copies `src/` and `include/` into a flat Arduino
   IDE sketch folder
+- `scripts/setup-dev.sh` – sets up a local checkout (venv, `secrets.ini`,
+  pre-commit hooks), see Commands
 - `scripts/rulesets.sh` – exports, diffs and applies the repository rulesets
   kept in `.github/rulesets/` (needs `gh` as a repo admin, so the user runs it)
 - `docs/` – Doxygen config; the docs are published to GitHub Pages
@@ -64,8 +66,7 @@ the repo.
 ## Commands
 
 ```sh
-cp secrets.ini.template secrets.ini   # once; dummy values build fine
-pip install -r requirements.txt       # PlatformIO and pre-commit, pinned
+scripts/setup-dev.sh                  # local setup, idempotent, see below
 pio run                               # build the default env (nodemcuv2_DEBUG)
 pio run -e nodemcuv2                  # build the release env
 pio check -e nodemcuv2_DEBUG          # static analysis: cppcheck + clang-tidy
@@ -75,6 +76,13 @@ test-sil/run.sh                      # SIL tests (firmware in host emulation)
 pre-commit run --all-files            # hygiene, JSON/YAML, Renovate, linters
 clang-format --dry-run --Werror src/*.cpp include/*.h*   # see .clang-format
 ```
+
+`scripts/setup-dev.sh` installs `requirements.txt` (PlatformIO and pre-commit,
+pinned) into a venv at `~/.venvs/esp8266-wifi-participant` (`VENV` overrides
+it), copies `secrets.ini.template` to `secrets.ini` if there is none (dummy
+values build fine), runs `pre-commit install` and `pre-commit install-hooks`,
+and says how to put the venv on `PATH`. Run it again after
+`requirements.txt` or `.pre-commit-config.yaml` changed.
 
 In Claude cloud sessions, `.claude/hooks/session-start.sh` does the setup above
 (PlatformIO and pre-commit in a venv that is put on `PATH`, a dummy
