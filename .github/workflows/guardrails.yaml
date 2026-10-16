@@ -1,0 +1,49 @@
+name: 🛡️ Guardrails
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  secret-scan:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0   # gitleaks scannt die Commits des PRs
+
+      - name: Scan for secrets
+        uses: gitleaks/gitleaks-action@v2.3.9
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  nolint:
+    name: NOLINT Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Reject untargeted suppressions
+        shell: bash
+        run: |
+          # Suppressions must name what they suppress: NOLINT(<check>),
+          # cppcheck-suppress <id>. See CLAUDE.md, Conventions.
+          if git grep -nE 'NOLINT(NEXTLINE|BEGIN)?([^(A-Za-z]|$)' -- src include test test-sil; then
+            echo "::error::Bare NOLINT found; name the check: NOLINT(<check>)"
+            exit 1
+          fi
+          if git grep -nE 'cppcheck-suppress[[:space:]]*$' -- src include test test-sil; then
+            echo "::error::cppcheck-suppress without an id"
+            exit 1
+          fi
