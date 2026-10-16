@@ -31,6 +31,8 @@ issues before changing an affected area, and reference them in commits.
   core libraries built as a Linux program, see `test-sil/README.md`
 - `scripts/migrate_to_ino.sh` – copies `src/` and `include/` into a flat Arduino
   IDE sketch folder
+- `scripts/rulesets.sh` – exports, diffs and applies the repository rulesets
+  kept in `.github/rulesets/` (needs `gh` as a repo admin, so the user runs it)
 - `docs/` – Doxygen config; the docs are published to GitHub Pages
 - `.github/workflows/` – CI (see below)
 
@@ -111,6 +113,10 @@ markdownlint, reviewdog.
   review) and GitHub auto-merge, enabled by Renovate, merges them once the
   required checks are green. Majors, PlatformIO and the ESP8266 platform/core
   stay manual. Leave Renovate PRs alone unless asked.
+- The required checks on `main` are listed by job name in
+  `.github/rulesets/require-green-ckecks.json`. Renaming or removing a CI job
+  means updating that file in the same PR, and the user then runs
+  `scripts/rulesets.sh apply`; otherwise PRs wait forever for the old check.
 - Work test-driven where it's feasible, and say why when it isn't. Logic that
   doesn't touch hardware (like `Metronome`) belongs under unit tests.
 

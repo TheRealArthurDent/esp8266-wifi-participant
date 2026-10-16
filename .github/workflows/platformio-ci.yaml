@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-
+    name: PlatformIO Build
     runs-on: ubuntu-latest
 
     steps:
