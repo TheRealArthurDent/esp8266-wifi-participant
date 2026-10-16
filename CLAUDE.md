@@ -119,6 +119,21 @@ markdownlint, reviewdog.
   `scripts/rulesets.sh apply`; otherwise PRs wait forever for the old check.
 - Work test-driven where it's feasible, and say why when it isn't. Logic that
   doesn't touch hardware (like `Metronome`) belongs under unit tests.
+- YAML files use the `.yaml` extension, not `.yml`.
+- Everything in the repo is written in English (code, comments, docs, commit
+  messages), even when the user chats in German.
+
+## Guardrails
+
+`.claude/hooks/guard.sh` runs before every Bash, Edit and Write call and
+blocks or asks for confirmation on the risky actions: reading or printing
+`secrets.ini` (also via `pio run -v`), pushing to `main` or force-pushing,
+skipping pre-commit hooks, flashing or opening a serial port, Docker, untargeted
+`NOLINT`/`cppcheck-suppress`, weakening CI or check configs, and changing the
+guardrails themselves. A block is a stop sign, not an obstacle: don't work
+around it, tell the user what you wanted to do. CI repeats the secret scan
+and the suppression check (`guardrails.yaml`), and `.github/rulesets/` holds
+the rules for `main`.
 
 ## Unit tests
 
@@ -143,9 +158,6 @@ markdownlint, reviewdog.
   don't build (like `WifiConnection` or `main.cpp`) is missing from the
   report rather than shown as uncovered. The HTML report lands in
   `.pio/build/coverage/coverage.html`.
-- YAML files use the `.yaml` extension, not `.yml`.
-- Everything in the repo is written in English (code, comments, docs, commit
-  messages), even when the user chats in German.
 
 ## Software-in-the-loop (SIL) tests
 

@@ -1,6 +1,19 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "hooks": {
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.sh",
+            "onFailure": "block",
+            "timeout": 10,
+            "type": "command"
+          }
+        ],
+        "matcher": "^(Bash|Edit|Write|NotebookEdit)$"
+      }
+    ],
     "SessionStart": [
       {
         "hooks": [
@@ -26,10 +39,21 @@
     "ask": [
       "Bash(pio device monitor:*)",
       "Bash(pio run --target upload:*)",
-      "Bash(pio run -t upload:*)"
+      "Bash(pio run -t upload:*)",
+      "Edit(./.claude/hooks/**)",
+      "Edit(./.claude/settings.json)",
+      "Write(./.claude/hooks/**)",
+      "Write(./.claude/settings.json)"
     ],
     "deny": [
-      "Read(./secrets.ini)"
+      "Bash(docker:*)",
+      "Bash(git push --force:*)",
+      "Bash(git push -f:*)",
+      "Bash(git push origin main:*)",
+      "Bash(pio project config:*)",
+      "Edit(./secrets.ini)",
+      "Read(./secrets.ini)",
+      "Write(./secrets.ini)"
     ]
   }
 }
