@@ -35,8 +35,13 @@ case "$tool" in
     # Containers are not allowed in cloud sessions.
     grep -Eq '\b(docker|podman)\b' <<<"$cmd" && block "no containers here (see team memory cloud-session-no-docker)."
     # The guardrails themselves.
-    grep -Eq '\.claude/(settings\.json|hooks/)' <<<"$cmd" && grep -Eq '\b(sed|tee|mv|rm|cp|chmod|truncate)\b|>' <<<"$cmd" \
-      && block "guardrail files change only through a reviewed PR the user asked for."
+    # Per command again: a write tool next to a guardrail path, or a redirect
+    # into one. Quotes stay, so a quoted redirect target is still seen.
+    while IFS= read -r seg; do
+      grep -Eq '\.claude/(settings\.json|hooks/)' <<<"$seg" || continue
+      grep -Eq "\b(sed|tee|mv|rm|cp|chmod|truncate)\b|>>?\s*[\"']?[^ ]*\.claude/(settings\.json|hooks/)" <<<"$seg" \
+        && block "guardrail files change only through a reviewed PR the user asked for."
+    done < <(awk '{ gsub(/&&|\|\||;|\|/, "\n") } 1' <<<"$cmd")
     ;;
   Edit|Write|MultiEdit|NotebookEdit)
     case "$path" in
