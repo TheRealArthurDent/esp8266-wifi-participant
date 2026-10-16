@@ -175,11 +175,21 @@ needs `secrets.ini`, so the sandbox can't hide that one, while only
    `allowUnsandboxedCommands: false` removes Claude's way of retrying a
    failed command outside the sandbox, and `failIfUnavailable: true` stops
    it from running commands unsandboxed when bubblewrap is missing.
-4. Check it: `/sandbox` in Claude Code shows whether the sandbox is active.
-   Then let Claude run `pio run` and `pre-commit run --all-files`, which must
-   work, and `cat ~/.config/esp8266-wifi-participant/secrets.ini`, which must
-   fail. If PlatformIO needs more (another write path, network access to its
-   registry), the failing command says so.
+4. Check it. `/sandbox` now only prints `Sandbox settings are overridden by
+   a higher-priority configuration and cannot be changed locally.`; that is
+   expected and means the managed settings are in force. `/status` should
+   list `Enterprise managed settings (file)` under `Setting sources`. Then
+   let Claude run these (typing them yourself with `!` bypasses the
+   sandbox, so that tests nothing):
+   - `touch ~/sandbox-probe` must fail with `Read-only file system`.
+   - `cat ~/sandbox-read-probe` must fail, after you created that file
+     (`echo hello > ~/sandbox-read-probe`) and added `"~/sandbox-read-probe"`
+     to `denyRead`. Testing on the credentials folder itself shows nothing
+     about the sandbox: the permission rules and the guard hook refuse
+     those commands before they run.
+   - `pio run` and `pre-commit run --all-files` must work. If PlatformIO
+     needs more (another write path, network access to its registry), the
+     failing command says so.
 
 Commands you run yourself with `!` in Claude Code are not sandboxed. Don't
 export `ESP8266_REAL_CONFIG` in the shell you start Claude from; only
