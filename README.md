@@ -39,9 +39,11 @@ If started with "#define DEBUG" it will log the progress via the Serial port.
 ## How-to-use
 
 To be able to compile the project locally, copy the secrets.ini.template
-to secrets.ini and adjust the values within said file.
+to secrets.ini. Its dummy values are enough to build and test.
 `scripts/setup-dev.sh` does that for you and installs PlatformIO into a venv
-(see below).
+(see below). Your real hostname and WiFi credentials only matter for flashing
+a board and live outside the repo, see
+[Keeping the WiFi credentials away from Claude](#keeping-the-wifi-credentials-away-from-claude).
 
 ## Flashing a board
 
@@ -56,9 +58,19 @@ scripts/setup-dev.sh
 
 This installs the pinned PlatformIO into `~/.venvs/esp8266-wifi-participant`
 and tells you how to put `pio` on your `PATH`. It also creates `secrets.ini`
-from the template if there is none: put your hostname, WiFi SSID and WiFi
-password in there. The ESP8266 only connects to 2.4 GHz networks with WPA2
-(WPA3-only networks don't work).
+from the template if there is none; leave the dummy values in there.
+
+Put your real hostname, WiFi SSID and WiFi password in a copy outside the
+repo instead, readable only by you:
+
+```sh
+mkdir -p ~/.config/esp8266-wifi-participant
+cp secrets.ini.template ~/.config/esp8266-wifi-participant/secrets.ini
+chmod 600 ~/.config/esp8266-wifi-participant/secrets.ini
+```
+
+The ESP8266 only connects to 2.4 GHz networks with WPA2 (WPA3-only networks
+don't work).
 
 ### 2. Connect the board
 
@@ -89,20 +101,89 @@ use a CH340).
 ### 3. Build, flash and watch
 
 ```sh
-pio run -t upload                 # build and flash the default env (nodemcuv2_DEBUG)
-pio run -e nodemcuv2 -t upload    # the release build instead
-pio device monitor                # serial log at 115200 baud, Ctrl+C to quit
-pio run -t upload -t monitor      # flash, then open the monitor right away
+scripts/flash.sh                  # build and flash the default env (nodemcuv2_DEBUG)
+scripts/flash.sh -e nodemcuv2     # the release build instead
+scripts/flash.sh -t monitor       # flash, then open the serial log at 115200 baud
+pio device monitor                # just the serial log, Ctrl+C to quit
 ```
+
+`scripts/flash.sh` runs `pio run -t upload` with your real values from
+`~/.config/esp8266-wifi-participant/secrets.ini` and builds into
+`~/.cache/esp8266-wifi-participant/build` instead of `.pio/build`, because
+the build output contains the values too. Further arguments go to `pio run`.
+A plain `pio run -t upload` still works, but flashes the dummy values.
 
 PlatformIO finds the port on its own; with several serial devices attached,
 pick one with `--upload-port` (and `--port` for the monitor). The monitor
-decodes ESP8266 exception backtraces to source lines.
+decodes ESP8266 exception backtraces to source lines when it runs together
+with the upload (`-t monitor`), because only then does it find the firmware
+it needs for that.
 
 The monitor doesn't reset the board, so the boot messages are usually over
 when it opens. Press the RST button on the NodeMCU to see the log from the
 start: `Debugging initialized.`, `Connecting to …`, then the IP address once
 connected.
+
+## Keeping the WiFi credentials away from Claude
+
+Claude Code builds and tests this project, so it can read everything in the
+checkout. Its guard hook (`.claude/hooks/guard.sh`) and the permission rules
+in `.claude/settings.json` stop accidental reads of the credentials, but they
+match command text and can't stop every way of reading a file. A hard limit
+comes from Claude Code's
+[sandbox](https://code.claude.com/docs/en/sandboxing), which blocks reading
+paths at the operating-system level for every command Claude runs.
+
+That only works because the real values live outside the repo: the build
+needs `secrets.ini`, so the sandbox can't hide that one, while only
+`scripts/flash.sh`, which you run yourself, reads
+`~/.config/esp8266-wifi-participant/`. To set it up once on Linux or WSL2
+(not WSL1):
+
+1. Move your real values out of the repo as in
+   [step 1 of Flashing a board](#1-prepare-the-checkout-once), put the
+   template's dummy values back into the repo's `secrets.ini`, and delete the
+   old builds, which still contain the real password: `rm -rf .pio/build`.
+2. Install the sandbox's dependencies: `sudo apt-get install bubblewrap socat`.
+3. Enable the sandbox in `/etc/claude-code/managed-settings.json`. Managed
+   settings take precedence over every other settings file, so neither
+   Claude nor a `.claude/settings.local.json` can turn it off again:
+
+   ```json
+   {
+     "permissions": {
+       "deny": [
+         "Read(~/.cache/esp8266-wifi-participant/**)",
+         "Read(~/.config/esp8266-wifi-participant/**)"
+       ]
+     },
+     "sandbox": {
+       "allowUnsandboxedCommands": false,
+       "enabled": true,
+       "failIfUnavailable": true,
+       "filesystem": {
+         "allowWrite": ["~/.cache/pre-commit", "~/.platformio"],
+         "denyRead": [
+           "~/.cache/esp8266-wifi-participant",
+           "~/.config/esp8266-wifi-participant"
+         ]
+       }
+     }
+   }
+   ```
+
+   `allowUnsandboxedCommands: false` removes Claude's way of retrying a
+   failed command outside the sandbox, and `failIfUnavailable: true` stops
+   it from running commands unsandboxed when bubblewrap is missing.
+4. Check it: `/sandbox` in Claude Code shows whether the sandbox is active.
+   Then let Claude run `pio run` and `pre-commit run --all-files`, which must
+   work, and `cat ~/.config/esp8266-wifi-participant/secrets.ini`, which must
+   fail. If PlatformIO needs more (another write path, network access to its
+   registry), the failing command says so.
+
+Commands you run yourself with `!` in Claude Code are not sandboxed. Don't
+export `ESP8266_REAL_CONFIG` in the shell you start Claude from; only
+`scripts/flash.sh` sets it.
 
 ## Documentation
 

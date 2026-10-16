@@ -37,9 +37,12 @@
       "Bash(pre-commit run:*)"
     ],
     "ask": [
+      "Bash(./scripts/flash.sh:*)",
+      "Bash(bash scripts/flash.sh:*)",
       "Bash(pio device monitor:*)",
       "Bash(pio run --target upload:*)",
       "Bash(pio run -t upload:*)",
+      "Bash(scripts/flash.sh:*)",
       "Edit(./.claude/hooks/**)",
       "Edit(./.claude/settings.json)",
       "Edit(./.claude/settings.local.json)",
@@ -56,6 +59,8 @@
       "Edit(./secrets.ini)",
       "Read(./.pio/build/**)",
       "Read(./secrets.ini)",
+      "Read(~/.cache/esp8266-wifi-participant/**)",
+      "Read(~/.config/esp8266-wifi-participant/**)",
       "Write(./secrets.ini)"
     ]
   }

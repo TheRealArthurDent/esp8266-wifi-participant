@@ -60,6 +60,18 @@ read_file 2 /repo/secrets.ini
 read_file 2 /repo/.pio/build/nodemcuv2_DEBUG/idedata.json
 read_file 0 /repo/src/main.cpp
 
+# The real values outside the repo, and builds with them.
+bash_cmd 2 'cat ~/.config/esp8266-wifi-participant/wifi.ini'
+bash_cmd 2 'ls -la "$HOME/.config/esp8266-wifi-participant"'
+bash_cmd 2 'strings ~/.cache/esp8266-wifi-participant/build/nodemcuv2/firmware.elf'
+bash_cmd 2 'ESP8266_REAL_CONFIG=~/x.ini pio run'
+bash_cmd 2 'export ESP8266_REAL_CONFIG=/tmp/x.ini && pio run'
+bash_cmd 0 'grep -n ESP8266_REAL_CONFIG platformio.ini'
+bash_cmd 0 'shellcheck scripts/flash.sh scripts/setup-dev.sh'
+bash_cmd 0 'grep -n "flash.sh" README.md'
+read_file 2 /home/u/.config/esp8266-wifi-participant/wifi.ini
+read_file 2 /home/u/.cache/esp8266-wifi-participant/build/nodemcuv2/idedata.json
+
 # main, force pushes and skipped hooks.
 bash_cmd 2 'git push origin main'
 bash_cmd 2 'git push origin HEAD:main'
@@ -86,6 +98,9 @@ bash_cmd A 'platformio run -t upload'
 bash_cmd A 'platformio device monitor'
 bash_cmd A 'python3 -m platformio run -t upload'
 bash_cmd A 'esptool.py --port /dev/ttyUSB0 erase_flash'
+bash_cmd A 'scripts/flash.sh'
+bash_cmd A 'git status && ./scripts/flash.sh -e nodemcuv2'
+bash_cmd A 'bash scripts/flash.sh -t monitor'
 
 bash_cmd 2 'docker run x'
 

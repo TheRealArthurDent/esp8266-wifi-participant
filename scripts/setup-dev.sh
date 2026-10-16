@@ -26,11 +26,16 @@ fi
 echo "Installing requirements.txt into ${VENV}"
 "${VENV}/bin/pip" install --quiet --disable-pip-version-check -r requirements.txt
 
-# A template copy only builds; put your real hostname and WiFi credentials in
-# afterwards. An existing secrets.ini is never touched.
+# The template's dummy values build and test fine. The real hostname and WiFi
+# credentials go outside the repo, where scripts/flash.sh reads them. An
+# existing secrets.ini is never touched.
 if [ ! -f secrets.ini ]; then
   cp secrets.ini.template secrets.ini
-  echo "Created secrets.ini from the template; fill in your WiFi credentials."
+  echo "Created secrets.ini from the template (dummy values)."
+fi
+if [ ! -f "${HOME}/.config/esp8266-wifi-participant/secrets.ini" ]; then
+  echo "To flash a board, put your real values in" \
+    "${HOME}/.config/esp8266-wifi-participant/secrets.ini (see README.md)."
 fi
 
 "${VENV}/bin/pre-commit" install
