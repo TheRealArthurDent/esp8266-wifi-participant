@@ -91,7 +91,9 @@ clang-format --dry-run --Werror src/*.cpp include/*.h*   # see .clang-format
 pinned) into a venv at `~/.venvs/esp8266-wifi-participant` (`VENV` overrides
 it), copies `secrets.ini.template` to `secrets.ini` if there is none (dummy
 values build fine), runs `pre-commit install` and `pre-commit install-hooks`,
-and says how to put the venv on `PATH`. Run it again after
+installs the PlatformIO packages of all envs and the `pio check` tools (so
+everything also runs offline in the sandbox), and says how to put the venv
+on `PATH`. Run it again after
 `requirements.txt` or `.pre-commit-config.yaml` changed.
 
 In Claude cloud sessions, `.claude/hooks/session-start.sh` does the setup above
