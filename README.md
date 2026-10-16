@@ -172,6 +172,11 @@ needs `secrets.ini`, so the sandbox can't hide that one, while only
    }
    ```
 
+   Don't add the repo's `secrets.ini` or `.pio/build` to `denyRead` or to
+   a `Read(...)` deny rule: Claude Code merges `Read(...)` deny rules into
+   the sandbox, and PlatformIO then can't read them and fails with
+   `No section: 'secret'`. They only hold dummy values now.
+
    `allowUnsandboxedCommands: false` removes Claude's way of retrying a
    failed command outside the sandbox, and `failIfUnavailable: true` stops
    it from running commands unsandboxed when bubblewrap is missing.
@@ -189,7 +194,9 @@ needs `secrets.ini`, so the sandbox can't hide that one, while only
      those commands before they run.
    - `pio run` and `pre-commit run --all-files` must work. If PlatformIO
      needs more (another write path, network access to its registry), the
-     failing command says so.
+     failing command says so. Blocked connections to
+     `collector.platformio.org` are PlatformIO's telemetry and harmless;
+     `pio settings set enable_telemetry no` stops them.
 
 Commands you run yourself with `!` in Claude Code are not sandboxed. Don't
 export `ESP8266_REAL_CONFIG` in the shell you start Claude from; only

@@ -57,8 +57,6 @@
       "Bash(git push origin main:*)",
       "Bash(pio project config:*)",
       "Edit(./secrets.ini)",
-      "Read(./.pio/build/**)",
-      "Read(./secrets.ini)",
       "Read(~/.cache/esp8266-wifi-participant/**)",
       "Read(~/.config/esp8266-wifi-participant/**)",
       "Write(./secrets.ini)"

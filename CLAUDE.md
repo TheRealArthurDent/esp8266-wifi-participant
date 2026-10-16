@@ -156,6 +156,11 @@ and changing the guardrails themselves (`.claude/settings*.json`,
 `.claude/hooks/`, `.git/hooks/`). A block is a stop sign, not an obstacle:
 don't work around it, tell the user what you wanted to do.
 
+Don't add `Read(...)` deny rules to `.claude/settings.json` for files the
+build reads (`secrets.ini`, `.pio/build`): with the sandbox enabled, Claude
+Code merges them into its read restrictions, and PlatformIO then fails with
+`No section: 'secret'`. `guard.sh` covers the Read tool for those paths.
+
 The guard matches command text, so it catches mistakes, not deliberate
 workarounds; what must be impossible is enforced server-side by the rulesets
 in `.github/rulesets/` and the required CI checks. CI repeats the secret scan
