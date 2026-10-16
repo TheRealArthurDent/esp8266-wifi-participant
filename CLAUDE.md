@@ -108,9 +108,9 @@ markdownlint, reviewdog.
   and updated by Renovate; keep them pinned. Renovate runs as the
   `P4ranoidAndroid` account. Its minor/patch/pin/digest PRs carry the
   `auto-merge` label: `renovate-approve.yaml` approves them (`main` requires a
-  review) and Renovate merges them once all checks are green. Majors, PlatformIO
-  and the ESP8266 platform/core stay manual. Leave Renovate PRs alone unless
-  asked.
+  review) and GitHub auto-merge, enabled by Renovate, merges them once the
+  required checks are green. Majors, PlatformIO and the ESP8266 platform/core
+  stay manual. Leave Renovate PRs alone unless asked.
 - Work test-driven where it's feasible, and say why when it isn't. Logic that
   doesn't touch hardware (like `Metronome`) belongs under unit tests.
 

@@ -2,9 +2,9 @@ name: ✅ Approve Renovate
 
 # main requires an approving review. Renovate's automerge PRs (minor, patch,
 # pin and digest updates, labeled `auto-merge` by renovate.json) get it from
-# this workflow, so Renovate can merge them once all checks are green. Every
-# other PR, including Renovate's majors and toolchain updates, still needs a
-# human review. See #141.
+# this workflow, so GitHub auto-merge (which Renovate enables on the PR) can
+# merge them once the required checks are green. Every other PR, including
+# Renovate's majors and toolchain updates, still needs a human review. See #141.
 #
 # pull_request_target runs this file as it is on main, so a PR can't change
 # what gets approved. The job never checks out or runs code from the PR.
@@ -53,4 +53,4 @@ jobs:
             exit 0
           fi
           gh pr review "$PR_NUMBER" --repo "$REPO" --approve \
-            --body "Approved automatically: Renovate automerge update (see renovate-approve.yaml, #141). Renovate merges it once all checks are green."
+            --body "Approved automatically: Renovate automerge update (see renovate-approve.yaml, #141). GitHub auto-merge merges it once the required checks are green."
