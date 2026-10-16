@@ -33,6 +33,8 @@ issues before changing an affected area, and reference them in commits.
   IDE sketch folder
 - `scripts/setup-dev.sh` – sets up a local checkout (venv, `secrets.ini`,
   pre-commit hooks), see Commands
+- `scripts/flash.sh` – flashes the board with the real credentials from
+  outside the repo, see Secrets; only the user runs it
 - `scripts/rulesets.sh` – exports, diffs and applies the repository rulesets
   kept in `.github/rulesets/` (needs `gh` as a repo admin, so the user runs it)
 - `docs/` – Doxygen config; the docs are published to GitHub Pages
@@ -62,6 +64,14 @@ includes it and passes the values as `SECRET_HOSTNAME`, `SECRET_WIFI_SSID` and
 exactly that, with dummy values). `secrets.ini` is gitignored: never commit it,
 never print or read its values, and never put real credentials anywhere else in
 the repo.
+
+The real values belong in `~/.config/esp8266-wifi-participant/secrets.ini`,
+outside the repo. `scripts/flash.sh` (run by the user) passes that file as
+`ESP8266_REAL_CONFIG`, which `extra_configs` reads after `secrets.ini`, and
+builds into `~/.cache/esp8266-wifi-participant/build`. Never read those
+folders, never set `ESP8266_REAL_CONFIG`; on the user's machine an OS-level
+sandbox may block them anyway (README, "Keeping the WiFi credentials away
+from Claude").
 
 ## Commands
 
@@ -137,13 +147,14 @@ suppression check, the `guard.sh` tests).
 `.claude/hooks/guard.sh` runs before every Bash, Edit, Write, Read and Grep
 call and blocks or asks for confirmation on the risky actions: reading or
 printing `secrets.ini` or the build outputs that embed its values
-(`.pio/build`, also via `pio run -v`), pushing to `main` or force-pushing,
-skipping or uninstalling pre-commit hooks, flashing or opening a serial port
-(`pio` or `platformio`), Docker, untargeted `NOLINT`/`cppcheck-suppress` in
-C/C++ files, weakening CI or check configs, and changing the guardrails
-themselves (`.claude/settings*.json`, `.claude/hooks/`, `.git/hooks/`). A block
-is a stop sign, not an obstacle: don't work around it, tell the user what you
-wanted to do.
+(`.pio/build`, also via `pio run -v`), the real values and builds outside the
+repo (see Secrets), pushing to `main` or force-pushing, skipping or
+uninstalling pre-commit hooks, flashing or opening a serial port (`pio`,
+`platformio` or `scripts/flash.sh`), Docker, untargeted
+`NOLINT`/`cppcheck-suppress` in C/C++ files, weakening CI or check configs,
+and changing the guardrails themselves (`.claude/settings*.json`,
+`.claude/hooks/`, `.git/hooks/`). A block is a stop sign, not an obstacle:
+don't work around it, tell the user what you wanted to do.
 
 The guard matches command text, so it catches mistakes, not deliberate
 workarounds; what must be impossible is enforced server-side by the rulesets

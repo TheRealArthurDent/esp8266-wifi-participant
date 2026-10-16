@@ -26,6 +26,8 @@ split() { awk '{ gsub(/&&|\|\||;|\|/, "\n") } 1' <<<"$1"; }
 # The build passes the secrets.ini values as -D flags, so they end up in the
 # build outputs too (idedata.json, compile_commands.json, the firmware).
 BUILD_SECRETS='\.pio/build|idedata\.json|compile_commands\.json|firmware\.(elf|bin)'
+# The real values live outside the repo; only scripts/flash.sh reads them.
+REAL_SECRETS='\.(config|cache)/esp8266-wifi-participant'
 GUARDRAILS='\.claude/(settings(\.local)?\.json|hooks/)|\.git/hooks/'
 
 case "$tool" in
@@ -41,7 +43,12 @@ case "$tool" in
       grep -Eq "$BUILD_SECRETS" <<<"$seg" \
         && grep -Eq '\b(cat|less|more|head|tail|grep|rg|strings|jq|xxd|od|python3?|cp|base64)\b' <<<"$seg" \
         && block "build outputs contain the WiFi credentials as -D flags."
+      grep -Eq "$REAL_SECRETS" <<<"$seg" \
+        && grep -Eq '\b(cat|less|more|head|tail|grep|rg|strings|jq|xxd|od|python3?|cp|mv|base64|ls|find|sed|awk)\b' <<<"$seg" \
+        && block "the real WiFi credentials and their builds are off limits."
     done < <(split "$cmd")
+    grep -Eq '\bESP8266_REAL_CONFIG=' <<<"$unquoted" \
+      && block "only scripts/flash.sh, run by the user, builds with the real WiFi credentials."
     pio_cmds=$(split "$unquoted" | grep -E '^\s*(\S*/)?(pio|platformio)\b|python3? -m platformio' || true)
     grep -Eq '\b(run|test|check)\b.*(\s-v\b|--verbose)|\bproject config\b|(-t|--target)[ =]?compiledb' <<<"$pio_cmds" \
       && block "verbose PlatformIO output prints SECRET_WIFI_PASS."
@@ -57,6 +64,8 @@ case "$tool" in
 
     # Hardware: flashing or serial only on the user's explicit word.
     grep -Eq '(-t|--target)[ =]?(upload|uploadfs|monitor|erase)|\b(device|remote)\b' <<<"$pio_cmds" \
+      && ask "Flashing or serial access on a real board: only when the user asked for it."
+    split "$unquoted" | grep -Eq '^\s*([A-Za-z_]+=\S*\s+)*((ba)?sh\s+)?\S*flash\.sh\b' \
       && ask "Flashing or serial access on a real board: only when the user asked for it."
     grep -Eq 'esptool|/dev/tty(USB|ACM)' <<<"$cmd" \
       && ask "Flashing or serial access on a real board: only when the user asked for it."
@@ -76,7 +85,7 @@ case "$tool" in
     done < <(split "$cmd")
     ;;
   Read|Grep)
-    grep -Eq "secrets\.ini$|$BUILD_SECRETS" <<<"$path" \
+    grep -Eq "secrets\.ini$|$BUILD_SECRETS|$REAL_SECRETS" <<<"$path" \
       && block "secrets.ini and build outputs contain the WiFi credentials."
     ;;
   Edit|Write|MultiEdit|NotebookEdit)
