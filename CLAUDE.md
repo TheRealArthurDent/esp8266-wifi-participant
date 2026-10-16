@@ -95,7 +95,8 @@ CI on every PR: PlatformIO build, `pio check` and the unit tests in both envs
 software-in-the-loop tests (`test-sil/run.sh`), cpp-linter (clang-format +
 clang-tidy, reports only, doesn't fail the build), Arduino IDE compile
 (`compile-sketch`) and `arduino-lint` (`check-arduino`), CodeQL, codespell,
-markdownlint, reviewdog.
+markdownlint, reviewdog, and `guardrails.yaml` (gitleaks secret scan, the
+suppression check, the `guard.sh` tests).
 
 ## Conventions
 
@@ -133,15 +134,22 @@ markdownlint, reviewdog.
 
 ## Guardrails
 
-`.claude/hooks/guard.sh` runs before every Bash, Edit and Write call and
-blocks or asks for confirmation on the risky actions: reading or printing
-`secrets.ini` (also via `pio run -v`), pushing to `main` or force-pushing,
-skipping pre-commit hooks, flashing or opening a serial port, Docker, untargeted
-`NOLINT`/`cppcheck-suppress`, weakening CI or check configs, and changing the
-guardrails themselves. A block is a stop sign, not an obstacle: don't work
-around it, tell the user what you wanted to do. CI repeats the secret scan
-and the suppression check (`guardrails.yaml`), and `.github/rulesets/` holds
-the rules for `main`.
+`.claude/hooks/guard.sh` runs before every Bash, Edit, Write, Read and Grep
+call and blocks or asks for confirmation on the risky actions: reading or
+printing `secrets.ini` or the build outputs that embed its values
+(`.pio/build`, also via `pio run -v`), pushing to `main` or force-pushing,
+skipping or uninstalling pre-commit hooks, flashing or opening a serial port
+(`pio` or `platformio`), Docker, untargeted `NOLINT`/`cppcheck-suppress` in
+C/C++ files, weakening CI or check configs, and changing the guardrails
+themselves (`.claude/settings*.json`, `.claude/hooks/`, `.git/hooks/`). A block
+is a stop sign, not an obstacle: don't work around it, tell the user what you
+wanted to do.
+
+The guard matches command text, so it catches mistakes, not deliberate
+workarounds; what must be impossible is enforced server-side by the rulesets
+in `.github/rulesets/` and the required CI checks. CI repeats the secret scan
+and the suppression check and runs `.claude/hooks/guard-test.sh`; add a case
+there with every change to `guard.sh`.
 
 ## Unit tests
 

@@ -11,7 +11,7 @@
             "type": "command"
           }
         ],
-        "matcher": "^(Bash|Edit|Write|NotebookEdit)$"
+        "matcher": "^(Bash|Edit|Write|NotebookEdit|Read|Grep)$"
       }
     ],
     "SessionStart": [
@@ -42,8 +42,10 @@
       "Bash(pio run -t upload:*)",
       "Edit(./.claude/hooks/**)",
       "Edit(./.claude/settings.json)",
+      "Edit(./.claude/settings.local.json)",
       "Write(./.claude/hooks/**)",
-      "Write(./.claude/settings.json)"
+      "Write(./.claude/settings.json)",
+      "Write(./.claude/settings.local.json)"
     ],
     "deny": [
       "Bash(docker:*)",
@@ -52,6 +54,7 @@
       "Bash(git push origin main:*)",
       "Bash(pio project config:*)",
       "Edit(./secrets.ini)",
+      "Read(./.pio/build/**)",
       "Read(./secrets.ini)",
       "Write(./secrets.ini)"
     ]

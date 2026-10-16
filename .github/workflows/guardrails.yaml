@@ -26,6 +26,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  guard-tests:
+    name: Guard Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7.0.1
+
+      - name: Run the guard.sh regression tests
+        shell: bash
+        run: bash .claude/hooks/guard-test.sh
+
   nolint:
     name: NOLINT Check
     runs-on: ubuntu-latest
