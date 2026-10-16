@@ -192,11 +192,17 @@ needs `secrets.ini`, so the sandbox can't hide that one, while only
      to `denyRead`. Testing on the credentials folder itself shows nothing
      about the sandbox: the permission rules and the guard hook refuse
      those commands before they run.
-   - `pio run` and `pre-commit run --all-files` must work. If PlatformIO
-     needs more (another write path, network access to its registry), the
-     failing command says so. Blocked connections to
-     `collector.platformio.org` are PlatformIO's telemetry and harmless;
-     `pio settings set enable_telemetry no` stops them.
+   - `pio run`, `pio test -e unit_test -e unit_test_DEBUG` and
+     `pio check` must work. The sandbox blocks the PlatformIO registry, so
+     run `scripts/setup-dev.sh` once outside Claude first; it installs every
+     package the envs and `pio check` need.
+   - `pre-commit run --all-files` works except for `end-of-file-fixer` on
+     files in `.claude/hooks/` and `.claude/skills/`: the hook opens every
+     file for writing and the sandbox write-protects those folders. Run it
+     outside the sandbox when you need it on all files.
+   - Blocked connections to `collector.platformio.org` are PlatformIO's
+     telemetry and harmless; `pio settings set enable_telemetry no` stops
+     them.
 
 Commands you run yourself with `!` in Claude Code are not sandboxed. Don't
 export `ESP8266_REAL_CONFIG` in the shell you start Claude from; only
