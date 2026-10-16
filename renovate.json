@@ -41,7 +41,7 @@
         "auto-merge"
       ],
       "automerge": true,
-      "description": "Automerge minor, patch, pin and digest updates to github-actions, pip_requirements and pyenv, except PlatformIO, which changes the firmware toolchain. main requires a review, so Renovate opens a PR, the renovate-approve workflow approves it (it carries the auto-merge label) and Renovate merges it once all checks are green (#141).",
+      "description": "Automerge minor, patch, pin and digest updates to github-actions, pip_requirements and pyenv, except PlatformIO, which changes the firmware toolchain. main requires a review, so Renovate opens a PR, the renovate-approve workflow approves it (it carries the auto-merge label) and GitHub's auto-merge, which Renovate enables on the PR, merges it once the required checks are green (#141).",
       "groupName": "auto merge",
       "matchManagers": [
         "github-actions",
@@ -111,7 +111,6 @@
       ]
     }
   ],
-  "platformAutomerge": false,
   "reviewers": [
     "TheRealArthurDent"
   ]

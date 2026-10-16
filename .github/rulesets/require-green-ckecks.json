@@ -1,0 +1,67 @@
+{
+  "bypass_actors": [
+    {
+      "actor_id": 5,
+      "actor_type": "RepositoryRole",
+      "bypass_mode": "always"
+    }
+  ],
+  "conditions": {
+    "ref_name": {
+      "exclude": [],
+      "include": [
+        "~DEFAULT_BRANCH"
+      ]
+    }
+  },
+  "enforcement": "active",
+  "name": "require-green-ckecks",
+  "rules": [
+    {
+      "parameters": {
+        "do_not_enforce_on_create": true,
+        "required_status_checks": [
+          {
+            "context": "PlatformIO Build",
+            "integration_id": 15368
+          },
+          {
+            "context": "PlatformIO Check",
+            "integration_id": 15368
+          },
+          {
+            "context": "Unit Tests",
+            "integration_id": 15368
+          },
+          {
+            "context": "SIL Tests",
+            "integration_id": 15368
+          },
+          {
+            "context": "esp8266:esp8266:nodemcuv2",
+            "integration_id": 15368
+          },
+          {
+            "context": "Arduino Lint",
+            "integration_id": 15368
+          },
+          {
+            "context": "Doxygen",
+            "integration_id": 15368
+          },
+          {
+            "context": "Markdown Lint",
+            "integration_id": 15368
+          },
+          {
+            "context": "Spell Check",
+            "integration_id": 15368
+          }
+        ],
+        "strict_required_status_checks_policy": true
+      },
+      "type": "required_status_checks"
+    }
+  ],
+  "target": "branch"
+}
