@@ -45,5 +45,5 @@ public:
 
 private:
   bool connected = false;
-  std::vector<WifiDependent *> dependents{};
+  std::vector<WifiDependent *> dependents;
 };
