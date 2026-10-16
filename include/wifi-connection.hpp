@@ -18,8 +18,8 @@
  */
 class WifiConnection
 {
-  WiFiEventHandler wifi_connect_handler;
-  WiFiEventHandler wifi_disconnect_handler;
+  WiFiEventHandler wifi_connect_handler{};
+  WiFiEventHandler wifi_disconnect_handler{};
   // Ticker wifi_reconnect_timer;
 
   WifiDependentNotifier notifier;
