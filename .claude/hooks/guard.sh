@@ -19,9 +19,15 @@ case "$tool" in
     grep -Eq '\bpio (run|test|check)\b.*(\s-v\b|--verbose)|\bpio project config\b' <<<"$cmd" \
       && block "verbose PlatformIO output prints SECRET_WIFI_PASS."
     # main is protected: no direct push, no force push, no skipping hooks.
-    grep -Eq '\bgit\b.*\bpush\b.*(\bmain\b|\bmaster\b|--force\b|\s-f\b|\+)' <<<"$cmd" \
+    # Look at each git command on its own, without quoted strings (commit
+    # messages, grep patterns), so `git log && grep -n "pre-commit"` passes.
+    unquoted=$(sed -E "s/\"[^\"]*\"//g; s/'[^']*'//g" <<<"$cmd")
+    git_cmds=$(awk '{ gsub(/&&|\|\||;|\|/, "\n") } 1' <<<"$unquoted" | grep -E '^\s*([A-Za-z_]+=\S*\s+)*git\b' || true)
+    grep -Eq '\bpush\b.*(\bmain\b|\bmaster\b|--force\b|\s-f\b|\s\+)' <<<"$git_cmds" \
       && block "push only feature branches, never main, never force."
-    grep -Eq '\bgit\b.*(--no-verify|\s-n\b.*commit|commit.*\s-n\b)|SKIP=|PRE_COMMIT_ALLOW_NO_CONFIG|core\.hooksPath' <<<"$cmd" \
+    grep -Eq -- '--no-verify|\bcommit\b.*\s-[A-Za-z]*n[A-Za-z]*(\s|$)' <<<"$git_cmds" \
+      && block "pre-commit hooks must not be skipped."
+    grep -Eq '(^|\s)SKIP=|PRE_COMMIT_ALLOW_NO_CONFIG|core\.hooksPath' <<<"$unquoted" \
       && block "pre-commit hooks must not be skipped."
     # Hardware: flashing or serial only on the user's explicit word.
     grep -Eq '\bpio\b.*(-t|--target)[ =]?(upload|uploadfs|monitor|erase)|\bpio (device|remote)\b|esptool|/dev/tty(USB|ACM)' <<<"$cmd" \
@@ -49,4 +55,3 @@ case "$tool" in
     ;;
 esac
 exit 0
-
