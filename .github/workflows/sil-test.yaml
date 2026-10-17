@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v7.0.1
 
       - name: Cache ESP8266 core
-        uses: actions/cache@v5.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: .pio/sil/arduino-*
           key: ${{ runner.os }}-sil-${{ hashFiles('test-sil/run.sh', 'test-sil/core-host-emulation.patch') }}
