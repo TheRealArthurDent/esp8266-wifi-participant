@@ -24,4 +24,18 @@ public:
    * in case a connection has been lost.
    */
   virtual void onWifiConnectionLost() {}
+
+  // A polymorphic interface: copying or moving through it would slice.
+  WifiDependent(const WifiDependent &) = delete;
+  WifiDependent(WifiDependent &&) = delete;
+  auto operator=(const WifiDependent &) -> WifiDependent & = delete;
+  auto operator=(WifiDependent &&) -> WifiDependent & = delete;
+
+protected:
+  WifiDependent() = default;
+  /**
+   * \brief Protected and non-virtual: a \c WifiDependent is never deleted
+   * through a pointer to this interface, so it needs no virtual destructor.
+   */
+  ~WifiDependent() = default;
 };
