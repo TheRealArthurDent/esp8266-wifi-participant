@@ -48,11 +48,15 @@ added to both, or referenced the same way.
   Compare the findings for the files you touched before and after your
   change (`pio check -e nodemcuv2_DEBUG --severity medium`) rather than
   trusting the exit code.
-- PlatformIO calls clang-tidy with `--checks=*`, which overrides the
-  `Checks:` list in `.clang-tidy`. So `llvmlibc-*`, `fuchsia-*` and
-  `llvm-header-guard` noise is expected here. The checks that matter are the
-  ones in `.clang-tidy`, which cpp-linter runs in CI (reports only). Run
-  them the way cpp-linter does, after `pio pkg install -e unit_test`:
+- `check_flags` in `platformio.ini` passes `--config-file=.clang-tidy`;
+  without it PlatformIO calls clang-tidy with `--checks=*`, which overrides
+  the `Checks:` list and floods the report with `llvmlibc-*`, `fuchsia-*`
+  and `altera-*` noise. PlatformIO's clang-tidy is 15, cpp-linter's in CI
+  is 21, so they still disagree on some findings (15 reports
+  `cppcoreguidelines-pro-type-member-init` on `std::vector` and
+  `std::shared_ptr` members, 21 calls the `{}` that silences it redundant;
+  follow 21). To run them the way cpp-linter does, after
+  `pio pkg install -e unit_test`:
   `clang-tidy <files> -- -Iinclude/ -Itest/
   -I.pio/libdeps/unit_test/Unity/src -I.pio/libdeps/unit_test/ArduinoFake/src`
 - Formatting: CI's cpp-linter uses clang-format 21, the session has 18, and
