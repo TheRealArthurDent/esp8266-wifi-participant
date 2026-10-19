@@ -26,11 +26,7 @@ void setup()
   static DummyWifiDependent dependent1;
   static DummyWifiDependent dependent2;
 
-  std::list<WifiDependent *> deps;
-  deps.push_back(&dependent1);
-  deps.push_back(&dependent2);
-
-  WifiConnection::getInstance().init(deps);
+  WifiConnection::getInstance().init({&dependent1, &dependent2});
 }
 
 // cppcheck-suppress unusedFunction

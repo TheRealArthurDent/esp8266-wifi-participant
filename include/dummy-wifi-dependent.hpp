@@ -8,7 +8,7 @@
  * Just a dummy implementation of a WifiDependent that does nothing but
  * logging the respective events.
  */
-class DummyWifiDependent : public WifiDependent
+class DummyWifiDependent final : public WifiDependent
 {
 
 public:
