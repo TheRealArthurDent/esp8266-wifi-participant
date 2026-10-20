@@ -4,7 +4,13 @@
  * \brief An interface defining a controller that depends on a WiFi connection.
  *
  * Implementing class will receive callbacks in case the WiFi connection is
- * established or lost.
+ * established or lost. They come in turns: established, lost, established,
+ * and so on, never twice in a row and never "lost" first.
+ *
+ * \warning The callbacks run in the ESP8266 SDK's system context, from the
+ * \c WiFi.onStationMode* event handlers. They must return quickly: no
+ * \c delay(), no \c yield(), no blocking I/O or long loops. To do real
+ * work, set a flag in the callback and act on it in \c loop().
  */
 class WifiDependent
 {

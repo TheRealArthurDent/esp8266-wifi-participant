@@ -209,7 +209,7 @@ all_scenarios=(boots waits_for_wifi wifi_events fails_to_connect repeated_discon
 
 # Scenarios that fail on main because of a known bug. They must keep failing
 # until it's fixed; then remove them here.
-known_failures=(fails_to_connect repeated_disconnects) # #163
+known_failures=()
 
 fetch_core
 build

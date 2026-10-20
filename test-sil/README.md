@@ -60,3 +60,8 @@ removes it from the list.
   printing dots, and `loop()` never runs. Passes.
 - `wifi_events`: connect, disconnect and reconnect reach both dependents.
   Passes.
+- `fails_to_connect`: `disconnected` events from failed attempts before the
+  first `got_ip` reach no dependent, and the SSID isn't logged per attempt.
+  Passes since #163.
+- `repeated_disconnects`: repeated `disconnected` events from failed
+  reconnect attempts reach each dependent once. Passes since #163.

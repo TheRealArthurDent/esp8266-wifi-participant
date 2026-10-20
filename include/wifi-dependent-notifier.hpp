@@ -26,12 +26,19 @@ public:
   /**
    * \brief Marks the connection as established and calls
    * WifiDependent::onWifiConnectionEstablished() on every dependent.
+   *
+   * Does nothing while the connection is already established, so the
+   * dependents only hear about actual changes.
    */
   void connectionEstablished();
 
   /**
    * \brief Marks the connection as lost and calls
    * WifiDependent::onWifiConnectionLost() on every dependent.
+   *
+   * Does nothing unless the connection was established, so neither a failed
+   * connection attempt nor a failed reconnect attempt after a loss notifies
+   * the dependents.
    */
   void connectionLost();
 
