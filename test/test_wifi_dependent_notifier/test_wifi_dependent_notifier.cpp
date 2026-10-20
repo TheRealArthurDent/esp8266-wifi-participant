@@ -92,12 +92,68 @@ void notifiesEachDependentOnceWhenTheConnectionIsLost()
   DependentMock second;
   WifiDependentNotifier notifier;
   notifier.setDependents({first.get(), second.get()});
+  notifier.connectionEstablished();
 
   notifier.connectionLost();
 
   Verify(Method(first(), onWifiConnectionLost)).Once();
   Verify(Method(second(), onWifiConnectionLost)).Once();
-  VerifyNoOtherInvocations(first(), second());
+}
+
+void doesNotNotifyALossBeforeTheConnectionWasEstablished()
+{
+  DependentMock dependent;
+  WifiDependentNotifier notifier;
+  notifier.setDependents({dependent.get()});
+
+  notifier.connectionLost();
+  notifier.connectionLost();
+
+  VerifyNoOtherInvocations(dependent());
+  TEST_ASSERT_FALSE(notifier.isConnected());
+}
+
+void notifiesARepeatedLossOnlyOnce()
+{
+  DependentMock dependent;
+  WifiDependentNotifier notifier;
+  notifier.setDependents({dependent.get()});
+  notifier.connectionEstablished();
+
+  notifier.connectionLost();
+  notifier.connectionLost();
+
+  Verify(Method(dependent(), onWifiConnectionLost)).Once();
+}
+
+void notifiesARepeatedEstablishmentOnlyOnce()
+{
+  DependentMock dependent;
+  WifiDependentNotifier notifier;
+  notifier.setDependents({dependent.get()});
+
+  notifier.connectionEstablished();
+  notifier.connectionEstablished();
+
+  Verify(Method(dependent(), onWifiConnectionEstablished)).Once();
+  VerifyNoOtherInvocations(dependent());
+  TEST_ASSERT_TRUE(notifier.isConnected());
+}
+
+void notifiesEveryChangeAfterAReconnect()
+{
+  DependentMock dependent;
+  WifiDependentNotifier notifier;
+  notifier.setDependents({dependent.get()});
+
+  notifier.connectionEstablished();
+  notifier.connectionLost();
+  notifier.connectionEstablished();
+  notifier.connectionLost();
+
+  Verify(Method(dependent(), onWifiConnectionEstablished), Method(dependent(), onWifiConnectionLost),
+         Method(dependent(), onWifiConnectionEstablished), Method(dependent(), onWifiConnectionLost));
+  VerifyNoOtherInvocations(dependent());
 }
 
 void notifiesDependentsInTheOrderTheyWereGiven()
@@ -148,6 +204,10 @@ auto main() -> int
   RUN_TEST(isNotConnectedOnceTheConnectionIsLost);
   RUN_TEST(notifiesEachDependentOnceWhenTheConnectionIsEstablished);
   RUN_TEST(notifiesEachDependentOnceWhenTheConnectionIsLost);
+  RUN_TEST(doesNotNotifyALossBeforeTheConnectionWasEstablished);
+  RUN_TEST(notifiesARepeatedLossOnlyOnce);
+  RUN_TEST(notifiesARepeatedEstablishmentOnlyOnce);
+  RUN_TEST(notifiesEveryChangeAfterAReconnect);
   RUN_TEST(notifiesDependentsInTheOrderTheyWereGiven);
   RUN_TEST(settingDependentsReplacesTheEarlierOnes);
   RUN_TEST(notifiesNobodyWithoutDependents);
