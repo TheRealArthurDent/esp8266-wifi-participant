@@ -21,19 +21,19 @@ jobs:
           ignore: mosquitto
 
       - name: Action lint
-        uses: reviewdog/action-actionlint@v1.80.5
+        uses: reviewdog/action-actionlint@v1.80.6
         with:
           reporter: github-pr-review
           fail_on_error: true
 
       - name: YAML lint
-        uses: reviewdog/action-yamllint@v1.25.2
+        uses: reviewdog/action-yamllint@v1.25.3
         with:
           reporter: github-pr-review
           fail_on_error: true
 
       - name: Markdown lint
-        uses: reviewdog/action-markdownlint@v0.31.6
+        uses: reviewdog/action-markdownlint@v0.31.7
         with:
           reporter: github-pr-review
           fail_on_error: true
