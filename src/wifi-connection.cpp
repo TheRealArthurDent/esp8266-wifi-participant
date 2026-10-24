@@ -77,8 +77,7 @@ void WifiConnection::onWifiConnect(const WiFiEventStationModeGotIP &event)
 
 void WifiConnection::onWifiDisconnect(const WiFiEventStationModeDisconnected &event)
 {
-  DEBUG_PRINTLN("Disconnected from WiFi ");
-  DEBUG_PRINTLN(SECRET_WIFI_SSID);
+  DEBUG_PRINTLN("Disconnected from WiFi");
 
   getInstance().notifier.connectionLost();
 

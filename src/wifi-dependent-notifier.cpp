@@ -9,6 +9,10 @@ void WifiDependentNotifier::setDependents(const std::list<WifiDependent *> &depe
 // cppcheck-suppress unusedFunction
 void WifiDependentNotifier::connectionEstablished()
 {
+  if (connected)
+  {
+    return;
+  }
   connected = true;
   for (WifiDependent *dependent : dependents)
   {
@@ -19,6 +23,10 @@ void WifiDependentNotifier::connectionEstablished()
 // cppcheck-suppress unusedFunction
 void WifiDependentNotifier::connectionLost()
 {
+  if (!connected)
+  {
+    return;
+  }
   connected = false;
   for (WifiDependent *dependent : dependents)
   {
