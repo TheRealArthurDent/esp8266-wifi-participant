@@ -101,13 +101,11 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2a95eb4c2f3df43a77d2f9cc363e6dab" id="r_a2a95eb4c2f3df43a77d2f9cc363e6dab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a95eb4c2f3df43a77d2f9cc363e6dab">setDependents</a> (const std::list&lt; <a class="el" href="classWifiDependent.html">WifiDependent</a> * &gt; &amp;dependents)</td></tr>
 <tr class="memdesc:a2a95eb4c2f3df43a77d2f9cc363e6dab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Replaces the registered dependents.  <br /></td></tr>
 <tr class="separator:a2a95eb4c2f3df43a77d2f9cc363e6dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfed20cec0b9f107d26393260747e3d9" id="r_abfed20cec0b9f107d26393260747e3d9"><td class="memItemLeft" align="right" valign="top"><a id="abfed20cec0b9f107d26393260747e3d9" name="abfed20cec0b9f107d26393260747e3d9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>connectionEstablished</b> ()</td></tr>
-<tr class="memdesc:abfed20cec0b9f107d26393260747e3d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks the connection as established and calls <a class="el" href="classWifiDependent.html#a36da441f78056898dd93eb23b34fb178" title="Callback function informing about an established connection.">WifiDependent::onWifiConnectionEstablished()</a> on every dependent. <br /></td></tr>
+<tr class="memitem:abfed20cec0b9f107d26393260747e3d9" id="r_abfed20cec0b9f107d26393260747e3d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abfed20cec0b9f107d26393260747e3d9">connectionEstablished</a> ()</td></tr>
+<tr class="memdesc:abfed20cec0b9f107d26393260747e3d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks the connection as established and calls <a class="el" href="classWifiDependent.html#a36da441f78056898dd93eb23b34fb178" title="Callback function informing about an established connection.">WifiDependent::onWifiConnectionEstablished()</a> on every dependent.  <br /></td></tr>
 <tr class="separator:abfed20cec0b9f107d26393260747e3d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acf9138035355bacec77f6be3a31f3974" id="r_acf9138035355bacec77f6be3a31f3974"><td class="memItemLeft" align="right" valign="top"><a id="acf9138035355bacec77f6be3a31f3974" name="acf9138035355bacec77f6be3a31f3974"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>connectionLost</b> ()</td></tr>
-<tr class="memdesc:acf9138035355bacec77f6be3a31f3974"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks the connection as lost and calls <a class="el" href="classWifiDependent.html#a10673c479193e0be330404115e75df4e" title="Callback function informing about a connection loss.">WifiDependent::onWifiConnectionLost()</a> on every dependent. <br /></td></tr>
+<tr class="memitem:acf9138035355bacec77f6be3a31f3974" id="r_acf9138035355bacec77f6be3a31f3974"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acf9138035355bacec77f6be3a31f3974">connectionLost</a> ()</td></tr>
+<tr class="memdesc:acf9138035355bacec77f6be3a31f3974"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks the connection as lost and calls <a class="el" href="classWifiDependent.html#a10673c479193e0be330404115e75df4e" title="Callback function informing about a connection loss.">WifiDependent::onWifiConnectionLost()</a> on every dependent.  <br /></td></tr>
 <tr class="separator:acf9138035355bacec77f6be3a31f3974"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae68d0ce9a76dbcc2ee4d7e2164b6f012" id="r_ae68d0ce9a76dbcc2ee4d7e2164b6f012"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae68d0ce9a76dbcc2ee4d7e2164b6f012">isConnected</a> () const -&gt; bool</td></tr>
 <tr class="memdesc:ae68d0ce9a76dbcc2ee4d7e2164b6f012"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the connection status.  <br /></td></tr>
@@ -117,6 +115,46 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>connectionLost</b> ()
 <div class="textblock"><p>Keeps track of the WiFi connection state and informs the registered <a class="el" href="classWifiDependent.html">WifiDependents</a> about its changes. </p>
 <p>The hardware-free part of <code><a class="el" href="classWifiConnection.html" title="A controller for a WiFi connection.">WifiConnection</a>:</code> it knows nothing about the ESP8266 WiFi stack, so it can be unit tested on the host. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="abfed20cec0b9f107d26393260747e3d9" name="abfed20cec0b9f107d26393260747e3d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfed20cec0b9f107d26393260747e3d9">&#9670;&#160;</a></span>connectionEstablished()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void WifiDependentNotifier::connectionEstablished </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Marks the connection as established and calls <a class="el" href="classWifiDependent.html#a36da441f78056898dd93eb23b34fb178" title="Callback function informing about an established connection.">WifiDependent::onWifiConnectionEstablished()</a> on every dependent. </p>
+<p>Does nothing while the connection is already established, so the dependents only hear about actual changes. </p>
+
+</div>
+</div>
+<a id="acf9138035355bacec77f6be3a31f3974" name="acf9138035355bacec77f6be3a31f3974"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf9138035355bacec77f6be3a31f3974">&#9670;&#160;</a></span>connectionLost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void WifiDependentNotifier::connectionLost </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Marks the connection as lost and calls <a class="el" href="classWifiDependent.html#a10673c479193e0be330404115e75df4e" title="Callback function informing about a connection loss.">WifiDependent::onWifiConnectionLost()</a> on every dependent. </p>
+<p>Does nothing unless the connection was established, so neither a failed connection attempt nor a failed reconnect attempt after a loss notifies the dependents. </p>
+
+</div>
+</div>
 <a id="ae68d0ce9a76dbcc2ee4d7e2164b6f012" name="ae68d0ce9a76dbcc2ee4d7e2164b6f012"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae68d0ce9a76dbcc2ee4d7e2164b6f012">&#9670;&#160;</a></span>isConnected()</h2>
 
