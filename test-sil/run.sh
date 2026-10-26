@@ -180,7 +180,32 @@ scenario_wifi_events()
   expect_line "DummyWifiDependent disconnected!" 2
 }
 
-all_scenarios=(boots waits_for_wifi wifi_events)
+scenario_fails_to_connect()
+{
+  # Failed connection attempts (wrong credentials, out of range) end in
+  # disconnected events before the first got_ip. Refs #163
+  run_firmware fails_to_connect 4 "disconnected@500,disconnected@1000,got_ip@1500"
+  expect_running
+  expect_line "Disconnected from WiFi" 2
+  # The SSID is printed when connecting and once connected, not per attempt.
+  expect_line "emulated-ssid" 2
+  expect_line "DummyWifiDependent disconnected!" 0
+  expect_line "DummyWifiDependent connected!" 2
+}
+
+scenario_repeated_disconnects()
+{
+  # The SDK fires disconnected again on every failed reconnect attempt while
+  # the access point is gone. Refs #163
+  run_firmware repeated_disconnects 4 "got_ip@500,disconnected@1000,disconnected@1500,disconnected@2000,got_ip@2500"
+  expect_running
+  expect_line "Disconnected from WiFi" 3
+  # One notification per dependent and transition.
+  expect_line "DummyWifiDependent disconnected!" 2
+  expect_line "DummyWifiDependent connected!" 4
+}
+
+all_scenarios=(boots waits_for_wifi wifi_events fails_to_connect repeated_disconnects)
 
 # Scenarios that fail on main because of a known bug. They must keep failing
 # until it's fixed; then remove them here.
